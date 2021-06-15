@@ -1,0 +1,14 @@
+../Practica3Monumentos (copia)/.gradle
+/local.properties
+*.iml
+.idea
+libraryCircleIndicator/*.iml
+libraryTimePickerDialog/*.iml
+.DS_Store
+/build
+/captures
+/reports
+apks
+*.hprof
+*.log
+buildSrc/build

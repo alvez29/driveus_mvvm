@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "707362158837",
+    "firebase_url": "https://driveus-bf8a8-default-rtdb.firebaseio.com",
+    "project_id": "driveus-bf8a8",
+    "storage_bucket": "driveus-bf8a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707362158837:android:fd0978090deb8a04fc6dbc",
+        "android_client_info": {
+          "package_name": "com.example.driveus_mvvm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707362158837-lg50pc2m7jkhfgdn4jmlc7nacpk4giq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIVsQ9EX03qDdjeApM69tHopAEeQulJg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707362158837-lg50pc2m7jkhfgdn4jmlc7nacpk4giq4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
