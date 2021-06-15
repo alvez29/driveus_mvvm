@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.google.firebase.firestore.EventListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
 
@@ -28,6 +31,12 @@ class UserViewModel : ViewModel() {
             }
 
         return userById
+    }
+
+    fun updateUserName(userId: String, name: String ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreRepository.updateUserName(userId, name)
+        }
     }
 
 }
