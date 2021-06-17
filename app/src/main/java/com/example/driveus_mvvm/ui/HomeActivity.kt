@@ -36,8 +36,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setup(email: String, provider: String) {
         title = "Inicio"
-        viewBinding?.emailTextView?.text = email
-        viewBinding?.providerTextView?.text = provider
+        viewBinding?.activityMainLabelEmailTextView?.text = email
+        viewBinding?.activityAuthLabelProviderTextView?.text = provider
 
         viewBinding?.logOutButton?.setOnClickListener {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()

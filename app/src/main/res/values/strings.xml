@@ -8,4 +8,11 @@
     <string name="activity_main__label__placeholder_provider">Proveedor</string>
     <string name="activity_main__label__placeholder_email">Email</string>
     <string name="activity_main__button__logout_button">Cerrar sesión</string>
+    <string name="menu__item__my_rides">Mis viajes</string>
+    <string name="menu__item__channels">Canales</string>
+    <string name="menu__item__payouts">Pagos</string>
+    <string name="menu__item__profile">Mi perfil</string>
+    <string name="login_dialog__message__error">Se ha producido un error autenticando al usuario</string>
+    <string name="login_dialog__message__title">Error</string>
+    <string name="login_dialog__mesage__positive_message">Aceptar</string>
 </resources>
