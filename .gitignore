@@ -5,6 +5,7 @@
 libraryCircleIndicator/*.iml
 libraryTimePickerDialog/*.iml
 .DS_Store
+.gradle
 /build
 /captures
 /reports

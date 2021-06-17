@@ -1,13 +1,10 @@
 package com.example.driveus_mvvm.ui
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
-import android.widget.TextView
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivityMainBinding
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.view_model.UserViewModel
