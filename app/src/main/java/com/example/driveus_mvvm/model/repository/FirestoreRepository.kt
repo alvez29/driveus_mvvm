@@ -21,4 +21,10 @@ object FirestoreRepository {
                     .update(mapOf("name" to name))
     }
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun createUser(user: User){
+        db.collection("users").add(user)
+    }
+
 }

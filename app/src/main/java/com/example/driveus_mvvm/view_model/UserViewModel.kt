@@ -22,18 +22,21 @@ class UserViewModel : ViewModel() {
                     //Log.w(tag, "Listen failed.", error)
                     userById.value = null
                 }
-
                 val user: User? = value?.toObject(User::class.java)
                 userById.postValue(user)
-
             }
-
         return userById
     }
 
     fun updateUserName(userId: String, name: String ) {
         viewModelScope.launch(Dispatchers.IO) {
             FirestoreRepository.updateUserName(userId, name)
+        }
+    }
+
+    fun createNewUser(user: User) {
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreRepository.createUser(user)
         }
     }
 }

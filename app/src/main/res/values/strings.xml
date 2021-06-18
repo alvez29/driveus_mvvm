@@ -1,11 +1,18 @@
 <resources>
-    <string name="app_name">driveus_mvvm</string>
-    <string name="email">email</string>
-    <string name="password">contraseña</string>
-    <string name="signIn">Registrar</string>
+    <string name="app_name">DriveUS</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
     <string name="logIn">Acceder</string>
     <string name="prefs_file">com.example.driveus_mvvm.PREFERENCE_FILE_KEY</string>
     <string name="activity_main__label__placeholder_provider">Proveedor</string>
     <string name="activity_main__label__placeholder_email">Email</string>
     <string name="activity_main__button__logout_button">Cerrar sesión</string>
+    <string name="activity_auth__button__sign_up_button">Registrarse</string>
+    <string name="activity_sig_up__label__name_edit_text">Nombre</string>
+    <string name="activity_sign_up__label__surname_edit_text">Apellidos</string>
+    <string name="activity_sign_up__label__username_edit_text">Nombre de usuario</string>
+    <string name="activity_sign_up__label__email_edit_text">Email</string>
+    <string name="activity_sign_up__label__password_edit_text">Contraseña</string>
+    <string name="activity_sign_up__label__password_repeat_edit_text">Repetir contraseña</string>
+    <string name="activity_sign_up__button__sign_up">Registrarse</string>
 </resources>
