@@ -20,6 +20,8 @@ class HomeActivity : AppCompatActivity() {
         viewBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(viewBinding?.root)
 
+        //TODO: CREAR OBSERVABLE PARA GUARDAR EN PREFS ID DEL DOCUMENTO
+
         //Setup
         val bundle: Bundle? = intent.extras
         val email: String? = bundle?.getString("email")
@@ -30,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
         //Persistencia de los datos de sesión
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
         prefs.putString("email", email)
-        prefs.putString("provider", provider)
+        prefs.putString("provider", provider.toString())
         prefs.apply()
     }
 

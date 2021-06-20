@@ -4,25 +4,49 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivitySignUpBinding
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+
+
 
 class SignUpActivity : AppCompatActivity() {
 
     private var viewBinding : ActivitySignUpBinding? = null
     private val viewModel : UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
 
+    private val formErrorsObserver = Observer<Map<SignUpFormEnum, Int>> {
+        it.forEach { (k,v) ->
+            when(k) {
+                SignUpFormEnum.NAME -> viewBinding?.activityAuthInputNameEditText?.error = getString(v)
+                SignUpFormEnum.SURNAME -> viewBinding?.activitySignInputSurnameEditText?.error = getString(v)
+                SignUpFormEnum.USERNAME -> viewBinding?.activitySignUpInputUsernameEditText?.error = getString(v)
+                SignUpFormEnum.EMAIL -> viewBinding?.activitySignUpInputEmailEditText?.error = getString(v)
+                SignUpFormEnum.PASSWORD -> viewBinding?.activitySignUpInputPasswordEditText?.error = getString(v)
+                SignUpFormEnum.CONFIRM_PASSWORD -> viewBinding?.activitySignUpInputPasswordRepeatEditText?.error = getString(v)
+            }
+        }
+    }
 
-    private fun showAlert(er: String) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        builder.setMessage(er)
-        builder.setPositiveButton("Aceptar", null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+    private val redirectObserver = Observer<Boolean> {
+        if(it) {
+            showHome(viewBinding?.activitySignUpInputEmailEditText?.text.toString(), ProviderType.BASIC)
+        }
+    }
+
+    private fun getInputs() : Map<SignUpFormEnum, String>{
+        return mutableMapOf(
+            SignUpFormEnum.NAME to viewBinding?.activityAuthInputNameEditText?.text.toString(),
+            SignUpFormEnum.SURNAME to viewBinding?.activitySignInputSurnameEditText?.text.toString(),
+            SignUpFormEnum.USERNAME to viewBinding?.activitySignUpInputUsernameEditText?.text.toString(),
+            SignUpFormEnum.EMAIL to viewBinding?.activitySignUpInputEmailEditText?.text.toString(),
+            SignUpFormEnum.PASSWORD to viewBinding?.activitySignUpInputPasswordEditText?.text.toString(),
+            SignUpFormEnum.CONFIRM_PASSWORD to viewBinding?.activitySignUpInputPasswordRepeatEditText?.text.toString()
+        )
     }
 
     private fun  showHome(email: String, provider: ProviderType) {
@@ -43,39 +67,13 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setup() {
-        title = "Registro"
+        title = getString(R.string.sign_up_title)
 
+        viewModel.getFormErrors().observe(this, formErrorsObserver)
+        viewModel.getRedirect().observe(this, redirectObserver)
 
         viewBinding?.activitySignUpButtonSignUp?.setOnClickListener {
-            if (viewBinding?.activityAuthInputNameEditText?.text?.isNotEmpty() == true
-                && viewBinding?.activitySignInputSurnameEditText?.text?.isNotEmpty() == true
-                && viewBinding?.activitySignUpInputEmailEditText?.text?.isNotEmpty() == true
-                && viewBinding?.activitySignUpInputPasswordEditText?.text?.isNotEmpty() == true
-                && viewBinding?.activitySignUpInputPasswordRepeatEditText?.text?.isNotEmpty() == true) {
-
-                val name = viewBinding?.activityAuthInputNameEditText?.text.toString()
-                val surname = viewBinding?.activitySignInputSurnameEditText?.text.toString()
-                val username = viewBinding?.activitySignUpInputUsernameEditText?.text.toString()
-                val email= viewBinding?.activitySignUpInputEmailEditText?.text.toString()
-
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                    viewBinding?.activitySignUpInputEmailEditText?.text.toString(),
-                    viewBinding?.activitySignUpInputPasswordEditText?.text.toString()
-                ).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        val uid = it.result?.user?.uid
-
-                        val newUser = User(uid, username, surname, name, emptyList(), emptyList(), false, email)
-                        viewModel.createNewUser(newUser)
-                        showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
-                    } else {
-                        //TODO: Controlar la excepción del login
-                        showAlert("Se ha producido un error autenticando al usuario")
-                    }
-                }
-            } else {
-                showAlert("Debes completar todos los campos")
-            }
+               viewModel.createNewUser(getInputs())
         }
     }
 }

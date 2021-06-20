@@ -15,4 +15,11 @@
     <string name="activity_sign_up__label__password_edit_text">Contraseña</string>
     <string name="activity_sign_up__label__password_repeat_edit_text">Repetir contraseña</string>
     <string name="activity_sign_up__button__sign_up">Registrarse</string>
+    <string name="sign_up_form_error_not_empty">Debe completar este campo</string>
+    <string name="sign_up_title">Registro</string>
+    <string name="sign_up_form_error_email_in_use">Este email ya está en uso</string>
+    <string name="sign_up_form_error_email_pattern">Formato del email no válido</string>
+    <string name="sign_up_form_error_max_50">Máximo 50 caracteres</string>
+    <string name="sign_up_form_error_pass_not_match">La contraseña no coincide</string>
+    <string name="sign_up_form_error_username_in_use">El nombre de usuario ya en uso</string>
 </resources>
