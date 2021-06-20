@@ -21,7 +21,7 @@ object FirestoreRepository {
         return db.collection("users").whereEqualTo("uid", uid)
     }
 
-    suspend fun usernameInUse(username: String): Query {
+    fun usernameInUse(username: String): Query {
         return db.collection("users").whereEqualTo("username", username)
     }
 
