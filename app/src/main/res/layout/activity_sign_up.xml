@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.SignUpActivity">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/signUpLayout"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="1.0">
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <EditText
+                    android:hint="@string/activity_sig_up__label__name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/activity_auth__input__name_edit_text"
+                    android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <EditText
+                    android:hint="@string/activity_sign_up__label__surname_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/activity_sign__input__surname_edit_text"
+                    android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <EditText
+                    android:hint="@string/activity_sign_up__label__username_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/activity_sign_up__input__username_edit_text"
+                    android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <EditText
+                    android:hint="@string/activity_sign_up__label__email_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/activity_sign_up__input__email_edit_text"
+                    android:inputType="textEmailAddress"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <EditText
+                    android:id="@+id/activity_sign_up__input__password_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:hint="@string/activity_sign_up__label__password_edit_text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <EditText
+                    android:id="@+id/activity_sign_up__input__password_repeat_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:hint="@string/activity_sign_up__label__password_repeat_edit_text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp"/>
+        <Button
+                android:text="@string/activity_sign_up__button__sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/activity_sign_up__button__sign_up"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

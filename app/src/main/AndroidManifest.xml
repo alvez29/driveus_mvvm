@@ -9,8 +9,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Driveus_mvvm">
+        <activity android:name=".ui.SignUpActivity">
+        </activity>
+        <activity android:name=".ui.AuthActivity">
 
-        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

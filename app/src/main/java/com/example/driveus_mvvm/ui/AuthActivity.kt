@@ -2,7 +2,6 @@ package com.example.driveus_mvvm.ui
 
 import android.content.Context
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -30,20 +29,6 @@ class AuthActivity : AppCompatActivity() {
     private fun setup() {
         title = "Autenticación"
 
-        viewBinding?.activityAuthButtonSignUpButton?.setOnClickListener{
-            if (viewBinding?.activityAuthInputEmailEditText?.text?.isNotEmpty() == true && viewBinding?.activityAuthInputPasswordEditText?.text?.isNotEmpty() == true) {
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(viewBinding?.activityAuthInputEmailEditText?.text.toString(),
-                    viewBinding?.activityAuthInputPasswordEditText?.text.toString()).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
-                    } else {
-                        //TODO: Controlar la excepción del login
-                        showAlert()
-                    }
-                }
-            }
-        }
-
         viewBinding?.activityAuthButtonLogInButton?.setOnClickListener{
             if (viewBinding?.activityAuthInputEmailEditText?.text?.isNotEmpty() == true && viewBinding?.activityAuthInputPasswordEditText?.text?.isNotEmpty() == true) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(viewBinding?.activityAuthInputEmailEditText?.text.toString(),
@@ -55,6 +40,10 @@ class AuthActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+      viewBinding?.activityAuthButtonSignUpButton?.setOnClickListener {
+            showForm()
         }
     }
 
@@ -77,6 +66,11 @@ class AuthActivity : AppCompatActivity() {
         startActivity(homeIntent)
     }
 
+    private fun showForm() {
+        val formIntent: Intent = Intent (this, SignUpActivity::class.java).apply{}
+        startActivity(formIntent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityAuthBinding.inflate(layoutInflater)
@@ -90,7 +84,5 @@ class AuthActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         viewBinding?.authLayout?.visibility = View.VISIBLE
-
     }
-
 }
