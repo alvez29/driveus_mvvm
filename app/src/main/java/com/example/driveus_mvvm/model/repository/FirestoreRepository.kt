@@ -37,4 +37,5 @@ object FirestoreRepository {
     suspend fun createUser(user: User){
         db.collection("users").add(user)
     }
+
 }

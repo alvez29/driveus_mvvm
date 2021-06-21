@@ -23,6 +23,7 @@ class AuthActivity : AppCompatActivity() {
             viewBinding?.authLayout?.visibility = View.INVISIBLE
             showHome(email, ProviderType.valueOf(provider))
         }
+
     }
 
     private fun setup() {
@@ -40,18 +41,20 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
         }
-        viewBinding?.activityAuthButtonSignUpButton?.setOnClickListener {
+
+      viewBinding?.activityAuthButtonSignUpButton?.setOnClickListener {
             showForm()
         }
     }
 
     private fun showAlert() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        builder.setMessage("Se ha producido un error autenticando al usuario")
-        builder.setPositiveButton("Aceptar", null)
+        builder.setTitle(getString(R.string.login_dialog__message__title))
+        builder.setMessage(getString(R.string.login_dialog__message__error))
+        builder.setPositiveButton(getString(R.string.login_dialog__mesage__positive_message), null)
         val dialog: AlertDialog = builder.create()
         dialog.show()
+
     }
 
     private fun  showHome(email: String, provider: ProviderType) {
@@ -59,6 +62,7 @@ class AuthActivity : AppCompatActivity() {
             putExtra("email", email)
             putExtra("provider", provider.toString())
         }
+
         startActivity(homeIntent)
     }
 

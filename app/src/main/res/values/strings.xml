@@ -22,4 +22,11 @@
     <string name="sign_up_form_error_max_50">Máximo 50 caracteres</string>
     <string name="sign_up_form_error_pass_not_match">La contraseña no coincide</string>
     <string name="sign_up_form_error_username_in_use">El nombre de usuario ya en uso</string>
+    <string name="menu__item__my_rides">Mis viajes</string>
+    <string name="menu__item__channels">Canales</string>
+    <string name="menu__item__payouts">Pagos</string>
+    <string name="menu__item__profile">Mi perfil</string>
+    <string name="login_dialog__message__error">Se ha producido un error autenticando al usuario</string>
+    <string name="login_dialog__message__title">Error</string>
+    <string name="login_dialog__mesage__positive_message">Aceptar</string>
 </resources>

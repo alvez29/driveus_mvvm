@@ -12,14 +12,16 @@
         <activity android:name=".ui.SignUpActivity">
         </activity>
         <activity android:name=".ui.AuthActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.HomeActivity">
-        </activity>
+
+        <activity android:name=".ui.AuthActivity"/>
+        <activity android:name=".ui.HomeActivity"/>
         <activity android:name=".ui.GoogleSignInActivity"/>
     </application>
 
