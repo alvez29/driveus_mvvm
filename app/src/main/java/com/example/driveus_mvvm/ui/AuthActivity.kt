@@ -1,6 +1,5 @@
 package com.example.driveus_mvvm.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -14,16 +13,11 @@ class AuthActivity : AppCompatActivity() {
 
     private var viewBinding : ActivityAuthBinding? = null
 
-    private fun session() {
-        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        val email = prefs.getString("email", null)
-        val provider = prefs.getString("provider", null)
-
-        if (email != null && provider != null) {
-            viewBinding?.authLayout?.visibility = View.INVISIBLE
-            showHome(email, ProviderType.valueOf(provider))
+    private fun checkSession() {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+        viewBinding?.authLayout?.visibility = View.INVISIBLE
+            startMainActivity()
         }
-
     }
 
     private fun setup() {
@@ -34,7 +28,7 @@ class AuthActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(viewBinding?.activityAuthInputEmailEditText?.text.toString(),
                     viewBinding?.activityAuthInputPasswordEditText?.text.toString()).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
+                        startMainActivity()
                     } else {
                         showAlert()
                     }
@@ -54,21 +48,16 @@ class AuthActivity : AppCompatActivity() {
         builder.setPositiveButton(getString(R.string.login_dialog__mesage__positive_message), null)
         val dialog: AlertDialog = builder.create()
         dialog.show()
-
-    }
-
-    private fun  showHome(email: String, provider: ProviderType) {
-        val homeIntent: Intent = Intent (this, HomeActivity::class.java).apply {
-            putExtra("email", email)
-            putExtra("provider", provider.toString())
-        }
-
-        startActivity(homeIntent)
     }
 
     private fun showForm() {
-        val formIntent: Intent = Intent (this, SignUpActivity::class.java).apply{}
+        val formIntent = Intent(this, SignUpActivity::class.java)
         startActivity(formIntent)
+    }
+
+    private fun startMainActivity() {
+        val mainActivityIntent = Intent(this, MainActivity::class.java)
+        startActivity(mainActivityIntent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +67,7 @@ class AuthActivity : AppCompatActivity() {
 
         // Setup
         setup()
-        session()
+        checkSession()
     }
 
     override fun onStart() {

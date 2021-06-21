@@ -1,4 +1,4 @@
-package com.example.driveus_mvvm.ui
+package com.example.driveus_mvvm.ui.enums
 
 enum class SignUpFormEnum {
     NAME,
