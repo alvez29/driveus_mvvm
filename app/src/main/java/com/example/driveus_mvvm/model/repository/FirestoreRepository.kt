@@ -9,33 +9,38 @@ import com.google.firebase.firestore.Query
 
 object FirestoreRepository {
 
+    private const val CHANNELS_COLLECTION = "channel"
+    private const val USERS_COLLECTION = "users"
+    
     private val db by lazy { FirebaseFirestore.getInstance() }
 
     //USER FUNCTIONS -----------------------------------------------------
 
     fun getUserById(userId: String) : DocumentReference {
-        return db.collection("users").document(userId)
+        return db.collection(USERS_COLLECTION).document(userId)
     }
 
     fun getUserFromUID(uid: String): Query {
-        return db.collection("users").whereEqualTo("uid", uid)
+        return db.collection(USERS_COLLECTION).whereEqualTo("uid", uid)
     }
 
     fun usernameInUse(username: String): Query {
-        return db.collection("users").whereEqualTo("username", username)
+        return db.collection(USERS_COLLECTION).whereEqualTo("username", username)
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun updateUserName(userId: String, name: String) {
-            db.collection("users").document(userId)
+            db.collection(USERS_COLLECTION).document(userId)
                     .update(mapOf("name" to name))
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun createUser(user: User){
-        db.collection("users").add(user)
+        db.collection(USERS_COLLECTION).add(user)
     }
+    
+    //CHANNEL FUNCTIONS --------------------------------------------------
 
 }
