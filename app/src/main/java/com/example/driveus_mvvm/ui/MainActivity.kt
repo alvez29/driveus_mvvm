@@ -1,23 +1,20 @@
 package com.example.driveus_mvvm.ui
 
 import android.os.Bundle
-
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivityMainBinding
-import com.example.driveus_mvvm.model.entities.User
-import com.example.driveus_mvvm.view_model.UserViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private var viewBinding : ActivityMainBinding? = null
-    private val viewModel : UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
 
-    private val userId = "0szOLEo3FeXgdefQLe07"
-
-    private val userObserver = Observer<User> { user ->
-        viewBinding?.mainActivityLabelSampleText?.text = user.name
+    private fun configureBottomBarNavigation() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_activity__container__fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        viewBinding?.mainActivityToolbarBottomNavView?.setupWithNavController(navController)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +22,7 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding?.root)
 
-        viewModel.getUserById(userId).observe(this, userObserver)
-
-        viewBinding?.mainActivityButtonSubmitNameButton?.setOnClickListener {
-            viewModel.updateUserName(userId, viewBinding?.mainActivityInputNameInput?.text.toString())
-        }
+        configureBottomBarNavigation()
     }
+
 }

@@ -15,23 +15,6 @@ class AuthActivity : AppCompatActivity() {
 
     private var viewBinding : ActivityAuthBinding? = null
 
-    //TODO: Ordenar los métodos (privados arriba)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewBinding = ActivityAuthBinding.inflate(layoutInflater)
-        setContentView(viewBinding?.root)
-
-        // Setup
-        setup()
-        session()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewBinding?.authLayout?.visibility = View.VISIBLE
-    }
-
     private fun session() {
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val email = prefs.getString("email", null)
@@ -41,6 +24,7 @@ class AuthActivity : AppCompatActivity() {
             viewBinding?.authLayout?.visibility = View.INVISIBLE
             showHome(email, ProviderType.valueOf(provider))
         }
+
     }
 
     private fun setup() {
@@ -49,7 +33,7 @@ class AuthActivity : AppCompatActivity() {
         viewBinding?.activityAuthButtonSignUpButton?.setOnClickListener{
             if (viewBinding?.activityAuthInputEmailEditText?.text?.isNotEmpty() == true && viewBinding?.activityAuthInputPasswordEditText?.text?.isNotEmpty() == true) {
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(viewBinding?.activityAuthInputEmailEditText?.text.toString(),
-                viewBinding?.activityAuthInputPasswordEditText?.text.toString()).addOnCompleteListener {
+                    viewBinding?.activityAuthInputPasswordEditText?.text.toString()).addOnCompleteListener {
                     if (it.isSuccessful) {
                         showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
                     } else {
@@ -64,24 +48,24 @@ class AuthActivity : AppCompatActivity() {
             if (viewBinding?.activityAuthInputEmailEditText?.text?.isNotEmpty() == true && viewBinding?.activityAuthInputPasswordEditText?.text?.isNotEmpty() == true) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(viewBinding?.activityAuthInputEmailEditText?.text.toString(),
                     viewBinding?.activityAuthInputPasswordEditText?.text.toString()).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
-                        } else {
-                            showAlert()
-                        }
+                    if (it.isSuccessful) {
+                        showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
+                    } else {
+                        showAlert()
+                    }
                 }
             }
         }
     }
 
     private fun showAlert() {
-
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        builder.setMessage("Se ha producido un error autenticando al usuario")
-        builder.setPositiveButton("Aceptar", null)
+        builder.setTitle(getString(R.string.login_dialog__message__title))
+        builder.setMessage(getString(R.string.login_dialog__message__error))
+        builder.setPositiveButton(getString(R.string.login_dialog__mesage__positive_message), null)
         val dialog: AlertDialog = builder.create()
         dialog.show()
+
     }
 
     private fun  showHome(email: String, provider: ProviderType) {
@@ -89,6 +73,24 @@ class AuthActivity : AppCompatActivity() {
             putExtra("email", email)
             putExtra("provider", provider.toString())
         }
+
         startActivity(homeIntent)
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewBinding = ActivityAuthBinding.inflate(layoutInflater)
+        setContentView(viewBinding?.root)
+
+        // Setup
+        setup()
+        session()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewBinding?.authLayout?.visibility = View.VISIBLE
+
+    }
+
 }
