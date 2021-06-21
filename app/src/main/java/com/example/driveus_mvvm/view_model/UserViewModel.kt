@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
-import com.example.driveus_mvvm.ui.SignUpFormEnum
+import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +22,6 @@ class UserViewModel : ViewModel() {
     private val userById: MutableLiveData<User> = MutableLiveData()
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
     private val redirect = MutableLiveData(false)
-    private val usernameInUse = MutableLiveData(false)
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
         val errorMap = mutableMapOf<SignUpFormEnum, Int>()
@@ -107,48 +106,6 @@ class UserViewModel : ViewModel() {
         formErrors.postValue(errorMap)
     }
 
-    fun getFormErrors(): LiveData<MutableMap<SignUpFormEnum, Int>> {
-        return formErrors
-    }
-
-    fun getRedirect(): LiveData<Boolean> {
-        return redirect
-    }
-
-    fun getUserById(userId: String): LiveData<User> {
-        FirestoreRepository.getUserById(userId)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(tag, "Listen failed.", error)
-                    userById.value = null
-                }
-                val user: User? = value?.toObject(User::class.java)
-                userById.postValue(user)
-            }
-
-        return userById
-    }
-
-    fun updateUserName(userId: String, name: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            FirestoreRepository.updateUserName(userId, name)
-        }
-    }
-
-    //Función para obtener la id del documento del usuario con la uid por parámetro.
-    // Se utilizará para actualizar los datos de la sesión
-    fun getDocumentIdFromUID(uid: String): String {
-        var res: String = ""
-
-        FirestoreRepository.getUserFromUID(uid).get().addOnSuccessListener {
-            if (it.documents.size == 1) {
-                res = it.documents.first().id
-            }
-        }
-
-        return res
-    }
-
     private fun validate(inputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean) {
         if (validateForm(inputs, usernameInUse) ) {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(
@@ -173,6 +130,47 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun getFormErrors(): LiveData<MutableMap<SignUpFormEnum, Int>> {
+        return formErrors
+    }
+
+    fun getRedirect(): LiveData<Boolean> {
+        return redirect
+    }
+
+    fun getUserById(userId: String): LiveData<User> {
+        FirestoreRepository.getUserById(userId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(tag, "Listen failed.", error)
+                    userById.value = null
+                }
+                val user: User? = value?.toObject(User::class.java)
+                userById.postValue(user)
+            }
+
+        return userById
+    }
+
+    //Función para obtener la id del documento del usuario con la uid por parámetro.
+    // Se utilizará para actualizar los datos de la sesión
+    fun getDocumentIdFromUID(uid: String): String {
+        var res: String = ""
+
+        FirestoreRepository.getUserFromUID(uid).get().addOnSuccessListener {
+            if (it.documents.size == 1) {
+                res = it.documents.first().id
+            }
+        }
+
+        return res
+    }
+
+    fun updateUserName(userId: String, name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            FirestoreRepository.updateUserName(userId, name)
+        }
+    }
 
     fun createNewUser(inputs: Map<SignUpFormEnum, String>) {
         FirestoreRepository.usernameInUse(inputs[SignUpFormEnum.USERNAME].toString()).get().addOnSuccessListener {

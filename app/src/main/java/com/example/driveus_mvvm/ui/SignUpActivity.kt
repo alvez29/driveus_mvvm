@@ -3,16 +3,12 @@ package com.example.driveus_mvvm.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivitySignUpBinding
-import com.example.driveus_mvvm.model.entities.User
+import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.example.driveus_mvvm.view_model.UserViewModel
-import com.google.firebase.auth.FirebaseAuth
-
-
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -34,7 +30,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private val redirectObserver = Observer<Boolean> {
         if(it) {
-            showHome(viewBinding?.activitySignUpInputEmailEditText?.text.toString(), ProviderType.BASIC)
+            startMainActivity()
         }
     }
 
@@ -49,14 +45,10 @@ class SignUpActivity : AppCompatActivity() {
         )
     }
 
-    private fun  showHome(email: String, provider: ProviderType) {
-        val homeIntent: Intent = Intent (this, HomeActivity::class.java).apply {
-            putExtra("email", email)
-            putExtra("provider", provider.toString())
-        }
-        startActivity(homeIntent)
+    private fun startMainActivity() {
+        val mainActivityIntent = Intent(this, MainActivity::class.java)
+        startActivity(mainActivityIntent)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
