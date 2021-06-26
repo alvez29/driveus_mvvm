@@ -29,6 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:menu="@menu/menu_bottom_bar"
+            app:itemIconTint="@drawable/tab_color"
+            app:itemTextColor="@drawable/tab_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

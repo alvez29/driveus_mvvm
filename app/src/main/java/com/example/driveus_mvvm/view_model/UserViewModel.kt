@@ -12,6 +12,7 @@ import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -107,11 +108,16 @@ class UserViewModel : ViewModel() {
     }
 
     private fun validate(inputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean) {
+        //Validamos los inputs del formulario y si el nombre de usuario está en uso
         if (validateForm(inputs, usernameInUse) ) {
+
+            //Una vez validados creamos la instancia del usuario en FirebaseAuth
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(
                 inputs[SignUpFormEnum.EMAIL].toString(),
                 inputs[SignUpFormEnum.PASSWORD].toString()
             ).addOnCompleteListener {
+
+                //Si es exitoso podemos crear el usuario en Firestore con la uid recien creada
                 if (it.isSuccessful) {
                     val uid: String? = it.result?.user?.uid
                     viewModelScope.launch(Dispatchers.IO) {
@@ -121,6 +127,8 @@ class UserViewModel : ViewModel() {
                     }
 
                     redirect.postValue(true)
+
+                //Si no es exitoso tratamos las excepciones que nos devuelve FirebaseAuth
                 } else {
                     it.exception?.let { ex ->
                         treatAuthExceptions(ex)
@@ -157,7 +165,7 @@ class UserViewModel : ViewModel() {
     fun getDocumentIdFromUID(uid: String): String {
         var res: String = ""
 
-        FirestoreRepository.getUserFromUID(uid).get().addOnSuccessListener {
+        FirestoreRepository.getUserByUID(uid).get().addOnSuccessListener {
             if (it.documents.size == 1) {
                 res = it.documents.first().id
             }

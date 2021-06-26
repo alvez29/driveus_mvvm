@@ -30,4 +30,10 @@
     <string name="login_dialog__message__title">Error</string>
     <string name="login_dialog__mesage__positive_message">Aceptar</string>
     <string name="profile_fragment__label__button_log_out">Cerrar sesión</string>
+    <string name="channels_fragment__label__tab_explore">Explorar</string>
+    <string name="channels_fragment__label__tab_my_channels">Mis canales</string>
+    <string name="channel_row__label__origin_zone_icon_content_description">Origin zone icon</string>
+    <string name="channel_row__label__destination_zone_icon_content_description">Destination zone icon</string>
+    <string name="all_channels_label_saerch_hint">Buscar zona...</string>
+    <string name="all_channels__label__filter_image_content_description">Filtro de canales</string>
 </resources>
