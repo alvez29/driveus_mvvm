@@ -42,7 +42,6 @@ class ChannelsFragment : Fragment() {
                 }.attach()
             }
         }
-
     }
 
     private fun attachViewPagerAdapter() {
