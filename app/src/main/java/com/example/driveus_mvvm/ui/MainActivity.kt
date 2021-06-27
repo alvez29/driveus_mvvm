@@ -7,11 +7,17 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivityMainBinding
+import com.example.driveus_mvvm.model.entities.User
+import com.example.driveus_mvvm.view_model.UserViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +27,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var viewBinding : ActivityMainBinding? = null
+    private val viewModel : UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
+
+    private val userObserver = Observer<DocumentSnapshot> {
+        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        prefs.putString(getString(R.string.shared_pref_doc_id_key), it.id )
+        prefs.apply()
+    }
 
     private val backgroundColorListener =
         NavController.OnDestinationChangedListener { _, _, arguments ->
@@ -45,17 +58,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun saveSession() {
-        val bundle: Bundle? = intent.extras
-        val email: String? = bundle?.getString("email")
-        val provider: String? = bundle?.getString("provider")
-
-        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-        prefs.putString("email", email)
-        prefs.putString("provider", provider.toString())
-        prefs.apply()
-    }
-
     private fun configureBottomBarNavigation() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_activity__container__fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding?.root)
 
+        FirebaseAuth.getInstance().currentUser?.let { viewModel.getUserByUid(it.uid).observe(this, userObserver) }
         configureBottomBarNavigation()
     }
 

@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,53 +11,47 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentProfileBinding
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
-import com.example.driveus_mvvm.ui.adapters.VehicleListAdapter
+import com.example.driveus_mvvm.ui.adapter.VehicleListAdapter
 import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 
 class ProfileFragment : Fragment() {
 
     private var viewBinding: FragmentProfileBinding? = null
     private val viewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
 
-    private val adapterListener = object : VehicleListAdapter.VehicleAdapterListener {
-        override fun onItemClick(expanded: Boolean) {
-            if(expanded){
-                viewBinding?.fragmentProfileRecycleView?.visibility = View.GONE
-            } else {
-                viewBinding?.fragmentProfileRecycleView?.visibility = View.VISIBLE
-            }
-        }
-    }
+    private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
-    private val userObserver = Observer<User> { user ->
-        val fullName = user.name + " " + user.surname
-        viewBinding?.profileFragmentLabelUsername?.text = user.username
+    private val userObserver = Observer<DocumentSnapshot> { document ->
+        val user: User? = document.toObject(User::class.java)
+        val fullName = user?.name + " " + user?.surname
+        viewBinding?.profileFragmentLabelUsername?.text = user?.username
         viewBinding?.profileFragmentLabelFullName?.text = fullName
-        viewBinding?.profileFragmentLabelEmail?.text = user.email
+        viewBinding?.profileFragmentLabelEmail?.text = user?.email
 
-        if (user.isDriver == false) {
+        val adapter = VehicleListAdapter()
+        viewBinding?.fragmentProfileRecycleView?.adapter = adapter
+        viewBinding?.fragmentProfileRecycleView?.layoutManager = LinearLayoutManager(context)
+        sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+            ?.let { viewModel.getVehiclesByUserId(it).observe(viewLifecycleOwner, vehiclesObserver(adapter)) }
+
+        if (user?.isDriver == false) {
             viewBinding?.fragmentProfileLayoutCars?.visibility = View.GONE
             viewBinding?.fragmentProfileLayoutNoCars?.visibility = View.VISIBLE
         } else {
             viewBinding?.fragmentProfileLayoutCars?.visibility = View.VISIBLE
             viewBinding?.fragmentProfileLayoutNoCars?.visibility = View.GONE
-            val adapter = VehicleListAdapter(adapterListener)
-            user.uid?.let { viewModel.getVehiclesByUserUid(it).observe(viewLifecycleOwner, vehiclesObserver(adapter)) }
-            viewBinding?.fragmentProfileRecycleView?.adapter = adapter
-            viewBinding?.fragmentProfileRecycleView?.layoutManager = LinearLayoutManager(context)
         }
     }
 
-
     private fun vehiclesObserver(adapter: VehicleListAdapter) = Observer<Map<String, Vehicle>> { vehicles ->
         vehicles?.let {
-            if (it.isNotEmpty()) {
-                adapter.submitList(it.toList())
-            }
+            adapter.submitList(it.toList())
         }
     }
 
@@ -87,6 +82,7 @@ class ProfileFragment : Fragment() {
         FirebaseAuth.getInstance().currentUser?.let {
             viewModel.getUserByUid(it.uid).observe(viewLifecycleOwner, userObserver)
         }
+
         return viewBinding?.root
     }
 

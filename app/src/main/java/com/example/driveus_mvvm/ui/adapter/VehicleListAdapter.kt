@@ -1,4 +1,4 @@
-package com.example.driveus_mvvm.ui.adapters
+package com.example.driveus_mvvm.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -26,13 +26,7 @@ private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Vehicle>>
     }
 }
 
-class VehicleListAdapter(
-    private val listener: VehicleAdapterListener
-    ) : ListAdapter<Pair<String, Vehicle>, VehicleListAdapter.VehicleViewHolder>(diffCallback) {
-
-    interface VehicleAdapterListener {
-        fun onItemClick(expanded: Boolean)
-    }
+class VehicleListAdapter() : ListAdapter<Pair<String, Vehicle>, VehicleListAdapter.VehicleViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleViewHolder {
         val vehicleView = LayoutInflater.from(parent.context).inflate(R.layout.car_row, parent, false)
@@ -53,7 +47,6 @@ class VehicleListAdapter(
             holder.expandableLayout.visibility = View.GONE
         }
     }
-
 
     inner class VehicleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val modelItemView: TextView by lazy { itemView.findViewById(R.id.car_row_label_brand_model) }

@@ -58,4 +58,5 @@
     <string name="channel_row__label__destination_zone_icon_content_description">Destination zone icon</string>
     <string name="all_channels_label_saerch_hint">Buscar zona...</string>
     <string name="all_channels__label__filter_image_content_description">Filtro de canales</string>
+    <string name="shared_pref_doc_id_key">docId</string>
 </resources>
