@@ -3,6 +3,8 @@ package com.example.driveus_mvvm.model.repository
 
 import androidx.annotation.WorkerThread
 import com.example.driveus_mvvm.model.entities.User
+import com.example.driveus_mvvm.model.entities.Vehicle
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -34,8 +36,26 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    fun updateIsDriver(userId: String, isDriver: Boolean) {
+        db.collection("users").document(userId)
+            .update(mapOf("isDriver" to isDriver))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun createUser(user: User){
         db.collection("users").add(user)
     }
 
+    //VEHICLE FUNCTIONS -----------------------------------------------------
+
+    fun getAllVehiclesByUserId(id: String): CollectionReference {
+        return db.collection("users").document(id).collection("vehicles")
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addVehicle(vehicle: Vehicle, userId: String) {
+        db.collection("users").document(userId).collection("vehicles").add(vehicle)
+    }
 }
