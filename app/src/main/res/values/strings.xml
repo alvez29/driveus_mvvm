@@ -30,6 +30,28 @@
     <string name="login_dialog__message__title">Error</string>
     <string name="login_dialog__mesage__positive_message">Aceptar</string>
     <string name="profile_fragment__label__button_log_out">Cerrar sesión</string>
+    <string name="profile_fragment__label__name">Nombre: </string>
+    <string name="profile_fragment__label__email_label">Email:</string>
+    <string name="profile_fragment__label__car_title">Tus coches registrados</string>
+    <string name="car_row__label__seat_label">Asientos: </string>
+    <string name="car_row__label__brand_model_test">Modelo y Marca</string>
+    <string name="car_row__label_seat_value_test">5</string>
+    <string name="car_row__label__color">Color:</string>
+    <string name="car_row__label__description">Decripción</string>
+    <string name="car_row__label_color_value_test">Blanco</string>
+    <string name="profile_fragment__label__no_car_title">Aún no eres conductor en DriveUS. Da de alta a tu vehículo y
+        conviértete en uno
+    </string>
+    <string name="profile_fragment__label__username_test">Usuario</string>
+    <string name="profile_fragment__label__add_car_button">Añadir vehículo</string>
+    <string name="fragment_add_car__label_title">Registra tu vehículo</string>
+    <string name="fragment_add_car__label__car_brand_value">Marca</string>
+    <string name="fragment_add_car__label__car_model_edit_text">Modelo</string>
+    <string name="fragment_add_car__label__car_color_edit_text">Color</string>
+    <string name="fragment_add_car__label__car_seats_edit_text">Nº asientos</string>
+    <string name="fragment_add_car__label__car_description_edit_text">Descripción</string>
+    <string name="fragment_add_car__button_add_car">Añadir</string>
+    <string name="profile_fragment__label__button_add_car">Añadir vehículo</string>
     <string name="channels_fragment__label__tab_explore">Explorar</string>
     <string name="channels_fragment__label__tab_my_channels">Mis canales</string>
     <string name="channel_row__label__origin_zone_icon_content_description">Origin zone icon</string>

@@ -41,7 +41,17 @@
 
     </fragment>
 
-    <fragment android:id="@+id/profileFragment" android:name="com.example.driveus_mvvm.ui.ProfileFragment"
+    <fragment android:id="@+id/profileFragment"
+              android:name="com.example.driveus_mvvm.ui.ProfileFragment"
+              android:label="ProfileFragment">
+        <action android:id="@+id/action_profileFragment_to_addCarFragment2" app:destination="@id/addCarFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/addCarFragment"
+              android:name="com.example.driveus_mvvm.ui.AddCarFragment"
+              android:label="AddCarFragment"/>
+
+  <fragment android:id="@+id/profileFragment" android:name="com.example.driveus_mvvm.ui.ProfileFragment"
               android:label="ProfileFragment"/>
     <fragment
         android:id="@+id/channelDetailFragment"

@@ -40,7 +40,8 @@
             <Button
                     android:text="@string/logIn"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/activity_auth__button__log_in_button" android:layout_weight="1"/>
+                    android:layout_height="wrap_content" android:id="@+id/activity_auth__button__log_in_button"
+                    android:layout_weight="1"/>
             <Space
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:layout_weight="1"/>

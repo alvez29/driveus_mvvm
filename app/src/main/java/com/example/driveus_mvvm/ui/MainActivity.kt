@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.ui
 
+
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
@@ -68,7 +69,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding?.root)
 
         configureBottomBarNavigation()
-        saveSession()
     }
 
 }
