@@ -52,4 +52,10 @@
     <string name="fragment_add_car__label__car_description_edit_text">Descripción</string>
     <string name="fragment_add_car__button_add_car">Añadir</string>
     <string name="profile_fragment__label__button_add_car">Añadir vehículo</string>
+    <string name="channels_fragment__label__tab_explore">Explorar</string>
+    <string name="channels_fragment__label__tab_my_channels">Mis canales</string>
+    <string name="channel_row__label__origin_zone_icon_content_description">Origin zone icon</string>
+    <string name="channel_row__label__destination_zone_icon_content_description">Destination zone icon</string>
+    <string name="all_channels_label_saerch_hint">Buscar zona...</string>
+    <string name="all_channels__label__filter_image_content_description">Filtro de canales</string>
 </resources>

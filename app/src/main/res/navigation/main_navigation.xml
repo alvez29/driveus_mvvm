@@ -6,15 +6,40 @@
 
     <fragment android:id="@+id/myRidesFragment"
               android:name="com.example.driveus_mvvm.ui.MyRidesFragment"
-              android:label="MyRidesFragment"/>
+              android:label="MyRidesFragment">
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="blue" />
+
+    </fragment>
 
     <fragment android:id="@+id/channelsFragment"
               android:name="com.example.driveus_mvvm.ui.ChannelsFragment"
-              android:label="ChannelsFragment"/>
+              android:label="ChannelsFragment">
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="pink" />
+
+        <action
+            android:id="@+id/action_channelsFragment_to_channelDetailFragment"
+            app:destination="@id/channelDetailFragment" />
+
+    </fragment>
 
     <fragment android:id="@+id/payoutsFragment"
               android:name="com.example.driveus_mvvm.ui.PayoutsFragment"
-              android:label="PayoutsFragment"/>
+              android:label="PayoutsFragment">
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="yellow" />
+
+    </fragment>
 
     <fragment android:id="@+id/profileFragment"
               android:name="com.example.driveus_mvvm.ui.ProfileFragment"
@@ -25,5 +50,34 @@
     <fragment android:id="@+id/addCarFragment"
               android:name="com.example.driveus_mvvm.ui.AddCarFragment"
               android:label="AddCarFragment"/>
+
+  <fragment android:id="@+id/profileFragment" android:name="com.example.driveus_mvvm.ui.ProfileFragment"
+              android:label="ProfileFragment"/>
+    <fragment
+        android:id="@+id/channelDetailFragment"
+        android:name="com.example.driveus_mvvm.ui.ChannelDetailFragment"
+        android:label="ChannelDetailFragment" >
+
+        <argument
+            android:name="channelId"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="pink" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/myChannelsFragment"
+        android:name="com.example.driveus_mvvm.ui.MyChannelsFragment"
+        android:label="MyChannelsFragment" />
+
+    <fragment
+        android:id="@+id/allChannelsFragment"
+        android:name="com.example.driveus_mvvm.ui.AllChannelsFragment"
+        android:label="AllChannelsFragment" />
 
 </navigation>
