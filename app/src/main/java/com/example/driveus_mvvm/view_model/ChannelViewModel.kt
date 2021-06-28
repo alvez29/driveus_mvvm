@@ -59,10 +59,9 @@ class ChannelViewModel : ViewModel() {
         return allChannels
     }
 
-    fun getUserChannels(uid: String): LiveData<Map<String, Channel>> {
-        FirestoreRepository.getUserByUID(uid).addSnapshotListener { value, _ ->
-            if (value?.documents?.size == 1) {
-                val subscribedChannels = value.documents.first()?.get("channels") as? List<DocumentReference>
+    fun getUserChannels(userId: String): LiveData<Map<String, Channel>> {
+        FirestoreRepository.getUserById(userId).addSnapshotListener { value, _ ->
+                val subscribedChannels = value?.get("channels") as? List<DocumentReference>
 
                 val resMap = mutableMapOf<String, Channel>()
 
@@ -84,7 +83,6 @@ class ChannelViewModel : ViewModel() {
                         }
                     }
                 }
-            }
         }
 
         return userChannels
@@ -109,35 +107,27 @@ class ChannelViewModel : ViewModel() {
         return channelRides
     }
 
-    //TODO: GUARDAR EN SESIÓN LA ID DEL USUARIO
-    fun suscribeToChannel(uid: String, channelDocId: String) {
-        FirestoreRepository.getUserByUID(uid).get().addOnSuccessListener { userQuery ->
-            if (userQuery.documents.size == 1) {
-                val userDocId = userQuery.documents.first().id
-                val userReference = userQuery.documents.first().reference
+    fun suscribeToChannel(userId: String, channelDocId: String) {
+        FirestoreRepository.getUserById(userId).get().addOnSuccessListener { document ->
+            val userReference = document.reference
 
-                FirestoreRepository.getChannelById(channelDocId).get().addOnSuccessListener { channelDoc ->
-                    viewModelScope.launch {
-                        FirestoreRepository.subscribeToChannelUserSide(userDocId, channelDoc.reference)
-                        FirestoreRepository.subscribeToChannelChannelSide(channelDoc.id, userReference)
-                    }
+            FirestoreRepository.getChannelById(channelDocId).get().addOnSuccessListener { channelDoc ->
+                viewModelScope.launch {
+                    FirestoreRepository.subscribeToChannelUserSide(userId, channelDoc.reference)
+                    FirestoreRepository.subscribeToChannelChannelSide(channelDoc.id, userReference)
                 }
             }
         }
     }
 
-    //TODO: GUARDAR EN SESIÓN LA ID DEL USUARIO
-    fun unsuscribeToChannel(uid: String, channelDocId: String) {
-        FirestoreRepository.getUserByUID(uid).get().addOnSuccessListener { userQuery ->
-            if (userQuery.documents.size == 1) {
-                val userDocId = userQuery.documents.first().id
-                val userReference = userQuery.documents.first().reference
+    fun unsuscribeToChannel(userId: String, channelDocId: String) {
+        FirestoreRepository.getUserById(userId).get().addOnSuccessListener { document ->
+            val userReference = document.reference
 
-                FirestoreRepository.getChannelById(channelDocId).get().addOnSuccessListener { channelDoc ->
-                    viewModelScope.launch {
-                        FirestoreRepository.unsubscribeToChannelUserSide(userDocId, channelDoc.reference)
-                        FirestoreRepository.unsubscribeToChannelChannelSide(channelDoc.id, userReference)
-                    }
+            FirestoreRepository.getChannelById(channelDocId).get().addOnSuccessListener { channelDoc ->
+                viewModelScope.launch {
+                    FirestoreRepository.unsubscribeToChannelUserSide(userId, channelDoc.reference)
+                    FirestoreRepository.unsubscribeToChannelChannelSide(channelDoc.id, userReference)
                 }
             }
         }

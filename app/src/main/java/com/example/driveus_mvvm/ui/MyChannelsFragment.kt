@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentMyChannelsBinding
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.ui.adapter.AllChannelsListAdapter
@@ -21,7 +23,7 @@ class MyChannelsFragment : Fragment() {
 
     private var viewBinding: FragmentMyChannelsBinding? = null
     private val channelViewModel : ChannelViewModel by lazy { ViewModelProvider(this)[ChannelViewModel::class.java] }
-    private val userUID : String? by lazy { FirebaseAuth.getInstance().currentUser?.uid }
+    private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
     private fun myChannelsObserver(adapter: AllChannelsListAdapter) = Observer<Map<String, Channel>> {
         adapter.submitList(it.toList())
@@ -39,15 +41,15 @@ class MyChannelsFragment : Fragment() {
         }
 
         override fun onSubscribeClick(channelDocId: String) {
-            userUID?.let {
-                channelViewModel.suscribeToChannel(channelDocId, it)
-            }
+            sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                    ?.let { channelViewModel.suscribeToChannel(channelDocId, it) }
+
         }
 
         override fun onUnsubscribeClick(channelDocId: String) {
-            userUID?.let {
-                channelViewModel.unsuscribeToChannel(channelDocId, it)
-            }
+            sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                    ?.let { channelViewModel.unsuscribeToChannel(channelDocId, it) }
+
         }
 
     }
@@ -72,8 +74,8 @@ class MyChannelsFragment : Fragment() {
 
         val adapter = setupRecyclerAdapter()
 
-        FirebaseAuth.getInstance().currentUser?.let {
-            channelViewModel.getUserChannels(it.uid).observe(viewLifecycleOwner, myChannelsObserver(adapter))
-        }
+        sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                ?.let { channelViewModel.getUserChannels(it).observe(viewLifecycleOwner, myChannelsObserver(adapter)) }
+
     }
 }

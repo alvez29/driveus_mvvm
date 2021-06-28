@@ -15,7 +15,7 @@ import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -23,13 +23,13 @@ class UserViewModel : ViewModel() {
 
     private val tag = "FIRESTORE_USER_VIEW_MODEL"
 
-    private val userById: MutableLiveData<User> = MutableLiveData()
-    private val userByUid: MutableLiveData<User> = MutableLiveData()
+    private val userDocumentByUid: MutableLiveData<DocumentSnapshot> = MutableLiveData()
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
     private val redirect = MutableLiveData(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
     private val vehicleFormError = MutableLiveData<MutableMap<AddCarEnum, Int>>(mutableMapOf())
+    private val redirectVehicle = MutableLiveData(false)
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
         val errorMap = mutableMapOf<SignUpFormEnum, Int>()
@@ -150,54 +150,17 @@ class UserViewModel : ViewModel() {
         return redirect
     }
 
-    fun getUserById(userId: String): LiveData<User> {
-        FirestoreRepository.getUserById(userId)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    Log.w(tag, "Listen failed.", error)
-                    userById.value = null
-                }
-                val user: User? = value?.toObject(User::class.java)
-                userById.postValue(user)
-            }
-        return userById
-    }
-
-    fun getUserByUid(uid: String): LiveData<User> {
-        FirestoreRepository.getUserFromUID(uid)
+    fun getUserByUid(uid: String): LiveData<DocumentSnapshot> {
+        FirestoreRepository.getUserByUID(uid)
             .addSnapshotListener { value, error ->
                 if ( error != null) {
                     Log.w(tag, "Listen failed.", error)
-                    userByUid.value = null
+                    userDocumentByUid.value = null
                 }
-                val user: User? = value?.toObjects(User::class.java)?.get(0)
-                userByUid.postValue(user)
+                userDocumentByUid.postValue(value?.documents?.first())
                }
-        return userByUid
-    }
-    
-    //Función para obtener la id del documento del usuario con la uid por parámetro.
-    // Se utilizará para actualizar los datos de la sesión
-    fun getDocumentIdFromUID(uid: String): String {
-        var res: String = ""
 
-        FirestoreRepository.getUserByUID(uid).get().addOnSuccessListener {
-            if (it.documents.size == 1) {
-                res = it.documents.first().id
-            }
-        return userByUid
-    }
-
-    //Función para obtener la id del documento del usuario con la uid por parámetro.
-    // Se utilizará para actualizar los datos de la sesión
-    fun getDocumentIdFromUID(uid: String): Query {
-        return FirestoreRepository.getUserFromUID(uid)
-    }
-
-    fun updateUserName(userId: String, name: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            FirestoreRepository.updateUserName(userId, name)
-        }
+        return userDocumentByUid
     }
 
     fun updateUserIsDriver(userId: String, isDriver: Boolean) {
@@ -258,20 +221,14 @@ class UserViewModel : ViewModel() {
             description = inputs[AddCarEnum.DESCRIPTION])
     }
 
-    fun addNewVehicle(inputs: Map<AddCarEnum, String>) {
+    fun addNewVehicle(inputs: Map<AddCarEnum, String>, documentId: String) {
         if (validateCarForm(inputs)){
-            FirebaseAuth.getInstance().currentUser?.uid?.let {
-                getDocumentIdFromUID(it).get()
-                    .addOnSuccessListener {
-                        val id = it.documents.first().id
-                        viewModelScope.launch(Dispatchers.IO){
-                                FirestoreRepository.addVehicle(getCarFromInputs(inputs), id)
-                                updateUserIsDriver(id, true)
-                        }
-                    }.addOnFailureListener {
-                        Log.w(tag, "Listen failed.")
-                    }
+            viewModelScope.launch(Dispatchers.IO){
+                    FirestoreRepository.addVehicle(getCarFromInputs(inputs), documentId)
+                    updateUserIsDriver(documentId, true)
             }
+            redirectVehicle.postValue(true)
+
         }
     }
 
@@ -279,27 +236,29 @@ class UserViewModel : ViewModel() {
         return vehicleFormError
     }
 
-    //TODO: GUARDAR EN SESIÓN LA ID DEL USUARIO
-    fun getVehiclesByUserUid(uid: String): LiveData<Map<String,Vehicle>> {
-        FirestoreRepository.getUserFromUID(uid).get().addOnSuccessListener {
-            FirestoreRepository.getAllVehiclesByUserId(it.documents.first().id)
-                .addSnapshotListener { value, error ->
-                    if (error != null) {
-                        Log.w(tag, "Listen failed.", error)
-                        vehiclesByUserId.value = mutableMapOf()
-                    }
-                    val documents = value?.documents
-                    var mapIdVehicles:MutableMap<String, Vehicle> = mutableMapOf()
-                    if (documents != null) {
-                        for (d in documents) {
-                            d.toObject(Vehicle::class.java)?.let {
-                                    it1 -> mapIdVehicles.put(d.id, it1)
-                            }
+    fun getRedirectVehicle(): LiveData<Boolean> {
+        return redirectVehicle
+    }
+
+    fun getVehiclesByUserId(id: String): LiveData<Map<String,Vehicle>> {
+        FirestoreRepository.getAllVehiclesByUserId(id)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(tag, "Listen failed.", error)
+                    vehiclesByUserId.value = mutableMapOf()
+                }
+                val documents = value?.documents
+                var mapIdVehicles:MutableMap<String, Vehicle> = mutableMapOf()
+                if (documents != null) {
+                    for (d in documents) {
+                        d.toObject(Vehicle::class.java)?.let {
+                                it1 -> mapIdVehicles.put(d.id, it1)
                         }
                     }
-                    vehiclesByUserId.postValue(mapIdVehicles)
                 }
-        }
+                vehiclesByUserId.postValue(mapIdVehicles)
+            }
+
         return vehiclesByUserId
     }
 }

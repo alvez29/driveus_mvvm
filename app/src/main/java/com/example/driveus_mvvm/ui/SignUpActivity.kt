@@ -29,7 +29,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private val redirectObserver = Observer<Boolean> {
-        if(it) {
+        if (it) {
             startMainActivity()
         }
     }
