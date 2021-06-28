@@ -15,8 +15,6 @@ import com.example.driveus_mvvm.databinding.FragmentMyChannelsBinding
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.ui.adapter.AllChannelsListAdapter
 import com.example.driveus_mvvm.view_model.ChannelViewModel
-import com.example.driveus_mvvm.view_model.UserViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 
 class MyChannelsFragment : Fragment() {
@@ -42,13 +40,20 @@ class MyChannelsFragment : Fragment() {
 
         override fun onSubscribeClick(channelDocId: String) {
             sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                    ?.let { channelViewModel.suscribeToChannel(channelDocId, it) }
+                    ?.let { channelViewModel.subscribeToChannel(it, channelDocId) }
 
         }
 
         override fun onUnsubscribeClick(channelDocId: String) {
             sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                    ?.let { channelViewModel.unsuscribeToChannel(channelDocId, it) }
+                    ?.let { channelViewModel.unsubscribeToChannel(it, channelDocId) }
+
+        }
+
+        override fun isSubscribed(usersList: List<DocumentReference?>): Boolean {
+            val docId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key),"")
+
+            return usersList.map { it?.id }.contains(docId)
 
         }
 
