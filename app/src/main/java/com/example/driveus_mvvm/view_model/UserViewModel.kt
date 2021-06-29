@@ -295,6 +295,14 @@ class UserViewModel : ViewModel() {
     }
 
     fun deleteVehicleById(userId: String, vehicleId: String) {
-        FirestoreRepository.deleteVehicleById(userId, vehicleId)
+        FirestoreRepository.getAllVehiclesByUserId(userId).addSnapshotListener { value, error ->
+            if (error != null) {
+                Log.w(tag, "Listen failed.", error)
+            }
+            if (value?.documents?.size == 1){
+                updateUserIsDriver(userId, false)
+            }
+            FirestoreRepository.deleteVehicleById(userId, vehicleId)
+        }
     }
 }

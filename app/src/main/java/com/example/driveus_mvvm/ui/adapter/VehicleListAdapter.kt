@@ -77,5 +77,4 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
             }
         }
     }
-
 }
