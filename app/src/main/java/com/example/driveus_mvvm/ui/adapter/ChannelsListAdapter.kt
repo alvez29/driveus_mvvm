@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.Channel
+import com.google.firebase.firestore.DocumentReference
 
 
 private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Channel>>() {
@@ -38,6 +39,7 @@ class AllChannelsListAdapter(
         fun onItemClick(channelDocId: String)
         fun onSubscribeClick(channelDocId: String)
         fun onUnsubscribeClick(channelDocId: String)
+        fun isSubscribed(usersList: List<DocumentReference?>): Boolean
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelViewHolder {
@@ -52,6 +54,15 @@ class AllChannelsListAdapter(
         holder.originZoneText.text = currentChannelPair.second.originZone
         holder.destinationZoneText.text = currentChannelPair.second.destinationZone
 
+        currentChannelPair.second.users?.let {
+            if (listener.isSubscribed(it)){
+                holder.subscribeButton.setImageResource(R.drawable.ic_round_bookmark_24)
+            } else {
+                holder.subscribeButton.setImageResource(R.drawable.ic_round_bookmark_border_24)
+            }
+        }
+
+
     }
 
     inner class ChannelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -65,7 +76,14 @@ class AllChannelsListAdapter(
             }
 
             subscribeButton.setOnClickListener {
-                //TODO
+                getItem(adapterPosition).second.users?.let {
+                    if (listener.isSubscribed(it)){
+                        listener.onUnsubscribeClick(getItem(adapterPosition).first)
+                    } else {
+                        listener.onSubscribeClick(getItem(adapterPosition).first)
+                    }
+                }
+
             }
         }
     }

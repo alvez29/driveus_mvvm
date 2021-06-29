@@ -1,16 +1,14 @@
 package com.example.driveus_mvvm.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.driveus_mvvm.R
@@ -18,8 +16,6 @@ import com.example.driveus_mvvm.databinding.FragmentAllChannelsBinding
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.ui.adapter.AllChannelsListAdapter
 import com.example.driveus_mvvm.view_model.ChannelViewModel
-import com.example.driveus_mvvm.view_model.UserViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import java.util.*
 
@@ -27,7 +23,7 @@ class AllChannelsFragment : Fragment() {
 
     private var viewBinding: FragmentAllChannelsBinding? = null
     private val channelViewModel : ChannelViewModel by lazy { ViewModelProvider(this)[ChannelViewModel::class.java] }
-    private val userUID : String? by lazy { FirebaseAuth.getInstance().currentUser?.uid }
+    private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
     private val allChannelsListAdapterListener = object : AllChannelsListAdapter.AllChannelsListAdapterListener {
 
@@ -41,18 +37,23 @@ class AllChannelsFragment : Fragment() {
         }
 
         override fun onSubscribeClick(channelDocId: String) {
-            userUID?.let {
-                channelViewModel.suscribeToChannel(channelDocId, it)
+            sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")?.let {
+                channelViewModel.subscribeToChannel(it, channelDocId)
             }
         }
 
         override fun onUnsubscribeClick(channelDocId: String) {
-            userUID?.let {
-                channelViewModel.unsuscribeToChannel(channelDocId, it)
+            sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")?.let {
+                channelViewModel.unsubscribeToChannel(it, channelDocId)
             }
         }
 
-        //TODO: Añadir la forma de mostrar es favorito o no
+        override fun isSubscribed(usersList: List<DocumentReference?>): Boolean {
+            val docId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key),"")
+
+            return usersList.map { it?.id }.contains(docId)
+
+        }
 
     }
 
@@ -108,26 +109,20 @@ class AllChannelsFragment : Fragment() {
     }
 
     private fun allChannelsObserver(adapter: AllChannelsListAdapter) = Observer<Map<String, Channel>> {
-        //Este método se puede poner más bonito (aún)
-        FirebaseAuth.getInstance().currentUser?.let { user ->
+        if (it.isEmpty().not()) {
+            viewBinding?.allChannelsSearchSearchView?.visibility = View.VISIBLE
+            viewBinding?.allChannelsSwitchFilter?.visibility = View.VISIBLE
+            viewBinding?.allChannelsImageFilterImage?.visibility = View.VISIBLE
+            configureChannelSearch(it, adapter)
 
-            if (it.isEmpty().not()) {
-                viewBinding?.allChannelsSearchSearchView?.visibility = View.VISIBLE
-                viewBinding?.allChannelsSwitchFilter?.visibility = View.VISIBLE
-                viewBinding?.allChannelsImageFilterImage?.visibility = View.VISIBLE
-                configureChannelSearch(it, adapter)
-
-            } else {
-                viewBinding?.allChannelsSearchSearchView?.visibility = View.GONE
-                viewBinding?.allChannelsSwitchFilter?.visibility = View.GONE
-                viewBinding?.allChannelsImageFilterImage?.visibility = View.GONE
-
-            }
-
-            adapter.submitList(it.toList())
+        } else {
+            viewBinding?.allChannelsSearchSearchView?.visibility = View.GONE
+            viewBinding?.allChannelsSwitchFilter?.visibility = View.GONE
+            viewBinding?.allChannelsImageFilterImage?.visibility = View.GONE
 
         }
 
+        adapter.submitList(it.toList())
     }
 
     private fun setupRecyclerAdapter() : AllChannelsListAdapter {

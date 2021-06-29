@@ -61,10 +61,13 @@ class ChannelViewModel : ViewModel() {
 
     fun getUserChannels(userId: String): LiveData<Map<String, Channel>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { value, _ ->
-                val subscribedChannels = value?.get("channels") as? List<DocumentReference>
+            val subscribedChannels = value?.get("channels") as? List<DocumentReference>
 
-                val resMap = mutableMapOf<String, Channel>()
+            val resMap = mutableMapOf<String, Channel>()
 
+            if (subscribedChannels?.isEmpty() == true) {
+                userChannels.postValue(resMap)
+            } else {
                 subscribedChannels?.forEach { channelReference ->
                     FirestoreRepository.getChannelById(channelReference.id).addSnapshotListener { value, error ->
 
@@ -83,6 +86,8 @@ class ChannelViewModel : ViewModel() {
                         }
                     }
                 }
+            }
+
         }
 
         return userChannels
@@ -107,7 +112,7 @@ class ChannelViewModel : ViewModel() {
         return channelRides
     }
 
-    fun suscribeToChannel(userId: String, channelDocId: String) {
+    fun subscribeToChannel(userId: String, channelDocId: String) {
         FirestoreRepository.getUserById(userId).get().addOnSuccessListener { document ->
             val userReference = document.reference
 
@@ -120,14 +125,14 @@ class ChannelViewModel : ViewModel() {
         }
     }
 
-    fun unsuscribeToChannel(userId: String, channelDocId: String) {
+    fun unsubscribeToChannel(userId: String, channelDocId: String) {
         FirestoreRepository.getUserById(userId).get().addOnSuccessListener { document ->
             val userReference = document.reference
 
             FirestoreRepository.getChannelById(channelDocId).get().addOnSuccessListener { channelDoc ->
                 viewModelScope.launch {
-                    FirestoreRepository.unsubscribeToChannelUserSide(userId, channelDoc.reference)
                     FirestoreRepository.unsubscribeToChannelChannelSide(channelDoc.id, userReference)
+                    FirestoreRepository.unsubscribeToChannelUserSide(userId, channelDoc.reference)
                 }
             }
         }
