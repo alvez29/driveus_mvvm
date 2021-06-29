@@ -55,6 +55,14 @@
                         android:text="@string/car_row__label_seat_value_test"
                         app:layout_constraintStart_toEndOf="@+id/car_row__label_seat"
                         app:layout_constraintTop_toTopOf="parent"/>
+                <Button
+                        android:id="@+id/car_row__button__delete_car"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/car_row__label__button_delete_car"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
                 <TextView
                         android:id="@+id/car_row__label_color"
                         android:layout_marginStart="16dp"

@@ -59,4 +59,8 @@
     <string name="all_channels_label_saerch_hint">Buscar zona...</string>
     <string name="all_channels__label__filter_image_content_description">Filtro de canales</string>
     <string name="shared_pref_doc_id_key">docId</string>
+    <string name="car_row__label__button_delete_car">Eliminar</string>
+    <string name="dialog_delete_car__label__body">¿Está seguro de que quiere eliminar este vehículo de su lista?</string>
+    <string name="dialog_delete_car__button__acept">Aceptar</string>
+    <string name="dialog_delete_car__label__cancel">Cancelar</string>
 </resources>

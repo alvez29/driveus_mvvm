@@ -1,8 +1,9 @@
 package com.example.driveus_mvvm.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.driveus_mvvm.R
@@ -50,13 +51,6 @@ class SignUpActivity : AppCompatActivity() {
         startActivity(mainActivityIntent)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewBinding = ActivitySignUpBinding.inflate(layoutInflater)
-        setContentView(viewBinding?.root)
-
-        setup()
-    }
 
     private fun setup() {
         title = getString(R.string.sign_up_title)
@@ -65,7 +59,17 @@ class SignUpActivity : AppCompatActivity() {
         viewModel.getRedirect().observe(this, redirectObserver)
 
         viewBinding?.activitySignUpButtonSignUp?.setOnClickListener {
-               viewModel.createNewUser(getInputs())
+            viewModel.createNewUser(getInputs())
         }
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewBinding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(viewBinding?.root)
+
+        setup()
+    }
+
+
 }

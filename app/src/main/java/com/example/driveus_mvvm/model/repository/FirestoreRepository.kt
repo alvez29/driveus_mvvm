@@ -32,12 +32,6 @@ object FirestoreRepository {
         return db.collection(USERS_COLLECTION).whereEqualTo("username", username)
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun updateUserName(userId: String, name: String) {
-            db.collection(USERS_COLLECTION).document(userId)
-                    .update(mapOf("name" to name))
-    }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
@@ -95,7 +89,13 @@ object FirestoreRepository {
 
     fun getAllVehiclesByUserId(id: String): CollectionReference {
         return db.collection("users").document(id).collection("vehicles")
-    }    
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    fun deleteVehicleById(userID: String, vehicleId: String) {
+        db.collection("users").document(userID).collection("vehicles").document(vehicleId).delete()
+    }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread

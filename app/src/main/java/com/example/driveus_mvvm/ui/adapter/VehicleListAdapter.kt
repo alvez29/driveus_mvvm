@@ -3,6 +3,7 @@ package com.example.driveus_mvvm.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
@@ -19,14 +20,18 @@ private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Vehicle>>
         return  oldItem.first == newItem.first
     }
 
-    override fun areContentsTheSame(oldItem: Pair<String, Vehicle>
-                                    , newItem: Pair<String, Vehicle>
+    override fun areContentsTheSame(oldItem: Pair<String, Vehicle>,
+                                    newItem: Pair<String, Vehicle>
     ): Boolean {
         return oldItem == newItem
     }
 }
 
-class VehicleListAdapter() : ListAdapter<Pair<String, Vehicle>, VehicleListAdapter.VehicleViewHolder>(diffCallback) {
+class VehicleListAdapter(private val listener: VehicleListAdapterListener) : ListAdapter<Pair<String, Vehicle>, VehicleListAdapter.VehicleViewHolder>(diffCallback) {
+
+    interface VehicleListAdapterListener {
+        fun onDeleteButtonClick(vehicleId: String, model: String)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleViewHolder {
         val vehicleView = LayoutInflater.from(parent.context).inflate(R.layout.car_row, parent, false)
@@ -39,7 +44,7 @@ class VehicleListAdapter() : ListAdapter<Pair<String, Vehicle>, VehicleListAdapt
         holder.modelItemView.text = currentVehicle.second.brand + " " + currentVehicle.second.model
         holder.colorItemView.text = currentVehicle.second.color
         holder.seatsItemView.text = currentVehicle.second.seats.toString()
-        holder.descriptionlItemView.text = currentVehicle.second.description
+        holder.descriptionItemView.text = currentVehicle.second.description
 
         if (currentVehicle.second.expanded) {
             holder.expandableLayout.visibility = View.VISIBLE
@@ -52,8 +57,11 @@ class VehicleListAdapter() : ListAdapter<Pair<String, Vehicle>, VehicleListAdapt
         val modelItemView: TextView by lazy { itemView.findViewById(R.id.car_row_label_brand_model) }
         val colorItemView: TextView by lazy { itemView.findViewById(R.id.car_row__label_color_value) }
         val seatsItemView: TextView by lazy { itemView.findViewById(R.id.car_row__label_seat_value) }
-        val descriptionlItemView: TextView by lazy { itemView.findViewById(R.id.car_row__label_Description_value) }
+        val descriptionItemView: TextView by lazy { itemView.findViewById(R.id.car_row__label_Description_value) }
         val expandableLayout : ConstraintLayout by lazy { itemView.findViewById(R.id.car_row__layout__expandable) }
+
+        private val deleteButton: Button by lazy { itemView.findViewById(R.id.car_row__button__delete_car) }
+
         init {
            modelItemView.setOnClickListener {
                if (expandableLayout.visibility == View.VISIBLE) {
@@ -62,6 +70,11 @@ class VehicleListAdapter() : ListAdapter<Pair<String, Vehicle>, VehicleListAdapt
                    expandableLayout.visibility = View.VISIBLE
                }
            }
+
+            deleteButton.setOnClickListener {
+                val model = getItem(adapterPosition).second.brand + " " + getItem(adapterPosition).second.brand
+                listener.onDeleteButtonClick(getItem(adapterPosition).first, model)
+            }
         }
     }
 

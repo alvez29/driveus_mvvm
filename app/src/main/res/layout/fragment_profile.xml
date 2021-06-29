@@ -20,6 +20,14 @@
                 android:orientation="vertical"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" >
+            <ImageView
+                    android:id="@+id/fragment_profile__image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/avatars"/>
             <TextView
                     android:id="@+id/profile_fragment__label__username"
                     android:layout_width="wrap_content"
