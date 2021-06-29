@@ -16,7 +16,10 @@
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintVertical_bias="1.0">
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                     android:hint="@string/activity_sig_up__label__name_edit_text"
                     android:layout_width="match_parent"
@@ -26,7 +29,10 @@
         <Space
                 android:layout_width="match_parent"
                 android:layout_height="8dp"/>
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                     android:hint="@string/activity_sign_up__label__surname_edit_text"
                     android:layout_width="match_parent"
@@ -36,11 +42,14 @@
         <Space
                 android:layout_width="match_parent"
                 android:layout_height="8dp"/>
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                     android:hint="@string/activity_sign_up__label__username_edit_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/activity_sign_up__input__username_edit_text"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity_sign_up__input__username_edit_text"
                     android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -48,11 +57,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="8dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                     android:hint="@string/activity_sign_up__label__email_edit_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/activity_sign_up__input__email_edit_text"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity_sign_up__input__email_edit_text"
                     android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,7 +72,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="8dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                     android:id="@+id/activity_sign_up__input__password_edit_text"
                     android:layout_width="match_parent"
@@ -73,7 +87,9 @@
         <Space
                 android:layout_width="match_parent"
                 android:layout_height="8dp"/>
-        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <EditText
                     android:id="@+id/activity_sign_up__input__password_repeat_edit_text"
@@ -89,7 +105,8 @@
         <Button
                 android:text="@string/activity_sign_up__button__sign_up"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/activity_sign_up__button__sign_up"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/activity_sign_up__button__sign_up"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

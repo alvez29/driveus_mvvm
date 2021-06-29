@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.view_model
 
+import android.net.Uri
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -14,8 +15,8 @@ import com.example.driveus_mvvm.ui.enums.AddCarEnum
 import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -24,8 +25,10 @@ class UserViewModel : ViewModel() {
     private val tag = "FIRESTORE_USER_VIEW_MODEL"
 
     private val userDocumentByUid: MutableLiveData<DocumentSnapshot> = MutableLiveData()
+    private val userDocumentById: MutableLiveData<DocumentSnapshot> = MutableLiveData()
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
     private val redirect = MutableLiveData(false)
+    private val imageTrigger =  MutableLiveData(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
     private val vehicleFormError = MutableLiveData<MutableMap<AddCarEnum, Int>>(mutableMapOf())
@@ -150,6 +153,10 @@ class UserViewModel : ViewModel() {
         return redirect
     }
 
+    fun getImageTrigger(): LiveData<Boolean> {
+        return imageTrigger
+    }
+
     fun getUserByUid(uid: String): LiveData<DocumentSnapshot> {
         FirestoreRepository.getUserByUID(uid)
             .addSnapshotListener { value, error ->
@@ -158,9 +165,22 @@ class UserViewModel : ViewModel() {
                     userDocumentByUid.value = null
                 }
                 userDocumentByUid.postValue(value?.documents?.first())
-               }
+            }
 
         return userDocumentByUid
+    }
+
+    fun getUserById(id: String): LiveData<DocumentSnapshot> {
+        FirestoreRepository.getUserById(id)
+            .addSnapshotListener { value, error ->
+                if ( error != null) {
+                    Log.w(tag, "Listen failed.", error)
+                    userDocumentById.value = null
+                }
+                userDocumentById.postValue(value)
+               }
+
+        return userDocumentById
     }
 
     fun updateUserIsDriver(userId: String, isDriver: Boolean) {
@@ -175,6 +195,18 @@ class UserViewModel : ViewModel() {
                 validate(inputs, true)
             } else {
                 validate(inputs, false)
+            }
+        }
+    }
+
+    fun uploadProfileImageToFirebase(imageUri: Uri, userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val storeReference = FirebaseStorage.getInstance().getReference("users/$userId")
+            storeReference.putFile(imageUri).addOnSuccessListener {
+                val currentValueIT: Boolean? = imageTrigger.value
+                currentValueIT?.let {
+                    imageTrigger.postValue(!it)
+                }
             }
         }
     }
@@ -260,5 +292,9 @@ class UserViewModel : ViewModel() {
             }
 
         return vehiclesByUserId
+    }
+
+    fun deleteVehicleById(userId: String, vehicleId: String) {
+        FirestoreRepository.deleteVehicleById(userId, vehicleId)
     }
 }
