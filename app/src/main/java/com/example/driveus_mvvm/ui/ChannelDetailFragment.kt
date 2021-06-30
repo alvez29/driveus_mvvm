@@ -13,12 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentChannelDetailBinding
-import com.example.driveus_mvvm.databinding.FragmentMyRidesBinding
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.model.entities.Ride
-import com.example.driveus_mvvm.ui.adapter.AllChannelsListAdapter
-import com.example.driveus_mvvm.ui.adapter.RidesListAdapter
-import com.example.driveus_mvvm.ui.utils.ImageUtils
+import com.example.driveus_mvvm.ui.adapter.MyComingRidesListAdapter
 import com.example.driveus_mvvm.view_model.ChannelViewModel
 import com.google.firebase.storage.FirebaseStorage
 
@@ -33,12 +30,12 @@ class ChannelDetailFragment : Fragment() {
         viewBinding?.channelDetailLabelChannelDestinationZone?.text = it.destinationZone
     }
 
-    private fun ridesObserver(adapter: RidesListAdapter) = Observer<Map<String, Ride>> { map ->
+    private fun ridesObserver(adapter: MyComingRidesListAdapter) = Observer<Map<String, Ride>> { map ->
         adapter.submitList(map.toList().sortedBy { it.second.date })
 
     }
 
-    private val ridesListAdapterListener = object : RidesListAdapter.RideListAdapterListener {
+    private val ridesListAdapterListener = object : MyComingRidesListAdapter.RideListAdapterListener {
 
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
             FirebaseStorage.getInstance().reference.child("users/$userId").downloadUrl.addOnSuccessListener {
@@ -58,8 +55,8 @@ class ChannelDetailFragment : Fragment() {
 
     }
 
-    private fun setupRecyclerAdapter(): RidesListAdapter {
-        val adapter = RidesListAdapter(ridesListAdapterListener)
+    private fun setupRecyclerAdapter(): MyComingRidesListAdapter {
+        val adapter = MyComingRidesListAdapter(ridesListAdapterListener)
 
         viewBinding?.channelDetailListRidesList?.adapter = adapter
         viewBinding?.channelDetailListRidesList?.layoutManager = LinearLayoutManager(context)

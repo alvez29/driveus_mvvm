@@ -111,7 +111,6 @@ class ChannelViewModel : ViewModel() {
                 }
             }
 
-
             channelRides.postValue(resMap)
         }
 

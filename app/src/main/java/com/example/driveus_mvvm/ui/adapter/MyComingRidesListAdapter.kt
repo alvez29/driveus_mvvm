@@ -33,7 +33,7 @@ private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Ride>>() 
 
 }
 
-class RidesListAdapter(
+class MyComingRidesListAdapter(
     private val listener: RideListAdapterListener
 ) : ListAdapter<Pair<String, Ride>, MyComingRidesListAdapter.RideViewHolder>(diffCallback) {
 
