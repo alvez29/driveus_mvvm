@@ -111,9 +111,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    //TODO: REVISAR COSTE COMPUTACIONAL DE LAS PETICIONES EN FB.
-    // POSIBLE SOLUCIÓN: Guardar en sesión la URL de la foto que estará a su vez en el modelo del usuario
-
     private fun showImage() {
         val imageName = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
         FirebaseStorage.getInstance().reference.child("users/$imageName").downloadUrl.addOnSuccessListener {
@@ -138,7 +135,7 @@ class ProfileFragment : Fragment() {
         val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_profile_pic, null)
         val mBuilder = AlertDialog.Builder(context)
             .setView(mDialogView)
-            .setTitle("Imagen de perfil")
+            .setTitle(getString(R.string.dialog_profile_pic__label__title))
 
         val mAlertDialog = mBuilder.show()
 
@@ -175,10 +172,6 @@ class ProfileFragment : Fragment() {
             ?.let { it1 -> viewModel.getUserById(it1).observe(viewLifecycleOwner, userObserver) }
 
         viewModel.getImageTrigger().observe(viewLifecycleOwner, imageTriggerObserver)
-
-//        viewBinding?.fragmentProfileImage?.setOnClickListener {
-//            getImage.launch("image/*")
-//        }
 
         viewBinding?.fragmentProfileImage?.setOnClickListener {
             pictureOptions()

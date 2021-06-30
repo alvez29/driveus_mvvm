@@ -66,4 +66,5 @@
     <string name="dialog_profile_pic___label__cancel">Cancelar</string>
     <string name="dialog_profile_pic__label__delete">Eliminar</string>
     <string name="dialog_profile_pic__label__change">Cambiar imagen</string>
+    <string name="dialog_profile_pic__label__title">Imagen de perfil</string>
 </resources>
