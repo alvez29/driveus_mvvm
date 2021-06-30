@@ -4,6 +4,7 @@ package com.example.driveus_mvvm.model.repository
 import androidx.annotation.WorkerThread
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -105,8 +106,9 @@ object FirestoreRepository {
    
     //RIDES FUNCTIONS ----------------------------------------------------
 
-    fun getRidesFromChannel(channelDocId: String) : CollectionReference {
-        return db.collection(CHANNELS_COLLECTION).document(channelDocId).collection(RIDES_COLLECTION)
+    fun getRidesFromChannel(channelDocId: String) : Query {
+        return db.collection(CHANNELS_COLLECTION).document(channelDocId)
+                .collection(RIDES_COLLECTION).whereGreaterThan("date", Timestamp.now())
     }
 
 }

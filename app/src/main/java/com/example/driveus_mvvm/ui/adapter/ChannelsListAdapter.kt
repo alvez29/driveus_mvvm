@@ -66,8 +66,8 @@ class AllChannelsListAdapter(
     }
 
     inner class ChannelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val originZoneText: TextView by lazy { itemView.findViewById(R.id.channel_row__label__channel_origin_zone) }
-        val destinationZoneText: TextView by lazy { itemView.findViewById(R.id.channel_row__label__channel_destination_zone) }
+        val originZoneText: TextView by lazy { itemView.findViewById(R.id.channel_detail__label__channel_origin_zone) }
+        val destinationZoneText: TextView by lazy { itemView.findViewById(R.id.channel_detail__label__channel_destination_zone) }
         val subscribeButton: ImageButton by lazy { itemView.findViewById(R.id.channel_row__button__subscribe) }
 
         init {

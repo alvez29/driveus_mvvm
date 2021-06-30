@@ -39,7 +39,7 @@
             android:layout_height="32dp"
             android:src="@drawable/ic_origin_zone_24"
             android:contentDescription="@string/all_channels__label__filter_image_content_description"
-            tools:src="@drawable/ic_round_location_on_24" />
+            tools:src="@drawable/ic_pink_round_location_on_24" />
 
         <androidx.appcompat.widget.AppCompatToggleButton
             android:id="@+id/all_channels__switch__filter"
