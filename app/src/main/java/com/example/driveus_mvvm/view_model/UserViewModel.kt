@@ -211,6 +211,18 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun deleteImageByUserId(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val storeReference = FirebaseStorage.getInstance().getReference("users/$userId")
+            storeReference.delete().addOnSuccessListener {
+                val currentValueIT: Boolean? = imageTrigger.value
+                currentValueIT?.let {
+                    imageTrigger.postValue(!it)
+                }
+            }
+        }
+    }
+
     //VEHICLE FUNCTIONS -----------------------------------------------------
 
     private fun validateCarForm(textInputs: Map<AddCarEnum, String>): Boolean{

@@ -63,6 +63,10 @@
     <string name="dialog_delete_car__label__body">¿Está seguro de que quiere eliminar este vehículo de su lista?</string>
     <string name="dialog_delete_car__button__acept">Aceptar</string>
     <string name="dialog_delete_car__label__cancel">Cancelar</string>
+    <string name="dialog_profile_pic___label__cancel">Cancelar</string>
+    <string name="dialog_profile_pic__label__delete">Eliminar</string>
+    <string name="dialog_profile_pic__label__change">Cambiar imagen</string>
+    <string name="dialog_profile_pic__label__title">Imagen de perfil</string>
     <string name="profile_picture_not_found_tag">Imagen no encontrada</string>
     <string name="profile_picture_not_found_message">No se ha encontrado imagen en Firebase Storage. Se ha cargado la imagen por defecto.</string>
 </resources>
