@@ -99,7 +99,7 @@ class AllChannelsFragment : Fragment() {
         
         viewBinding?.allChannelsSwitchFilter?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                viewBinding?.allChannelsImageFilterImage?.setImageResource(R.drawable.ic_round_location_on_24)
+                viewBinding?.allChannelsImageFilterImage?.setImageResource(R.drawable.ic_pink_round_location_on_24)
             } else {
                 viewBinding?.allChannelsImageFilterImage?.setImageResource(R.drawable.ic_origin_zone_24)
             }
