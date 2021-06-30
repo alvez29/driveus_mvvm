@@ -102,9 +102,15 @@ class ChannelViewModel : ViewModel() {
 
             val resMap = mutableMapOf<String, Ride>()
 
-            value?.forEach {
-                resMap[it.id] = it.toObject(Ride::class.java)
+            if (value?.documents?.isEmpty() == false) {
+                value.documents.forEach { document ->
+                    val ride: Ride? = document.toObject(Ride::class.java)
+                    ride?.let {
+                        resMap[document.id] = it
+                    }
+                }
             }
+
 
             channelRides.postValue(resMap)
         }

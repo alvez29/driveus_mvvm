@@ -9,4 +9,5 @@ data class Ride(var date: Timestamp? = null,
                 var meetingPoint : GeoPoint = GeoPoint(0.0 , 0.0 ),
                 var passengers : List<DocumentReference> = emptyList(),
                 var price : Double? = 0.0,
-                var vehicle : DocumentReference? = null)
+                var vehicle : DocumentReference? = null,
+                var capacity: Int? = 0)
