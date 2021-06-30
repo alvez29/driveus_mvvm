@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.ui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -131,6 +133,32 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ResourceType")
+    private fun pictureOptions() {
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_profile_pic, null)
+        val mBuilder = AlertDialog.Builder(context)
+            .setView(mDialogView)
+            .setTitle("Imagen de perfil")
+
+        val mAlertDialog = mBuilder.show()
+
+        mDialogView.findViewById<View>(R.id.dialog_profile_pic_cancel).setOnClickListener{
+            mAlertDialog.dismiss()
+        }
+
+        mDialogView.findViewById<View>(R.id.dialog_profile_pic_delete).setOnClickListener{
+            sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                ?.let { it1 -> viewModel.deleteImageByUserId(it1) }
+            mAlertDialog.dismiss()
+        }
+
+        mDialogView.findViewById<View>(R.id.dialog_profile_pic_change).setOnClickListener{
+            getImage.launch("image/*")
+            mAlertDialog.dismiss()
+        }
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewBinding = FragmentProfileBinding.inflate(inflater, container, false)
 
@@ -148,8 +176,12 @@ class ProfileFragment : Fragment() {
 
         viewModel.getImageTrigger().observe(viewLifecycleOwner, imageTriggerObserver)
 
+//        viewBinding?.fragmentProfileImage?.setOnClickListener {
+//            getImage.launch("image/*")
+//        }
+
         viewBinding?.fragmentProfileImage?.setOnClickListener {
-            getImage.launch("image/*")
+            pictureOptions()
         }
     }
 }
