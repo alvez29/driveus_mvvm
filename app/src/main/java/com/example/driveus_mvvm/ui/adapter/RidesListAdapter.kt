@@ -35,19 +35,19 @@ private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Ride>>() 
 
 class RidesListAdapter(
     private val listener: RideListAdapterListener
-) : ListAdapter<Pair<String, Ride>, MyComingRidesListAdapter.RideViewHolder>(diffCallback) {
+) : ListAdapter<Pair<String, Ride>, RidesListAdapter.RideViewHolder>(diffCallback) {
 
     interface RideListAdapterListener {
         fun loadProfilePicture(userId: String?, imageView: ImageView)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RideViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RidesListAdapter.RideViewHolder {
         val rideView = LayoutInflater.from(parent.context).inflate(R.layout.row_ride, parent, false)
 
         return RideViewHolder(rideView)
     }
 
-    override fun onBindViewHolder(holder: RideViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RidesListAdapter.RideViewHolder, position: Int) {
         val currentRidePair = getItem(position)
 
         val pattern = "HH:mm dd-MM-yyyy"
