@@ -25,7 +25,6 @@ class UserViewModel : ViewModel() {
 
     private val tag = "FIRESTORE_USER_VIEW_MODEL"
 
-    private val userDocumentByUid: MutableLiveData<DocumentSnapshot> = MutableLiveData()
     private val userDocumentById: MutableLiveData<DocumentSnapshot> = MutableLiveData()
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
     private val redirect = MutableLiveData(false)
