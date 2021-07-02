@@ -27,13 +27,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var viewBinding : ActivityMainBinding? = null
-    private val viewModel : UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
-
-    private val userObserver = Observer<DocumentSnapshot> {
-        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-        prefs.putString(getString(R.string.shared_pref_doc_id_key), it.id )
-        prefs.apply()
-    }
 
     private val backgroundColorListener =
         NavController.OnDestinationChangedListener { _, _, arguments ->
@@ -70,8 +63,9 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding?.root)
 
-        FirebaseAuth.getInstance().currentUser?.let { viewModel.getUserByUid(it.uid).observe(this, userObserver) }
+
         configureBottomBarNavigation()
+
     }
 
 }

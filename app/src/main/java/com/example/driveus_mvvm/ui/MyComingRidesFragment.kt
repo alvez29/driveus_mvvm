@@ -101,10 +101,14 @@ class MyComingRidesFragment : Fragment() {
         val adapterAsDriver = setupRecyclerAsDriverAdapter()
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                ?.let { rideViewModel.getComingRidesAsPassenger(it).observe(viewLifecycleOwner, myComingRidesAsPassengerObserver(adapterAsPassenger)) }
+                ?.let {
+                    rideViewModel.getComingRidesAsPassenger(it).observe(viewLifecycleOwner, myComingRidesAsPassengerObserver(adapterAsPassenger))
+                }
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                ?.let { rideViewModel.getComingRidesAsDriver(it).observe(viewLifecycleOwner, myComingRidesAsDriverObserver(adapterAsDriver)) }
+                ?.let {
+                    rideViewModel.getComingRidesAsDriver(it).observe(viewLifecycleOwner, myComingRidesAsDriverObserver(adapterAsDriver))
+                }
 
         setupFloatingButton()
 

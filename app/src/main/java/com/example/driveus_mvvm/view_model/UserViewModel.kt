@@ -16,6 +16,7 @@ import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -157,17 +158,8 @@ class UserViewModel : ViewModel() {
         return imageTrigger
     }
 
-    fun getUserByUid(uid: String): LiveData<DocumentSnapshot> {
-        FirestoreRepository.getUserByUID(uid)
-            .addSnapshotListener { value, error ->
-                if ( error != null) {
-                    Log.w(tag, "Listen failed.", error)
-                    userDocumentByUid.value = null
-                }
-                userDocumentByUid.postValue(value?.documents?.first())
-            }
-
-        return userDocumentByUid
+    fun getUserByUid(uid: String): Query {
+        return FirestoreRepository.getUserByUID(uid)
     }
 
     fun getUserById(id: String): LiveData<DocumentSnapshot> {
