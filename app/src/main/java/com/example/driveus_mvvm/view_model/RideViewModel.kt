@@ -18,7 +18,7 @@ class RideViewModel : ViewModel() {
     private val ridesAsPassenger: MutableLiveData<Map<String, Ride>> = MutableLiveData(mutableMapOf())
     private val ridesAsDriver: MutableLiveData<Map<String, Ride>> = MutableLiveData(mutableMapOf())
 
-    fun getRidesAsPassenger(userId: String): MutableLiveData<Map<String, Ride>> {
+    fun getComingRidesAsPassenger(userId: String): MutableLiveData<Map<String, Ride>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
             if ( error != null) {
                 Log.w(tag, "Listen failed.", error)
@@ -51,14 +51,12 @@ class RideViewModel : ViewModel() {
                     ridesAsPassenger.postValue(resMap)
                 }
             }
-
-
         }
 
         return ridesAsPassenger
     }
 
-    fun getRidesAsDriver(userId: String): MutableLiveData<Map<String, Ride>> {
+    fun getComingRidesAsDriver(userId: String): MutableLiveData<Map<String, Ride>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
             if ( error != null) {
                 Log.w(tag, "Listen failed.", error)
@@ -98,5 +96,62 @@ class RideViewModel : ViewModel() {
         return ridesAsDriver
     }
 
+    fun getRidesAsPassenger(userId: String): MutableLiveData<Map<String, Ride>> {
+        FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
+            if ( error != null) {
+                Log.w(tag, "Listen failed.", error)
+                ridesAsPassenger.value = mapOf()
+            }
+
+            val userObject = user?.toObject(User::class.java)
+            val resMap = mutableMapOf<String, Ride>()
+
+            userObject?.ridesAsPassenger?.forEach { docReference ->
+                docReference?.addSnapshotListener { rideDoc, error ->
+                    if ( error != null) {
+                        Log.w(tag, "Listen failed.", error)
+                        ridesAsPassenger.value = mapOf()
+                    }
+
+                    val ride: Ride? = rideDoc?.toObject(Ride::class.java)
+
+                    ride?.let {
+                        resMap[rideDoc.id] = it
+                    }
+                    ridesAsPassenger.postValue(resMap)
+                }
+            }
+        }
+        return ridesAsPassenger
+    }
+
+    fun getRidesAsDriver(userId: String): MutableLiveData<Map<String, Ride>> {
+        FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
+            if ( error != null) {
+                Log.w(tag, "Listen failed.", error)
+                ridesAsDriver.value = mapOf()
+            }
+
+            val userObject = user?.toObject(User::class.java)
+            val resMap = mutableMapOf<String, Ride>()
+
+            userObject?.ridesAsDriver?.forEach { docReference ->
+                docReference?.addSnapshotListener { rideDoc, error ->
+                    if ( error != null) {
+                        Log.w(tag, "Listen failed.", error)
+                        ridesAsDriver.value = mapOf()
+                    }
+
+                    val ride: Ride? = rideDoc?.toObject(Ride::class.java)
+
+                    ride?.let {
+                            resMap[rideDoc.id] = it
+                    }
+                    ridesAsDriver.postValue(resMap)
+                }
+            }
+        }
+        return ridesAsDriver
+    }
 
 }

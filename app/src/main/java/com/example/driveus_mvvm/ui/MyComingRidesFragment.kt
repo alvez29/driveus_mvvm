@@ -16,7 +16,6 @@ import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentMyComingRidesBinding
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.ui.adapter.MyComingRidesListAdapter
-import com.example.driveus_mvvm.ui.adapter.RidesListAdapter
 import com.example.driveus_mvvm.view_model.RideViewModel
 import com.google.firebase.storage.FirebaseStorage
 
@@ -102,10 +101,10 @@ class MyComingRidesFragment : Fragment() {
         val adapterAsDriver = setupRecyclerAsDriverAdapter()
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                ?.let { rideViewModel.getRidesAsPassenger(it).observe(viewLifecycleOwner, myComingRidesAsPassengerObserver(adapterAsPassenger)) }
+                ?.let { rideViewModel.getComingRidesAsPassenger(it).observe(viewLifecycleOwner, myComingRidesAsPassengerObserver(adapterAsPassenger)) }
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                ?.let { rideViewModel.getRidesAsDriver(it).observe(viewLifecycleOwner, myComingRidesAsDriverObserver(adapterAsDriver)) }
+                ?.let { rideViewModel.getComingRidesAsDriver(it).observe(viewLifecycleOwner, myComingRidesAsDriverObserver(adapterAsDriver)) }
 
         setupFloatingButton()
 

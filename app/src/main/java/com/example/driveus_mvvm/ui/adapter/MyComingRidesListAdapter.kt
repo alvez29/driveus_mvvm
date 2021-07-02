@@ -97,7 +97,6 @@ class MyComingRidesListAdapter(
         val meetingPoint: TextView by lazy { itemView.findViewById(R.id.ride_row__label__meeting_point) }
         val profilePicture: ImageView by lazy { itemView.findViewById(R.id.ride_row__image__profile) }
         val capacityIndicator: ImageView by lazy { itemView.findViewById(R.id.ride_row__image__capacity_indicator) }
-
     }
 
 }
