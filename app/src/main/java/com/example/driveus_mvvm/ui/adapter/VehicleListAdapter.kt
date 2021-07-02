@@ -34,7 +34,7 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleViewHolder {
-        val vehicleView = LayoutInflater.from(parent.context).inflate(R.layout.car_row, parent, false)
+        val vehicleView = LayoutInflater.from(parent.context).inflate(R.layout.row_car, parent, false)
         return VehicleViewHolder(vehicleView)
     }
 
