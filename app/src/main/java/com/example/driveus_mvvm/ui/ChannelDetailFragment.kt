@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentChannelDetailBinding
-import com.example.driveus_mvvm.databinding.FragmentMyRidesBinding
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.model.entities.Ride
-import com.example.driveus_mvvm.ui.adapter.AllChannelsListAdapter
+import com.example.driveus_mvvm.ui.adapter.MyComingRidesListAdapter
 import com.example.driveus_mvvm.ui.adapter.RidesListAdapter
-import com.example.driveus_mvvm.ui.utils.ImageUtils
 import com.example.driveus_mvvm.view_model.ChannelViewModel
 import com.google.firebase.storage.FirebaseStorage
 

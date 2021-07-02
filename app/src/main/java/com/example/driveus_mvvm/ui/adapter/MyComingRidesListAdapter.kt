@@ -33,21 +33,22 @@ private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Ride>>() 
 
 }
 
-class RidesListAdapter(
-    private val listener: RideListAdapterListener
-) : ListAdapter<Pair<String, Ride>, RidesListAdapter.RideViewHolder>(diffCallback) {
+class MyComingRidesListAdapter(
+        private val listener: MyComingRideListAdapterListener
+) : ListAdapter<Pair<String, Ride>, MyComingRidesListAdapter.RideViewHolder>(diffCallback) {
 
-    interface RideListAdapterListener {
+    interface MyComingRideListAdapterListener {
         fun loadProfilePicture(userId: String?, imageView: ImageView)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RidesListAdapter.RideViewHolder {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RideViewHolder {
         val rideView = LayoutInflater.from(parent.context).inflate(R.layout.row_ride, parent, false)
 
         return RideViewHolder(rideView)
     }
 
-    override fun onBindViewHolder(holder: RidesListAdapter.RideViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RideViewHolder, position: Int) {
         val currentRidePair = getItem(position)
 
         val pattern = "HH:mm dd-MM-yyyy"
@@ -67,9 +68,7 @@ class RidesListAdapter(
         )
         holder.price.text = currentRidePair.second.price.toString()
 
-        holder.profilePicture.setImageResource(R.drawable.ic_action_name)
-
-        listener.loadProfilePicture(currentRidePair.second.driver?.id.toString(), holder.profilePicture)
+        listener.loadProfilePicture(currentRidePair.second.driver?.id, holder.profilePicture)
 
         capacityPercentage?.let {
             capacityDrawable = if (capacityPercentage == 1.0) {
@@ -86,6 +85,7 @@ class RidesListAdapter(
 
         Glide.with(holder.itemView.context)
                 .load(capacityDrawable)
+                .circleCrop()
                 .into(holder.capacityIndicator)
 
 

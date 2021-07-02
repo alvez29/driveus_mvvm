@@ -94,6 +94,7 @@ class ProfileFragment : Fragment() {
     private fun logOut() {
         viewBinding?.profileFragmentButtonLogOut?.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+            sharedPref?.edit()?.clear()?.apply()
             val authIntent = Intent(activity, AuthActivity::class.java)
             startActivity(authIntent)
         }
