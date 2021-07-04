@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        app:cardCornerRadius="4dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -10,94 +11,182 @@
 
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:padding="8dp">
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            app:cardBackgroundColor="@color/common_google_signin_btn_text_dark_focused">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/car_row__image__car"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="32dp"
+                    app:srcCompat="@drawable/ic_round_drive_eta_24"
+                    app:layout_constraintTop_toTopOf="@+id/car_row_label_brand_model"
+                    app:layout_constraintBottom_toBottomOf="@+id/car_row_label_brand_model"
+                    app:layout_constraintEnd_toStartOf="@id/car_row_label_brand_model"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                     android:id="@+id/car_row_label_brand_model"
                     android:text="@string/car_row__label__brand_model_test"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
+                    android:padding="8dp"
                     android:backgroundTint="@color/browser_actions_bg_grey"
+                    android:textColor="@color/browser_actions_bg_grey"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-            />
+                    app:layout_constraintStart_toEndOf="@id/car_row__image__car"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/car_row__image__expandable_icon_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    app:srcCompat="@drawable/ic_expandable_more"
+                    app:layout_constraintTop_toTopOf="@+id/car_row_label_brand_model"
+                    app:layout_constraintBottom_toBottomOf="@+id/car_row_label_brand_model"
+                    app:layout_constraintEnd_toEndOf="@+id/car_row_label_brand_model"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/car_row__image__expandable_icon_less"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_expandable_less"
+                    app:layout_constraintTop_toTopOf="@+id/car_row_label_brand_model"
+                    app:layout_constraintBottom_toBottomOf="@+id/car_row_label_brand_model"
+                    app:layout_constraintEnd_toEndOf="@+id/car_row_label_brand_model"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/car_row__layout__expandable"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:visibility="visible"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/car_row_label_brand_model">
 
-                <TextView
-                        android:id="@+id/car_row__label_seat"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/car_row__label__seat_label"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/car_row__container__seats"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                />
-                <TextView
-                        android:id="@+id/car_row__label_seat_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="@string/car_row__label_seat_value_test"
-                        app:layout_constraintStart_toEndOf="@+id/car_row__label_seat"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="@id/car_row__layout__expandable">
+                    <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/car_row__image__seat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="72dp"
+                            android:layout_marginEnd="32dp"
+                            app:srcCompat="@drawable/ic_seat_car_24"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/car_row__label_seat"
+                            android:layout_marginStart="16dp"
+                            android:text="@string/car_row__label__seat_label"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/browser_actions_bg_grey"
+                            app:layout_constraintStart_toEndOf="@id/car_row__image__seat"
+                            app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                            android:id="@+id/car_row__label_seat_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/browser_actions_bg_grey"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/car_row__label_seat_value_test"
+                            app:layout_constraintStart_toEndOf="@+id/car_row__label_seat"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
                 <Button
                         android:id="@+id/car_row__button__delete_car"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:text="@string/car_row__label__button_delete_car"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        app:icon="@drawable/ic_delete_24"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
-                <TextView
-                        android:id="@+id/car_row__label_color"
-                        android:layout_marginStart="16dp"
-                        android:text="@string/car_row__label__color"
-                        android:textStyle="bold"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/car_row__container__color"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/car_row__label_seat"/>
-                <TextView
-                android:id="@+id/car_row__label_color_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/car_row__label_color_value_test"
-                android:layout_marginStart="8dp"
-                app:layout_constraintStart_toEndOf="@+id/car_row__label_color"
-                app:layout_constraintTop_toBottomOf="@id/car_row__label_seat_value"/>
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/car_row__container__seats"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/car_row__image__color"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="72dp"
+                            android:layout_marginEnd="32dp"
+                            android:layout_marginTop="8dp"
+                            app:srcCompat="@drawable/ic_round_color_lens_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/car_row__label_color"
+                            android:layout_marginStart="16dp"
+                            android:text="@string/car_row__label__color"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/browser_actions_bg_grey"
+                            app:layout_constraintStart_toEndOf="@id/car_row__image__color"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <TextView
+                            android:id="@+id/car_row__label_color_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/car_row__label_color_value_test"
+                            android:textColor="@color/browser_actions_bg_grey"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toEndOf="@+id/car_row__label_color"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                        android:id="@+id/car_row__label_Description"
+                        android:id="@+id/car_row__label_description"
                         android:text="@string/car_row__label__description"
                         android:textStyle="bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAlignment="center"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
+                        android:textColor="@color/browser_actions_bg_grey"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/car_row__label_color"/>
+                        app:layout_constraintTop_toBottomOf="@id/car_row__container__color"/>
                 <TextView
                         android:id="@+id/car_row__label_Description_value"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/browser_actions_bg_grey"
+                        android:layout_marginBottom="8dp"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."                        android:layout_marginStart="8dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/car_row__label_Description"/>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/car_row__label_description"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
