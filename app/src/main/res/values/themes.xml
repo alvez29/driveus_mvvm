@@ -15,4 +15,17 @@
         <item name="android:fontFamily">@font/montserrat</item>
     </style>
 
+    <style name="TabLayoutPower" parent="Widget.MaterialComponents.TabLayout">
+        <item name="enforceMaterialTheme">true</item>
+        <item name="enforceTextAppearance">true</item>
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="tabIconTint">@color/my_rides_icon_color_selector</item>
+        <item name="tabIndicatorAnimationDuration">@integer/mtrl_tab_indicator_anim_duration_ms</item>
+        <item name="tabIndicatorColor">?attr/colorSecondary</item>
+        <item name="tabTextAppearance">?attr/textAppearanceButton</item>
+        <item name="tabTextColor">@color/my_rides_icon_color_selector</item>
+        <item name="tabRippleColor">@color/my_rides_tabs_ripple_color</item>
+        <item name="tabUnboundedRipple">true</item>
+    </style>
+
 </resources>

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentMyRidesBinding
 import com.example.driveus_mvvm.ui.adapter.MyRidesViewPagerAdapter
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -41,28 +40,6 @@ class MyRidesFragment : Fragment() {
         viewBinding?.myRidesFragmentContainerChannelsViewPager2?.adapter = viewPagerAdapter
     }
 
-    //TODO: Revisar los colores
-    private fun setupTabColor() {
-        val tabSelectedListener = object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                context?.let { ContextCompat.getColor(it, R.color.teal_300) }
-                        ?.let { tab?.icon?.setTint(it) }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                context?.let { ContextCompat.getColor(it, R.color.material_on_background_disabled) }
-                        ?.let { tab?.icon?.setTint(it) }
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-
-        }
-
-        viewBinding?.myRidesFragmentContainerTabLayout?.addOnTabSelectedListener(tabSelectedListener)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewBinding = FragmentMyRidesBinding.inflate(inflater, container, false)
 
@@ -74,7 +51,6 @@ class MyRidesFragment : Fragment() {
 
         attachViewPagerAdapter()
         setupTabLayoutMediator()
-        setupTabColor()
 
     }
 
