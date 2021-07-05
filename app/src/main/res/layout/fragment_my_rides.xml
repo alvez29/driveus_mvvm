@@ -8,8 +8,7 @@
         android:id="@+id/my_rides_fragment__container__tab_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:tabIndicatorColor="?colorSecondary"
-        app:tabSelectedTextColor="?colorSecondary"
+        style="@style/TabLayoutPower"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
