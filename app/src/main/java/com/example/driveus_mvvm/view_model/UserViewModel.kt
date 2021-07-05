@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -174,12 +175,6 @@ class UserViewModel : ViewModel() {
         return userDocumentById
     }
 
-    fun updateUserIsDriver(userId: String, isDriver: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            FirestoreRepository.updateIsDriver(userId, isDriver)
-        }
-    }
-
     fun createNewUser(inputs: Map<SignUpFormEnum, String>) {
         FirestoreRepository.usernameInUse(inputs[SignUpFormEnum.USERNAME].toString()).get().addOnSuccessListener {
             if (it.documents.size > 0) {
@@ -256,11 +251,19 @@ class UserViewModel : ViewModel() {
             description = inputs[AddCarEnum.DESCRIPTION])
     }
 
+    private fun updateUserRole(id: String, value: QuerySnapshot? ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (value?.documents?.isEmpty() == true) {
+                FirestoreRepository.updateIsDriver(id, false)
+            }
+        }
+    }
+
     fun addNewVehicle(inputs: Map<AddCarEnum, String>, documentId: String) {
         if (validateCarForm(inputs)){
             viewModelScope.launch(Dispatchers.IO){
-                    FirestoreRepository.addVehicle(getCarFromInputs(inputs), documentId)
-                    updateUserIsDriver(documentId, true)
+                FirestoreRepository.addVehicle(getCarFromInputs(inputs), documentId)
+                FirestoreRepository.updateIsDriver(documentId, true)
             }
             redirectVehicle.postValue(true)
 
@@ -282,8 +285,12 @@ class UserViewModel : ViewModel() {
                     Log.w(tag, "Listen failed.", error)
                     vehiclesByUserId.value = mutableMapOf()
                 }
+
+                updateUserRole(id, value)
+
                 val documents = value?.documents
                 var mapIdVehicles:MutableMap<String, Vehicle> = mutableMapOf()
+
                 if (documents != null) {
                     for (d in documents) {
                         d.toObject(Vehicle::class.java)?.let {
@@ -291,6 +298,7 @@ class UserViewModel : ViewModel() {
                         }
                     }
                 }
+
                 vehiclesByUserId.postValue(mapIdVehicles)
             }
 
@@ -298,13 +306,7 @@ class UserViewModel : ViewModel() {
     }
 
     fun deleteVehicleById(userId: String, vehicleId: String) {
-        FirestoreRepository.getAllVehiclesByUserId(userId).addSnapshotListener { value, error ->
-            if (error != null) {
-                Log.w(tag, "Listen failed.", error)
-            }
-            if (value?.documents?.size == 1){
-                updateUserIsDriver(userId, false)
-            }
+        viewModelScope.launch(Dispatchers.IO) {
             FirestoreRepository.deleteVehicleById(userId, vehicleId)
         }
     }
