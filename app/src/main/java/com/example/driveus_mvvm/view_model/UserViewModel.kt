@@ -11,7 +11,7 @@ import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
-import com.example.driveus_mvvm.ui.enums.AddCarEnum
+import com.example.driveus_mvvm.ui.enums.VehicleFormEnum
 import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -31,7 +31,7 @@ class UserViewModel : ViewModel() {
     private val imageTrigger =  MutableLiveData(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
-    private val vehicleFormError = MutableLiveData<MutableMap<AddCarEnum, Int>>(mutableMapOf())
+    private val vehicleFormError = MutableLiveData<MutableMap<VehicleFormEnum, Int>>(mutableMapOf())
     private val redirectVehicle = MutableLiveData(false)
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
@@ -216,58 +216,57 @@ class UserViewModel : ViewModel() {
 
     //VEHICLE FUNCTIONS -----------------------------------------------------
 
-    private fun validateCarForm(textInputs: Map<AddCarEnum, String>): Boolean{
-        val errorMap = mutableMapOf<AddCarEnum, Int>()
+    private fun validateCarForm(textInputs: Map<VehicleFormEnum, String>): Boolean{
+        val errorMap = mutableMapOf<VehicleFormEnum, Int>()
         var res = true
 
         //Brand
-        if (textInputs[AddCarEnum.BRAND].isNullOrBlank()){
-            errorMap[AddCarEnum.BRAND] = R.string.sign_up_form_error_not_empty
+        if (textInputs[VehicleFormEnum.BRAND].isNullOrBlank()){
+            errorMap[VehicleFormEnum.BRAND] = R.string.sign_up_form_error_not_empty
             res = false
         }
 
         //Model
-        if (textInputs[AddCarEnum.MODEL].isNullOrBlank()){
-            errorMap[AddCarEnum.MODEL] = R.string.sign_up_form_error_not_empty
+        if (textInputs[VehicleFormEnum.MODEL].isNullOrBlank()){
+            errorMap[VehicleFormEnum.MODEL] = R.string.sign_up_form_error_not_empty
             res = false
         }
 
         //Color
-        if (textInputs[AddCarEnum.COLOR].isNullOrBlank()){
-            errorMap[AddCarEnum.COLOR] = R.string.sign_up_form_error_not_empty
+        if (textInputs[VehicleFormEnum.COLOR].isNullOrBlank()){
+            errorMap[VehicleFormEnum.COLOR] = R.string.sign_up_form_error_not_empty
             res = false
         }
 
         //Seats
-        if (textInputs[AddCarEnum.SEAT].isNullOrBlank()){
-            errorMap[AddCarEnum.SEAT] = R.string.sign_up_form_error_not_empty
+        if (textInputs[VehicleFormEnum.SEAT].isNullOrBlank()){
+            errorMap[VehicleFormEnum.SEAT] = R.string.sign_up_form_error_not_empty
             res = false
         }
         vehicleFormError.postValue(errorMap)
         return res
     }
 
-    private fun getCarFromInputs(inputs: Map<AddCarEnum, String>): Vehicle {
+    private fun getCarFromInputs(inputs: Map<VehicleFormEnum, String>): Vehicle {
         return Vehicle(
-            brand = inputs[AddCarEnum.BRAND],
-            model = inputs[AddCarEnum.MODEL],
-            seats = inputs[AddCarEnum.SEAT]?.toInt(),
-            color = inputs[AddCarEnum.COLOR],
-            description = inputs[AddCarEnum.DESCRIPTION])
+            brand = inputs[VehicleFormEnum.BRAND],
+            model = inputs[VehicleFormEnum.MODEL],
+            seats = inputs[VehicleFormEnum.SEAT]?.toInt(),
+            color = inputs[VehicleFormEnum.COLOR],
+            description = inputs[VehicleFormEnum.DESCRIPTION])
     }
 
-    fun addNewVehicle(inputs: Map<AddCarEnum, String>, documentId: String) {
+    fun addNewVehicle(inputs: Map<VehicleFormEnum, String>, documentId: String) {
         if (validateCarForm(inputs)){
             viewModelScope.launch(Dispatchers.IO){
                     FirestoreRepository.addVehicle(getCarFromInputs(inputs), documentId)
                     updateUserIsDriver(documentId, true)
             }
             redirectVehicle.postValue(true)
-
         }
     }
 
-    fun getFormVehicleErrors(): LiveData<MutableMap<AddCarEnum, Int>> {
+    fun getFormVehicleErrors(): LiveData<MutableMap<VehicleFormEnum, Int>> {
         return vehicleFormError
     }
 

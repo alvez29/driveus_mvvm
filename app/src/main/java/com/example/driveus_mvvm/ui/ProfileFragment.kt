@@ -97,11 +97,6 @@ class ProfileFragment : Fragment() {
     }
 
     private fun addNewCar() {
-        viewBinding?.profileFragmentButtonAddCar?.setOnClickListener {
-            val actionNoDriver = ProfileFragmentDirections.actionProfileFragmentToAddCarFragment2()
-            findNavController().navigate(actionNoDriver)
-        }
-
         viewBinding?.profileFragmentButtonAddCarDriver?.setOnClickListener {
             val actionDriver = ProfileFragmentDirections.actionProfileFragmentToAddCarFragment2()
             findNavController().navigate(actionDriver)
