@@ -5,12 +5,7 @@ import androidx.annotation.WorkerThread
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
 
@@ -36,7 +31,6 @@ object FirestoreRepository {
     fun usernameInUse(username: String): Query {
         return db.collection(USERS_COLLECTION).whereEqualTo("username", username)
     }
-
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread

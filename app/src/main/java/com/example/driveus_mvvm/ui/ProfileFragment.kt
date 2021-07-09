@@ -103,6 +103,13 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun addFirstCar() {
+        viewBinding?.profileFragmentButtonAddCar?.setOnClickListener {
+            val actionDriver = ProfileFragmentDirections.actionProfileFragmentToAddCarFragment2()
+            findNavController().navigate(actionDriver)
+        }
+    }
+
     private fun showImage() {
         val imageName = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
         FirebaseStorage.getInstance().reference.child("users/$imageName").downloadUrl.addOnSuccessListener {
@@ -169,6 +176,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         showImage()
         addNewCar()
+        addFirstCar()
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
             ?.let { it1 -> viewModel.getUserById(it1).observe(viewLifecycleOwner, userObserver) }

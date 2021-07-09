@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
-import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.enums.RideFormEnum
 import com.example.driveus_mvvm.ui.utils.DateTimeUtils
@@ -28,7 +27,6 @@ class RideViewModel : ViewModel() {
     private val ridesAsPassenger: MutableLiveData<Map<String, Ride>> = MutableLiveData(mutableMapOf())
     private val ridesAsDriver: MutableLiveData<Map<String, Ride>> = MutableLiveData(mutableMapOf())
     private var meetingGeoPoint: GeoPoint? = null
-    private var vehiclesByUserId: MutableMap<String, Vehicle> = mutableMapOf()
 
 
     private  val redirectRide = MutableLiveData(false)

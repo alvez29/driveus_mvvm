@@ -118,7 +118,8 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
+        val idKeys: List<String>? = idAndVehicle?.keys?.toList()
+        vehicleDocRef = idKeys?.get(0)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
