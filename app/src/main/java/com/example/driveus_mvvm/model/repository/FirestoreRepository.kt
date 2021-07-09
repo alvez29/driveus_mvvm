@@ -34,7 +34,7 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    fun updateIsDriver(userId: String, isDriver: Boolean) {
+    suspend fun updateIsDriver(userId: String, isDriver: Boolean) {
         db.collection("users").document(userId)
             .update(mapOf("isDriver" to isDriver))
     }
@@ -103,7 +103,7 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    fun deleteVehicleById(userID: String, vehicleId: String) {
+    suspend fun deleteVehicleById(userID: String, vehicleId: String) {
         db.collection("users").document(userID).collection("vehicles").document(vehicleId).delete()
     }
 
