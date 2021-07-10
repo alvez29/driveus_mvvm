@@ -93,7 +93,9 @@ class ProfileFragment : Fragment() {
         FirebaseAuth.getInstance().signOut()
         sharedPref?.edit()?.clear()?.apply()
         val authIntent = Intent(activity, AuthActivity::class.java)
+        authIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(authIntent)
+        activity?.finish()
     }
 
     private fun addNewCar() {
