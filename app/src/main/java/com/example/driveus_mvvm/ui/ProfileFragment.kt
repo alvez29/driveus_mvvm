@@ -97,12 +97,14 @@ class ProfileFragment : Fragment() {
     }
 
     private fun addNewCar() {
-        viewBinding?.profileFragmentButtonAddCar?.setOnClickListener {
-            val actionNoDriver = ProfileFragmentDirections.actionProfileFragmentToAddCarFragment2()
-            findNavController().navigate(actionNoDriver)
-        }
-
         viewBinding?.profileFragmentButtonAddCarDriver?.setOnClickListener {
+            val actionDriver = ProfileFragmentDirections.actionProfileFragmentToAddCarFragment2()
+            findNavController().navigate(actionDriver)
+        }
+    }
+
+    private fun addFirstCar() {
+        viewBinding?.profileFragmentButtonAddCar?.setOnClickListener {
             val actionDriver = ProfileFragmentDirections.actionProfileFragmentToAddCarFragment2()
             findNavController().navigate(actionDriver)
         }
@@ -174,6 +176,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         showImage()
         addNewCar()
+        addFirstCar()
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
             ?.let { it1 -> viewModel.getUserById(it1).observe(viewLifecycleOwner, userObserver) }

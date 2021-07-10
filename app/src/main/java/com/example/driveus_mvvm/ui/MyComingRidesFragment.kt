@@ -111,7 +111,6 @@ class MyComingRidesFragment : Fragment() {
                 }
 
         setupFloatingButton()
-
     }
 
 }

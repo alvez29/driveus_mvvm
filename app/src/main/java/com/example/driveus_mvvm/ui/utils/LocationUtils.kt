@@ -13,4 +13,15 @@ object LocationUtils {
 
         return "${address?.firstOrNull()?.thoroughfare?:""} ${address?.firstOrNull()?.subThoroughfare?:""}"
     }
+
+    fun getLocation(location: String?, context: Context) : GeoPoint? {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        var address = location?.let { geocoder.getFromLocationName(it,  10) }
+        address = address?.filter { it.countryName == "Spain" }
+        return if (address?.isEmpty() == true){
+            GeoPoint(0.0, 0.0)
+        } else {
+            address?.first()?.let { GeoPoint(it.latitude, it.longitude) }
+        }
+    }
 }
