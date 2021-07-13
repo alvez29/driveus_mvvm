@@ -5,6 +5,7 @@ import androidx.annotation.WorkerThread
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
@@ -41,9 +42,11 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun addRideToUserAsDriver(userId: String, channelDocId: DocumentReference) {
-        db.collection(USERS_COLLECTION).document(userId)
-            .collection(RIDES_COLLECTION).add(channelDocId)
+    suspend fun addRideToUserAsDriver(userId: String, rideDocRef: DocumentReference?) {
+        if (rideDocRef != null) {
+            db.collection(USERS_COLLECTION).document(userId)
+                .update("ridesAsDriver", FieldValue.arrayUnion(rideDocRef))
+        }
     }
 
     @Suppress("RedundantSuspendModifier")
@@ -103,6 +106,15 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun updateVehicleIsInRide(userId: String, vehicleId: String) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .collection(VEHICLES_COLLECTION).document(vehicleId)
+            .update(mapOf("isInRide" to true))
+    }
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun deleteVehicleById(userID: String, vehicleId: String) {
         db.collection("users").document(userID).collection("vehicles").document(vehicleId).delete()
     }
@@ -122,9 +134,9 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun addNewRide(ride: Ride, channelDocId: String): DocumentReference? {
+    suspend fun addNewRide(ride: Ride, channelDocId: String): Task<DocumentReference> {
         return db.collection(CHANNELS_COLLECTION).document(channelDocId)
-            .collection(RIDES_COLLECTION).add(ride).await()
+            .collection(RIDES_COLLECTION).add(ride)
     }
 
 }

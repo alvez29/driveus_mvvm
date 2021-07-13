@@ -10,10 +10,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.Vehicle
-import kotlin.coroutines.coroutineContext
 
 private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Vehicle>>() {
 
@@ -54,6 +52,12 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
         } else {
             holder.expandableLayout.visibility = View.GONE
         }
+
+        if (currentVehicle.second.isInRide) {
+            holder.deleteButton.visibility = View.GONE
+        } else {
+            holder.deleteButton.visibility = View.VISIBLE
+        }
     }
 
     inner class VehicleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -62,10 +66,9 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
         val seatsItemView: TextView by lazy { itemView.findViewById(R.id.car_row__label_seat_value) }
         val descriptionItemView: TextView by lazy { itemView.findViewById(R.id.car_row__label_Description_value) }
         val expandableLayout: ConstraintLayout by lazy { itemView.findViewById(R.id.car_row__layout__expandable) }
-        val expandableImageMore: ImageView by lazy { itemView.findViewById(R.id.car_row__image__expandable_icon_more) }
-        val expandableImageLess: ImageView by lazy { itemView.findViewById(R.id.car_row__image__expandable_icon_less) }
-
-        private val deleteButton: Button by lazy { itemView.findViewById(R.id.car_row__button__delete_car) }
+        private val expandableImageMore: ImageView by lazy { itemView.findViewById(R.id.car_row__image__expandable_icon_more) }
+        private val expandableImageLess: ImageView by lazy { itemView.findViewById(R.id.car_row__image__expandable_icon_less) }
+        val deleteButton: Button by lazy { itemView.findViewById(R.id.car_row__button__delete_car) }
 
         init {
            modelItemView.setOnClickListener {
@@ -73,14 +76,12 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
                    expandableLayout.visibility = View.GONE
                    expandableImageLess.visibility = View.GONE
                    expandableImageMore.visibility = View.VISIBLE
-
                } else {
                    expandableLayout.visibility = View.VISIBLE
                    expandableImageLess.visibility = View.VISIBLE
                    expandableImageMore.visibility = View.GONE
                }
            }
-
             deleteButton.setOnClickListener {
                 val model = getItem(adapterPosition).second.brand + " " + getItem(adapterPosition).second.brand
                 listener.onDeleteButtonClick(getItem(adapterPosition).first, model)
