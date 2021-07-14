@@ -9,4 +9,5 @@
     <color name="yellow_100">#f9f3bc</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="filled_input">#1F000000</color>
 </resources>

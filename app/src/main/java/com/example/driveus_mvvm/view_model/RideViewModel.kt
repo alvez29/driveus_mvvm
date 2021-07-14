@@ -18,6 +18,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.math.BigDecimal
 
 class RideViewModel : ViewModel() {
@@ -243,14 +244,17 @@ class RideViewModel : ViewModel() {
                 try {
                     val userDocumentId = FirestoreRepository.getUserById(userId)
                     val vehicleDocRef = FirestoreRepository.getVehicleById(userId, vehicleId)
+                    FirestoreRepository.updateVehicleIsInRide(userId, vehicleDocRef.id)
+                    var rideDocRef: DocumentReference? = null
                     getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
-                        FirestoreRepository.addNewRide(it, channelId)
+                        rideDocRef =  FirestoreRepository.addNewRide(it, channelId).await()
                     }
+                    FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
+                    redirectRide.postValue(true)
                 } catch (e: Exception) {
                     Log.w(tag, "Listen failed.", e)
                 }
             }
-            redirectRide.postValue(true)
         }
     }
 }
