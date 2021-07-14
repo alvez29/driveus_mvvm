@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
@@ -51,6 +52,19 @@ class ChannelDetailFragment : Fragment() {
                     .into(imageView)
 
                 Log.d(getString(R.string.profile_picture_not_found_tag), getString(R.string.profile_picture_not_found_message))
+            }
+        }
+
+        override fun navigateToRideDetail(rideId: String) {
+            val action = channelId?.let {
+                ChannelDetailFragmentDirections
+                    .actionChannelDetailFragmentToRideDetailFragment()
+                    .setRideId(rideId)
+                    .setChannelId(it)
+            }
+
+            if (action != null) {
+                findNavController().navigate(action)
             }
         }
 

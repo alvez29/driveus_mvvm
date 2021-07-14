@@ -71,4 +71,8 @@
     <string name="my_rides_fragment__label__tab_coming_rides">Próximos</string>
     <string name="my_rides_fragment__label__tab_record">Historial</string>
     <string name="menu_top_bar__labe__log_out">Cerrar sesión</string>
+    <string name="ride_detail__label__price">Precio</string>
+    <string name="ride_detail__label__capacity">Aforo</string>
+    <string name="ride_detail__label__date">Fecha de salida</string>
+    <string name="dialog_passenger__label__title">Pasajeros</string>
 </resources>

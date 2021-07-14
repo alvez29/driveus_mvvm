@@ -33,6 +33,7 @@ class UserViewModel : ViewModel() {
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
     private val vehicleFormError = MutableLiveData<MutableMap<AddCarEnum, Int>>(mutableMapOf())
     private val redirectVehicle = MutableLiveData(false)
+    private val vehicleById: MutableLiveData<Vehicle> = MutableLiveData(null)
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
         val errorMap = mutableMapOf<SignUpFormEnum, Int>()
@@ -296,6 +297,25 @@ class UserViewModel : ViewModel() {
 
         return vehiclesByUserId
     }
+
+    fun getVehicleById(vehicleId: String, driverId: String): LiveData<Vehicle> {
+        FirestoreRepository.getVehicleById(vehicleId, driverId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(tag, "Listen failed.", error)
+                    vehicleById.value = null
+                }
+
+                val vehicle = value?.toObject(Vehicle::class.java)
+
+                vehicle?.let {
+                    vehicleById.postValue(it)
+                }
+            }
+
+        return vehicleById
+    }
+
 
     fun deleteVehicleById(userId: String, vehicleId: String) {
         FirestoreRepository.getAllVehiclesByUserId(userId).addSnapshotListener { value, error ->

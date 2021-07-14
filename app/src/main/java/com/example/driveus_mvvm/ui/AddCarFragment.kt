@@ -52,8 +52,8 @@ class AddCarFragment : Fragment() {
     }
 
     private fun setup(){
-        viewModel.getFormVehicleErrors().observe(this, formErrorsObserver)
-        viewModel.getRedirectVehicle().observe(this, redirectObserver)
+        viewModel.getFormVehicleErrors().observe(viewLifecycleOwner, formErrorsObserver)
+        viewModel.getRedirectVehicle().observe(viewLifecycleOwner, redirectObserver)
 
         viewBinding?.fragmentAddCarButtonAddCar?.setOnClickListener{
             sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")

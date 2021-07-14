@@ -10,19 +10,28 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.*
+import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
 
     private const val CHANNELS_COLLECTION = "channel"
     private const val USERS_COLLECTION = "users"
     private const val RIDES_COLLECTION = "rides"
+    private const val VEHICLES_COLLECTION = "vehicles"
     
     private val db by lazy { FirebaseFirestore.getInstance() }
 
     //USER FUNCTIONS -----------------------------------------------------
 
+
     fun getUserById(userId: String) : DocumentReference {
         return db.collection(USERS_COLLECTION).document(userId)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getUserByIdSync(userId: String) : DocumentSnapshot? {
+        return db.collection(USERS_COLLECTION).document(userId).get().await()
     }
 
     fun getUserByUID(uid: String): Query {
@@ -89,21 +98,29 @@ object FirestoreRepository {
     //VEHICLE FUNCTIONS -----------------------------------------------------
 
     fun getAllVehiclesByUserId(id: String): CollectionReference {
-        return db.collection("users").document(id).collection("vehicles")
+        return db.collection(USERS_COLLECTION).document(id)
+            .collection(VEHICLES_COLLECTION)
+    }
+
+    fun getVehicleById(vehicleId: String, driverId: String): DocumentReference {
+        return db.collection(USERS_COLLECTION).document(driverId)
+            .collection(VEHICLES_COLLECTION).document(vehicleId)
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     fun deleteVehicleById(userID: String, vehicleId: String) {
-        db.collection("users").document(userID).collection("vehicles").document(vehicleId).delete()
+        db.collection(USERS_COLLECTION).document(userID)
+            .collection(VEHICLES_COLLECTION).document(vehicleId).delete()
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun addVehicle(vehicle: Vehicle, userId: String) {
-        db.collection("users").document(userId).collection("vehicles").add(vehicle)
+        db.collection(USERS_COLLECTION).document(userId)
+            .collection(VEHICLES_COLLECTION).add(vehicle)
     }
-   
+
     //RIDES FUNCTIONS ----------------------------------------------------
 
     fun getRidesFromChannel(channelDocId: String) : Query {
@@ -111,4 +128,8 @@ object FirestoreRepository {
                 .collection(RIDES_COLLECTION).whereGreaterThan("date", Timestamp.now())
     }
 
+    fun getRideById(channelDocId: String , rideDocId: String): DocumentReference {
+        return db.collection(CHANNELS_COLLECTION).document(channelDocId)
+            .collection(RIDES_COLLECTION).document(rideDocId)
+    }
 }
