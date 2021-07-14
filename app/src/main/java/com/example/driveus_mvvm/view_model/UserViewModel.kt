@@ -35,6 +35,7 @@ class UserViewModel : ViewModel() {
     private val vehicleFormError = MutableLiveData<MutableMap<VehicleFormEnum, Int>>(mutableMapOf())
     private val redirectVehicle = MutableLiveData(false)
     private val isDriver = MutableLiveData(false)
+    private val hasAnySuscription = MutableLiveData(false)
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
         val errorMap = mutableMapOf<SignUpFormEnum, Int>()
@@ -174,6 +175,18 @@ class UserViewModel : ViewModel() {
         return isDriver
     }
 
+    fun hasAnySuscription(userId: String): LiveData<Boolean>? {
+        FirestoreRepository.getUserById(userId).addSnapshotListener { value, error ->
+            if (error != null) {
+                Log.w(tag, "Listen failed.", error)
+                hasAnySuscription.postValue(false)
+            }
+            val user = value?.toObject(User::class.java)
+            hasAnySuscription.postValue(user?.channels?.isNotEmpty())
+        }
+        return hasAnySuscription
+    }
+
     fun getUserById(id: String): LiveData<DocumentSnapshot> {
         FirestoreRepository.getUserById(id)
             .addSnapshotListener { value, error ->
@@ -272,7 +285,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun addNewVehicle(inputs: Map<AddCarEnum, String>, documentId: String) {
+    fun addNewVehicle(inputs: Map<VehicleFormEnum, String>, documentId: String) {
         if (validateCarForm(inputs)){
             viewModelScope.launch(Dispatchers.IO){
                 FirestoreRepository.addVehicle(getCarFromInputs(inputs), documentId)

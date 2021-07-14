@@ -15,6 +15,7 @@ import com.example.driveus_mvvm.databinding.FragmentMyChannelsBinding
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.ui.adapter.AllChannelsListAdapter
 import com.example.driveus_mvvm.view_model.ChannelViewModel
+import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.firestore.DocumentReference
 
 class MyChannelsFragment : Fragment() {
@@ -22,6 +23,7 @@ class MyChannelsFragment : Fragment() {
     private var viewBinding: FragmentMyChannelsBinding? = null
     private val channelViewModel : ChannelViewModel by lazy { ViewModelProvider(this)[ChannelViewModel::class.java] }
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
+    private val userViewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
 
     private fun myChannelsObserver(adapter: AllChannelsListAdapter) = Observer<Map<String, Channel>> {
         adapter.submitList(it.toList())
@@ -56,7 +58,16 @@ class MyChannelsFragment : Fragment() {
             return usersList.map { it?.id }.contains(docId)
 
         }
+    }
 
+    private val hasAnySuscriptionObserver = Observer<Boolean> {
+        if (it) {
+            viewBinding?.myChannelsFragmentContainerChannelsRecycler?.visibility = View.VISIBLE
+            viewBinding?.myChannelsFragmentContainerNoChannels?.visibility = View.GONE
+        } else {
+            viewBinding?.myChannelsFragmentContainerChannelsRecycler?.visibility = View.GONE
+            viewBinding?.myChannelsFragmentContainerNoChannels?.visibility = View.VISIBLE
+        }
     }
 
     private fun setupRecyclerAdapter() : AllChannelsListAdapter {
@@ -76,6 +87,9 @@ class MyChannelsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+            ?.let { userViewModel.hasAnySuscription(it)?.observe(viewLifecycleOwner, hasAnySuscriptionObserver) }
 
         val adapter = setupRecyclerAdapter()
 

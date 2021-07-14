@@ -28,6 +28,10 @@ class RideViewModel : ViewModel() {
     private val ridesAsDriver: MutableLiveData<Map<String, Ride>> = MutableLiveData(mutableMapOf())
     private var meetingGeoPoint: GeoPoint? = null
 
+    private val hasRidesAsDriver = MutableLiveData(false)
+    private val hasRidesAsPassenger = MutableLiveData(false)
+    private val hasComingRidesAsDriver = MutableLiveData(false)
+    private val hasComingRidesAsPassenger = MutableLiveData(false)
 
     private  val redirectRide = MutableLiveData(false)
     private val rideFormError = MutableLiveData<MutableMap<RideFormEnum, Int>>(mutableMapOf())
@@ -100,6 +104,22 @@ class RideViewModel : ViewModel() {
 
     }
 
+    fun hasRidesAsPassenger(): MutableLiveData<Boolean> {
+        return hasRidesAsPassenger
+    }
+
+    fun hasRidesAsDriver(): MutableLiveData<Boolean> {
+        return hasRidesAsDriver
+    }
+
+    fun hasComingRidesAsPassenger(): MutableLiveData<Boolean> {
+        return hasComingRidesAsPassenger
+    }
+
+    fun hasComingRidesAsDriver(): MutableLiveData<Boolean> {
+        return hasComingRidesAsDriver
+    }
+
     fun getComingRidesAsPassenger(userId: String): MutableLiveData<Map<String, Ride>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
             if ( error != null) {
@@ -124,6 +144,7 @@ class RideViewModel : ViewModel() {
                         // El filtro controla el estado del mapa actual
                         if (ride.date?.toDate()?.after(Timestamp.now().toDate()) == true) {
                             resMap[rideDoc.id] = it
+                            hasComingRidesAsPassenger.postValue(true)
                         } else if (ride.date?.toDate()?.after(Timestamp.now().toDate()) == false && resMap.containsKey(rideDoc.id) ) {
                             resMap.remove(rideDoc.id)
                         }
@@ -163,6 +184,7 @@ class RideViewModel : ViewModel() {
                             resMap.remove(rideDoc.id)
                         }
                     }
+                    hasComingRidesAsDriver.postValue(true)
                     ridesAsDriver.postValue(resMap)
                 }
             }
@@ -192,6 +214,9 @@ class RideViewModel : ViewModel() {
                     ride?.let {
                         resMap[rideDoc.id] = it
                     }
+                    if (resMap.isNotEmpty()) {
+                        hasRidesAsPassenger.postValue(true)
+                    }
                     ridesAsPassenger.postValue(resMap)
                 }
             }
@@ -220,6 +245,9 @@ class RideViewModel : ViewModel() {
 
                     ride?.let {
                             resMap[rideDoc.id] = it
+                    }
+                    if (resMap.isNotEmpty()) {
+                        hasRidesAsDriver.postValue(true)
                     }
                     ridesAsDriver.postValue(resMap)
                 }

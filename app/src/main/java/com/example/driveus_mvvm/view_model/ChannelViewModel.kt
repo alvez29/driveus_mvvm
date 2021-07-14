@@ -23,6 +23,11 @@ class ChannelViewModel : ViewModel() {
     private val userChannels: MutableLiveData<Map<String, Channel>> = MutableLiveData(mutableMapOf())
     private val channelRides: MutableLiveData<Map<String, Ride>> = MutableLiveData(mutableMapOf())
     private val channelById: MutableLiveData<Channel> = MutableLiveData()
+    private val hasAnyRide = MutableLiveData(true)
+
+    fun hasAnyRide(): LiveData<Boolean> {
+        return hasAnyRide
+    }
 
     fun getChannelById(channelDocId: String) : LiveData<Channel> {
         FirestoreRepository.getChannelById(channelDocId).addSnapshotListener { value, error ->
@@ -110,7 +115,9 @@ class ChannelViewModel : ViewModel() {
                     }
                 }
             }
-
+            if (resMap.isEmpty() ){
+                hasAnyRide.postValue(false)
+            }
             channelRides.postValue(resMap)
         }
 

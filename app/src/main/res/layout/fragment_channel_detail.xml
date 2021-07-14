@@ -78,14 +78,56 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/channel_detail__list__rides_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/channel_detail__container__title_container"/>
+            android:id="@+id/channel_detail__list__rides_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/channel_detail__container__title_container"/>
+
+    <LinearLayout
+            android:id="@+id/channel_detail_fragment__container__no_rides_linear_layout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/channel_detail__container__title_container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/channel_detail_fragment__container__no_rides"
+                android:background="?colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/car_row__image__seat"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:tint="#1F0000"
+                    app:srcCompat="@drawable/ic_stop_signal"
+                    app:layout_constraintBottom_toTopOf="@+id/my_channels_fragment__label__no_rides"
+                    app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/my_channels_fragment__label__no_rides"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/channel_detail_fragment__label__no_rides"
+                    android:fontFamily="@font/montserrat"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    android:gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/channel_detail__button__floating_button"
