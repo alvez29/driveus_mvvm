@@ -10,25 +10,25 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.driveus_mvvm.R
-import com.example.driveus_mvvm.databinding.FragmentAddCarBinding
-import com.example.driveus_mvvm.ui.enums.AddCarEnum
+import com.example.driveus_mvvm.databinding.FragmentVehicleFormBinding
+import com.example.driveus_mvvm.ui.enums.VehicleFormEnum
 import com.example.driveus_mvvm.view_model.UserViewModel
 
-class AddCarFragment : Fragment() {
+class VehicleFormFragment : Fragment() {
 
-    private var viewBinding: FragmentAddCarBinding? = null
+    private var viewBinding: FragmentVehicleFormBinding? = null
     private val viewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
 
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
-    private val formErrorsObserver = Observer<Map<AddCarEnum, Int>> {
+    private val formErrorsObserver = Observer<Map<VehicleFormEnum, Int>> {
         it.forEach { (k,v) ->
             when(k) {
-                AddCarEnum.BRAND -> viewBinding?.fragmentAddCarLabelCarBrandEditText?.error = getString(v)
-                AddCarEnum.MODEL -> viewBinding?.fragmentAddCarLabelCarModelEditText?.error = getString(v)
-                AddCarEnum.COLOR -> viewBinding?.fragmentAddCarLabelCarColorEditText?.error = getString(v)
-                AddCarEnum.SEAT -> viewBinding?.fragmentAddCarLabelCarSeats?.error = getString(v)
-                AddCarEnum.DESCRIPTION -> viewBinding?.fragmentAddCarLabelCarDescriptionEditText?.error = getString(v)
+                VehicleFormEnum.BRAND -> viewBinding?.fragmentAddCarLabelCarBrandEditText?.error = getString(v)
+                VehicleFormEnum.MODEL -> viewBinding?.fragmentAddCarLabelCarModelEditText?.error = getString(v)
+                VehicleFormEnum.COLOR -> viewBinding?.fragmentAddCarLabelCarColorEditText?.error = getString(v)
+                VehicleFormEnum.SEAT -> viewBinding?.fragmentAddCarLabelCarSeats?.error = getString(v)
+                VehicleFormEnum.DESCRIPTION -> viewBinding?.fragmentAddCarLabelCarDescriptionEditText?.error = getString(v)
 
             }
         }
@@ -41,13 +41,13 @@ class AddCarFragment : Fragment() {
     }
 
 
-    private fun getInputs() : Map<AddCarEnum, String> {
+    private fun getInputs() : Map<VehicleFormEnum, String> {
         return mutableMapOf(
-            AddCarEnum.BRAND to viewBinding?.fragmentAddCarLabelCarBrandEditText?.text.toString(),
-            AddCarEnum.MODEL to viewBinding?.fragmentAddCarLabelCarModelEditText?.text.toString(),
-            AddCarEnum.COLOR to viewBinding?.fragmentAddCarLabelCarColorEditText?.text.toString(),
-            AddCarEnum.SEAT to viewBinding?.fragmentAddCarLabelCarSeatsEditText?.text.toString(),
-            AddCarEnum.DESCRIPTION to viewBinding?.fragmentAddCarLabelCarDescriptionEditText?.text.toString()
+            VehicleFormEnum.BRAND to viewBinding?.fragmentAddCarLabelCarBrandEditText?.text.toString(),
+            VehicleFormEnum.MODEL to viewBinding?.fragmentAddCarLabelCarModelEditText?.text.toString(),
+            VehicleFormEnum.COLOR to viewBinding?.fragmentAddCarLabelCarColorEditText?.text.toString(),
+            VehicleFormEnum.SEAT to viewBinding?.fragmentAddCarLabelCarSeatsEditText?.text.toString(),
+            VehicleFormEnum.DESCRIPTION to viewBinding?.fragmentAddCarLabelCarDescriptionEditText?.text.toString()
         )
     }
 
@@ -62,7 +62,7 @@ class AddCarFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewBinding = FragmentAddCarBinding.inflate(inflater, container, false)
+        viewBinding = FragmentVehicleFormBinding.inflate(inflater, container, false)
 
         setup()
         return viewBinding?.root

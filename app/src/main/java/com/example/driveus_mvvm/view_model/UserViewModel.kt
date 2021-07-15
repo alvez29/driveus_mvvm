@@ -11,12 +11,14 @@ import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
-import com.example.driveus_mvvm.ui.enums.AddCarEnum
+import com.example.driveus_mvvm.ui.enums.VehicleFormEnum
 import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,9 +33,10 @@ class UserViewModel : ViewModel() {
     private val imageTrigger =  MutableLiveData(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
-    private val vehicleFormError = MutableLiveData<MutableMap<AddCarEnum, Int>>(mutableMapOf())
+    private val vehicleFormError = MutableLiveData<MutableMap<VehicleFormEnum, Int>>(mutableMapOf())
     private val redirectVehicle = MutableLiveData(false)
     private val vehicleById: MutableLiveData<Vehicle> = MutableLiveData(null)
+    private val isDriverAndSuscribed = MutableLiveData(false)
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
         val errorMap = mutableMapOf<SignUpFormEnum, Int>()
@@ -162,6 +165,28 @@ class UserViewModel : ViewModel() {
         return FirestoreRepository.getUserByUID(uid)
     }
 
+    fun isDriverAndSuscribed(userId: String, channelId: String): LiveData<Boolean>? {
+        FirestoreRepository.getUserById(userId).addSnapshotListener { value, error ->
+            if (error != null) {
+                Log.w(tag, "Listen failed.", error)
+                isDriverAndSuscribed.postValue(false)
+            }
+            val user: User? = value?.toObject(User::class.java)
+            val channels: List<DocumentReference?>? = user?.channels
+            var boolSus = false
+            if (channels != null) {
+                for (c in channels) {
+                    if (c?.id == channelId){
+                        boolSus = true
+                        break
+                    }
+                }
+            }
+            isDriverAndSuscribed.postValue(user?.isDriver == true && boolSus)
+        }
+        return isDriverAndSuscribed
+    }
+
     fun getUserById(id: String): LiveData<DocumentSnapshot> {
         FirestoreRepository.getUserById(id)
             .addSnapshotListener { value, error ->
@@ -171,14 +196,7 @@ class UserViewModel : ViewModel() {
                 }
                 userDocumentById.postValue(value)
                }
-
         return userDocumentById
-    }
-
-    fun updateUserIsDriver(userId: String, isDriver: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            FirestoreRepository.updateIsDriver(userId, isDriver)
-        }
     }
 
     fun createNewUser(inputs: Map<SignUpFormEnum, String>) {
@@ -217,58 +235,66 @@ class UserViewModel : ViewModel() {
 
     //VEHICLE FUNCTIONS -----------------------------------------------------
 
-    private fun validateCarForm(textInputs: Map<AddCarEnum, String>): Boolean{
-        val errorMap = mutableMapOf<AddCarEnum, Int>()
+    private fun validateCarForm(textInputs: Map<VehicleFormEnum, String>): Boolean{
+        val errorMap = mutableMapOf<VehicleFormEnum, Int>()
         var res = true
 
         //Brand
-        if (textInputs[AddCarEnum.BRAND].isNullOrBlank()){
-            errorMap[AddCarEnum.BRAND] = R.string.sign_up_form_error_not_empty
+        if (textInputs[VehicleFormEnum.BRAND].isNullOrBlank()){
+            errorMap[VehicleFormEnum.BRAND] = R.string.sign_up_form_error_not_empty
             res = false
         }
 
         //Model
-        if (textInputs[AddCarEnum.MODEL].isNullOrBlank()){
-            errorMap[AddCarEnum.MODEL] = R.string.sign_up_form_error_not_empty
+        if (textInputs[VehicleFormEnum.MODEL].isNullOrBlank()){
+            errorMap[VehicleFormEnum.MODEL] = R.string.sign_up_form_error_not_empty
             res = false
         }
 
         //Color
-        if (textInputs[AddCarEnum.COLOR].isNullOrBlank()){
-            errorMap[AddCarEnum.COLOR] = R.string.sign_up_form_error_not_empty
+        if (textInputs[VehicleFormEnum.COLOR].isNullOrBlank()){
+            errorMap[VehicleFormEnum.COLOR] = R.string.sign_up_form_error_not_empty
             res = false
         }
 
         //Seats
-        if (textInputs[AddCarEnum.SEAT].isNullOrBlank()){
-            errorMap[AddCarEnum.SEAT] = R.string.sign_up_form_error_not_empty
+        if (textInputs[VehicleFormEnum.SEAT].isNullOrBlank()){
+            errorMap[VehicleFormEnum.SEAT] = R.string.sign_up_form_error_not_empty
             res = false
         }
         vehicleFormError.postValue(errorMap)
         return res
     }
 
-    private fun getCarFromInputs(inputs: Map<AddCarEnum, String>): Vehicle {
+    private fun getCarFromInputs(inputs: Map<VehicleFormEnum, String>): Vehicle {
         return Vehicle(
-            brand = inputs[AddCarEnum.BRAND],
-            model = inputs[AddCarEnum.MODEL],
-            seats = inputs[AddCarEnum.SEAT]?.toInt(),
-            color = inputs[AddCarEnum.COLOR],
-            description = inputs[AddCarEnum.DESCRIPTION])
+            brand = inputs[VehicleFormEnum.BRAND],
+            model = inputs[VehicleFormEnum.MODEL],
+            seats = inputs[VehicleFormEnum.SEAT]?.toInt(),
+            color = inputs[VehicleFormEnum.COLOR],
+            description = inputs[VehicleFormEnum.DESCRIPTION])
     }
 
-    fun addNewVehicle(inputs: Map<AddCarEnum, String>, documentId: String) {
-        if (validateCarForm(inputs)){
-            viewModelScope.launch(Dispatchers.IO){
-                    FirestoreRepository.addVehicle(getCarFromInputs(inputs), documentId)
-                    updateUserIsDriver(documentId, true)
-            }
-            redirectVehicle.postValue(true)
 
+    private fun updateUserRole(id: String, value: QuerySnapshot? ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (value?.documents?.isEmpty() == true) {
+                FirestoreRepository.updateIsDriver(id, false)
+            }
         }
     }
 
-    fun getFormVehicleErrors(): LiveData<MutableMap<AddCarEnum, Int>> {
+    fun addNewVehicle(inputs: Map<VehicleFormEnum, String>, documentId: String) {
+        if (validateCarForm(inputs)){
+            viewModelScope.launch(Dispatchers.IO){
+                FirestoreRepository.addVehicle(getCarFromInputs(inputs), documentId)
+                FirestoreRepository.updateIsDriver(documentId, true)
+            }
+            redirectVehicle.postValue(true)
+        }
+    }
+
+    fun getFormVehicleErrors(): LiveData<MutableMap<VehicleFormEnum, Int>> {
         return vehicleFormError
     }
 
@@ -283,8 +309,12 @@ class UserViewModel : ViewModel() {
                     Log.w(tag, "Listen failed.", error)
                     vehiclesByUserId.value = mutableMapOf()
                 }
+
+                updateUserRole(id, value)
+
                 val documents = value?.documents
                 var mapIdVehicles:MutableMap<String, Vehicle> = mutableMapOf()
+
                 if (documents != null) {
                     for (d in documents) {
                         d.toObject(Vehicle::class.java)?.let {
@@ -292,6 +322,7 @@ class UserViewModel : ViewModel() {
                         }
                     }
                 }
+
                 vehiclesByUserId.postValue(mapIdVehicles)
             }
 
@@ -318,13 +349,7 @@ class UserViewModel : ViewModel() {
 
 
     fun deleteVehicleById(userId: String, vehicleId: String) {
-        FirestoreRepository.getAllVehiclesByUserId(userId).addSnapshotListener { value, error ->
-            if (error != null) {
-                Log.w(tag, "Listen failed.", error)
-            }
-            if (value?.documents?.size == 1){
-                updateUserIsDriver(userId, false)
-            }
+        viewModelScope.launch(Dispatchers.IO) {
             FirestoreRepository.deleteVehicleById(userId, vehicleId)
         }
     }

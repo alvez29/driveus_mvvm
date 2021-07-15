@@ -71,6 +71,15 @@
     <string name="my_rides_fragment__label__tab_coming_rides">Próximos</string>
     <string name="my_rides_fragment__label__tab_record">Historial</string>
     <string name="menu_top_bar__labe__log_out">Cerrar sesión</string>
+    <string name="fragment_ride_form__label__title">Nuevo trayecto</string>
+    <string name="fragment_ride_form__label__capacity_edit_text">Nº de plazas disponibles</string>
+    <string name="fragment_ride_form__label__price_edit_text">Precio</string>
+    <string name="fragment_ride_form__label__meeting_point_edit_text">Punto de encuentro</string>
+    <string name="fragment_ride_form__label__button_submit">Enviar</string>
+    <string name="ride_form_error_price_decimals">Debe contener dos cifras decimales máximo</string>
+    <string name="fragment_ride_form__label__date_time_edit_text">Fecha y hora</string>
+    <string name="ride_form_error_date_time_past">El viaje debe resgistrarse en una fecha futura</string>
+    <string name="ride_form_error_location_not_found">Localización no reconocida</string>
     <string name="ride_detail__label__price">Precio</string>
     <string name="ride_detail__label__capacity">Aforo</string>
     <string name="ride_detail__label__date">Fecha de salida</string>

@@ -1,6 +1,6 @@
 package com.example.driveus_mvvm.ui.enums
 
-enum class AddCarEnum {
+enum class VehicleFormEnum {
     BRAND,
     MODEL,
     COLOR,

@@ -53,7 +53,7 @@
     </fragment>
 
     <fragment android:id="@+id/addCarFragment"
-              android:name="com.example.driveus_mvvm.ui.AddCarFragment"
+              android:name="com.example.driveus_mvvm.ui.VehicleFormFragment"
               android:label="AddCarFragment"/>
 
     <fragment
@@ -70,6 +70,9 @@
             android:name="backgroundColor"
             app:argType="string"
             android:defaultValue="pink" />
+
+        <action android:id="@+id/action_channelDetailFragment_to_rideFormFragment"
+                app:destination="@id/rideFormFragment"/>
 
         <action
             android:id="@+id/action_channelDetailFragment_to_rideDetailFragment"
@@ -98,22 +101,5 @@
         android:id="@+id/rideDetailFragment"
         android:name="com.example.driveus_mvvm.ui.RideDetailFragment"
         android:label="RideDetailFragment" >
-
-        <argument
-            android:name="backgroundColor"
-            app:argType="string"
-            android:defaultValue="blue" />
-
-        <argument
-            android:name="rideId"
-            app:argType="string"
-            android:defaultValue="" />
-
-        <argument
-            android:name="channelId"
-            app:argType="string"
-            android:defaultValue="" />
-
-    </fragment>
 
 </navigation>
