@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +17,6 @@ import com.example.driveus_mvvm.databinding.FragmentMyComingRidesBinding
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.ui.adapter.MyComingRidesListAdapter
 import com.example.driveus_mvvm.view_model.RideViewModel
-import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.storage.FirebaseStorage
 
 class MyComingRidesFragment : Fragment() {
@@ -44,15 +42,27 @@ class MyComingRidesFragment : Fragment() {
                 Log.d(getString(R.string.profile_picture_not_found_tag), getString(R.string.profile_picture_not_found_message))
             }
         }
-
     }
 
     private fun myComingRidesAsPassengerObserver(adapter: MyComingRidesListAdapter) = Observer<Map<String, Ride>> {
+        if (it.isEmpty()){
+            viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.GONE
+            viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.VISIBLE
+            viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.GONE
+        }
         adapter.submitList(it.toList().sortedBy { pair -> pair.second.date })
-
     }
 
     private fun myComingRidesAsDriverObserver(adapter: MyComingRidesListAdapter) = Observer<Map<String, Ride>> {
+        if (it.isEmpty()){
+            viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.GONE
+            viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.VISIBLE
+            viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.GONE
+        }
         adapter.submitList(it.toList().sortedBy { pair -> pair.second.date })
 
     }
@@ -75,42 +85,20 @@ class MyComingRidesFragment : Fragment() {
         return adapter
     }
 
-    private val hasRidesAsDriverObserver = Observer<Boolean> {
-        if (it) {
-            viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayout?.visibility = View.GONE
-            viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.VISIBLE
-        } else {
-            viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayout?.visibility = View.VISIBLE
-            viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.GONE
-        }
-    }
-
-    private val hasRidesAsPassenger = Observer<Boolean> {
-        if (it) {
-            viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayout?.visibility = View.GONE
-            viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.VISIBLE
-        } else {
-            viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayout?.visibility = View.VISIBLE
-            viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.GONE
-        }
-    }
 
     private fun setupFloatingButton() {
         viewBinding?.myComingRidesListButtonFloatingButton?.setOnClickListener {
-            if (viewBinding?.myComingRidesListRecyclerAsDriver?.isShown == true) {
-                viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.GONE
-                viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.VISIBLE
-                rideViewModel.hasComingRidesAsPassenger().observe(viewLifecycleOwner, hasRidesAsPassenger)
+            if (viewBinding?.myComingRidesContainerDriver?.isShown == true) {
+                viewBinding?.myComingRidesContainerPassenger?.visibility = View.VISIBLE
+                viewBinding?.myComingRidesContainerDriver?.visibility = View.GONE
                 viewBinding?.myComingRidesListButtonFloatingButton?.setImageResource(R.drawable.ic_round_event_seat_24)
             } else {
-                viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.VISIBLE
-                viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.GONE
-                rideViewModel.hasComingRidesAsDriver().observe(viewLifecycleOwner, hasRidesAsDriverObserver)
+                viewBinding?.myComingRidesContainerPassenger?.visibility = View.GONE
+                viewBinding?.myComingRidesContainerDriver?.visibility = View.VISIBLE
                 viewBinding?.myComingRidesListButtonFloatingButton?.setImageResource(R.drawable.ic_steering_wheel_24)
             }
         }
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewBinding = FragmentMyComingRidesBinding.inflate(inflater, container, false)
@@ -133,8 +121,6 @@ class MyComingRidesFragment : Fragment() {
                 ?.let {
                     rideViewModel.getComingRidesAsDriver(it).observe(viewLifecycleOwner, myComingRidesAsDriverObserver(adapterAsDriver))
                 }
-
-        rideViewModel.hasComingRidesAsPassenger().observe(viewLifecycleOwner, hasRidesAsPassenger)
 
         setupFloatingButton()
     }

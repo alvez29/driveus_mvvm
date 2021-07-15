@@ -30,8 +30,6 @@ class RideViewModel : ViewModel() {
 
     private val hasRidesAsDriver = MutableLiveData(false)
     private val hasRidesAsPassenger = MutableLiveData(false)
-    private val hasComingRidesAsDriver = MutableLiveData(false)
-    private val hasComingRidesAsPassenger = MutableLiveData(false)
 
     private  val redirectRide = MutableLiveData(false)
     private val rideFormError = MutableLiveData<MutableMap<RideFormEnum, Int>>(mutableMapOf())
@@ -112,13 +110,6 @@ class RideViewModel : ViewModel() {
         return hasRidesAsDriver
     }
 
-    fun hasComingRidesAsPassenger(): MutableLiveData<Boolean> {
-        return hasComingRidesAsPassenger
-    }
-
-    fun hasComingRidesAsDriver(): MutableLiveData<Boolean> {
-        return hasComingRidesAsDriver
-    }
 
     fun getComingRidesAsPassenger(userId: String): MutableLiveData<Map<String, Ride>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
@@ -144,7 +135,6 @@ class RideViewModel : ViewModel() {
                         // El filtro controla el estado del mapa actual
                         if (ride.date?.toDate()?.after(Timestamp.now().toDate()) == true) {
                             resMap[rideDoc.id] = it
-                            hasComingRidesAsPassenger.postValue(true)
                         } else if (ride.date?.toDate()?.after(Timestamp.now().toDate()) == false && resMap.containsKey(rideDoc.id) ) {
                             resMap.remove(rideDoc.id)
                         }
@@ -184,7 +174,6 @@ class RideViewModel : ViewModel() {
                             resMap.remove(rideDoc.id)
                         }
                     }
-                    hasComingRidesAsDriver.postValue(true)
                     ridesAsDriver.postValue(resMap)
                 }
             }
