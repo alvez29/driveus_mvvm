@@ -39,6 +39,7 @@ class RidesListAdapter(
 
     interface RideListAdapterListener {
         fun loadProfilePicture(userId: String?, imageView: ImageView)
+        fun navigateToRideDetail(rideId: String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RidesListAdapter.RideViewHolder {
@@ -98,6 +99,11 @@ class RidesListAdapter(
         val profilePicture: ImageView by lazy { itemView.findViewById(R.id.ride_row__image__profile) }
         val capacityIndicator: ImageView by lazy { itemView.findViewById(R.id.ride_row__image__capacity_indicator) }
 
+        init {
+            itemView.setOnClickListener {
+                listener.navigateToRideDetail(getItem(adapterPosition).first)
+            }
+        }
     }
 
 }

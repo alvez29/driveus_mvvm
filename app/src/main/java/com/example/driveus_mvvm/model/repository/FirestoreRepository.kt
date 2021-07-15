@@ -5,6 +5,7 @@ import androidx.annotation.WorkerThread
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.tasks.await
@@ -20,8 +21,15 @@ object FirestoreRepository {
 
     //USER FUNCTIONS -----------------------------------------------------
 
+
     fun getUserById(userId: String) : DocumentReference {
         return db.collection(USERS_COLLECTION).document(userId)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getUserByIdSync(userId: String) : DocumentSnapshot? {
+        return db.collection(USERS_COLLECTION).document(userId).get().await()
     }
 
     fun getUserByUID(uid: String): Query {
@@ -41,9 +49,11 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun addRideToUserAsDriver(userId: String, channelDocId: DocumentReference) {
-        db.collection(USERS_COLLECTION).document(userId)
-            .collection(RIDES_COLLECTION).add(channelDocId)
+    suspend fun addRideToUserAsDriver(userId: String, rideDocRef: DocumentReference?) {
+        if (rideDocRef != null) {
+            db.collection(USERS_COLLECTION).document(userId)
+                .update("ridesAsDriver", FieldValue.arrayUnion(rideDocRef))
+        }
     }
 
     @Suppress("RedundantSuspendModifier")
@@ -98,8 +108,23 @@ object FirestoreRepository {
     }
 
     fun getAllVehiclesByUserId(id: String): CollectionReference {
-        return db.collection("users").document(id).collection("vehicles")
+        return db.collection(USERS_COLLECTION).document(id)
+            .collection(VEHICLES_COLLECTION)
     }
+
+    fun getVehicleById(vehicleId: String, driverId: String): DocumentReference {
+        return db.collection(USERS_COLLECTION).document(driverId)
+            .collection(VEHICLES_COLLECTION).document(vehicleId)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun updateVehicleIsInRide(userId: String, vehicleId: String) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .collection(VEHICLES_COLLECTION).document(vehicleId)
+            .update(mapOf("isInRide" to true))
+    }
+
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
@@ -110,9 +135,10 @@ object FirestoreRepository {
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun addVehicle(vehicle: Vehicle, userId: String) {
-        db.collection("users").document(userId).collection("vehicles").add(vehicle)
+        db.collection(USERS_COLLECTION).document(userId)
+            .collection(VEHICLES_COLLECTION).add(vehicle)
     }
-   
+
     //RIDES FUNCTIONS ----------------------------------------------------
 
     fun getRidesFromChannel(channelDocId: String) : Query {
@@ -122,9 +148,13 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun addNewRide(ride: Ride, channelDocId: String): DocumentReference? {
+    suspend fun addNewRide(ride: Ride, channelDocId: String): Task<DocumentReference> {
         return db.collection(CHANNELS_COLLECTION).document(channelDocId)
-            .collection(RIDES_COLLECTION).add(ride).await()
+            .collection(RIDES_COLLECTION).add(ride)
     }
 
+    fun getRideById(channelDocId: String , rideDocId: String): DocumentReference {
+        return db.collection(CHANNELS_COLLECTION).document(channelDocId)
+            .collection(RIDES_COLLECTION).document(rideDocId)
+    }
 }

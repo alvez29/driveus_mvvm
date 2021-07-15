@@ -36,7 +36,7 @@ class ChannelDetailFragment : Fragment() {
         viewBinding?.channelDetailLabelChannelDestinationZone?.text = it.destinationZone
     }
 
-    private val isDriverObserver = Observer<Boolean> {
+    private val isDriverAndSuscribedObserver = Observer<Boolean> {
         if (it){
             viewBinding?.channelDetailButtonFloatingButton?.visibility = View.VISIBLE
         } else {
@@ -73,6 +73,19 @@ class ChannelDetailFragment : Fragment() {
                     .into(imageView)
 
                 Log.d(getString(R.string.profile_picture_not_found_tag), getString(R.string.profile_picture_not_found_message))
+            }
+        }
+
+        override fun navigateToRideDetail(rideId: String) {
+            val action = channelId?.let {
+                ChannelDetailFragmentDirections
+                    .actionChannelDetailFragmentToRideDetailFragment()
+                    .setRideId(rideId)
+                    .setChannelId(it)
+            }
+
+            if (action != null) {
+                findNavController().navigate(action)
             }
         }
 
@@ -117,8 +130,10 @@ class ChannelDetailFragment : Fragment() {
             viewModel.getRidesFromChannel(it).observe(viewLifecycleOwner, ridesObserver(adapter))
             viewModel.getChannelById(it).observe(viewLifecycleOwner, channelObserver)
         }
-        sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")?.let {
-            userViewModel.isDriver(it)?.observe(viewLifecycleOwner, isDriverObserver)
+        sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")?.let { userId ->
+            channelId?.let { channelId ->
+                userViewModel.isDriverAndSuscribed(userId, channelId)?.observe(viewLifecycleOwner, isDriverAndSuscribedObserver)
+            }
         }
 
         rideForm()

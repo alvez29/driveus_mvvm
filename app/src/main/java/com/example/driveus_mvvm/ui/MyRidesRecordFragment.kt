@@ -10,13 +10,14 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentMyRidesRecordBinding
-import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.ui.adapter.MyRidesRecordListAdapter
 import com.example.driveus_mvvm.view_model.RideViewModel
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 
 class MyRidesRecordFragment : Fragment() {
@@ -25,7 +26,7 @@ class MyRidesRecordFragment : Fragment() {
     private val rideViewModel : RideViewModel by lazy { ViewModelProvider(this)[RideViewModel::class.java] }
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
-    private val myRidesRecordListAdapterListener = object:MyRidesRecordListAdapter.MyRidesRecordListAdapterListener {
+    private val myRidesRecordListAdapterListener = object : MyRidesRecordListAdapter.MyRidesRecordListAdapterListener {
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
             FirebaseStorage.getInstance().reference.child("users/$userId").downloadUrl.addOnSuccessListener {
                 Glide.with(this@MyRidesRecordFragment)
@@ -41,6 +42,20 @@ class MyRidesRecordFragment : Fragment() {
                 Log.d(getString(R.string.profile_picture_not_found_tag), getString(R.string.profile_picture_not_found_message))
             }
         }
+
+        override fun navigateToRideDetail(rideId: String, channelId: String?) {
+            val action = channelId?.let {
+                MyRidesFragmentDirections
+                        .actionMyRidesFragmentToRideDetailFragment()
+                        .setRideId(rideId)
+                        .setChannelId(it)
+            }
+
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
+
     }
 
     private fun myRidesRecordAsPassengerObserver(adapter: MyRidesRecordListAdapter) = Observer<Map<String, Ride>> {

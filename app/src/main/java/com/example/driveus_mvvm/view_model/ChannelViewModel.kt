@@ -10,6 +10,7 @@ import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

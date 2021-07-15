@@ -15,6 +15,7 @@ import com.example.driveus_mvvm.ui.enums.VehicleFormEnum
 import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -36,6 +37,8 @@ class UserViewModel : ViewModel() {
     private val redirectVehicle = MutableLiveData(false)
     private val isDriver = MutableLiveData(false)
     private val hasAnySuscription = MutableLiveData(false)
+    private val vehicleById: MutableLiveData<Vehicle> = MutableLiveData(null)
+    private val isDriverAndSuscribed = MutableLiveData(false)
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
         val errorMap = mutableMapOf<SignUpFormEnum, Int>()
@@ -164,15 +167,26 @@ class UserViewModel : ViewModel() {
         return FirestoreRepository.getUserByUID(uid)
     }
 
-    fun isDriver(userId: String): LiveData<Boolean>? {
+    fun isDriverAndSuscribed(userId: String, channelId: String): LiveData<Boolean>? {
         FirestoreRepository.getUserById(userId).addSnapshotListener { value, error ->
             if (error != null) {
                 Log.w(tag, "Listen failed.", error)
-                isDriver.postValue(false)
+                isDriverAndSuscribed.postValue(false)
             }
-            isDriver.postValue(value?.toObject(User::class.java)?.isDriver)
+            val user: User? = value?.toObject(User::class.java)
+            val channels: List<DocumentReference?>? = user?.channels
+            var boolSus = false
+            if (channels != null) {
+                for (c in channels) {
+                    if (c?.id == channelId){
+                        boolSus = true
+                        break
+                    }
+                }
+            }
+            isDriverAndSuscribed.postValue(user?.isDriver == true && boolSus)
         }
-        return isDriver
+        return isDriverAndSuscribed
     }
 
     fun hasAnySuscription(userId: String): LiveData<Boolean>? {
@@ -196,7 +210,6 @@ class UserViewModel : ViewModel() {
                 }
                 userDocumentById.postValue(value)
                }
-
         return userDocumentById
     }
 
@@ -329,6 +342,25 @@ class UserViewModel : ViewModel() {
 
         return vehiclesByUserId
     }
+
+    fun getVehicleById(vehicleId: String, driverId: String): LiveData<Vehicle> {
+        FirestoreRepository.getVehicleById(vehicleId, driverId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(tag, "Listen failed.", error)
+                    vehicleById.value = null
+                }
+
+                val vehicle = value?.toObject(Vehicle::class.java)
+
+                vehicle?.let {
+                    vehicleById.postValue(it)
+                }
+            }
+
+        return vehicleById
+    }
+
 
     fun deleteVehicleById(userId: String, vehicleId: String) {
         viewModelScope.launch(Dispatchers.IO) {
