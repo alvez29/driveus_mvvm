@@ -103,18 +103,14 @@ object FirestoreRepository {
     
     //VEHICLE FUNCTIONS -----------------------------------------------------
 
-    fun getVehicleById(userId: String, vehicleId: String): DocumentReference {
-        return db.collection(USERS_COLLECTION).document(userId).collection(VEHICLES_COLLECTION).document(vehicleId)
+    fun getVehicleById(vehicleId: String, driverId: String): DocumentReference {
+        return db.collection(USERS_COLLECTION).document(driverId)
+            .collection(VEHICLES_COLLECTION).document(vehicleId)
     }
 
     fun getAllVehiclesByUserId(id: String): CollectionReference {
         return db.collection(USERS_COLLECTION).document(id)
             .collection(VEHICLES_COLLECTION)
-    }
-
-    fun getVehicleById(vehicleId: String, driverId: String): DocumentReference {
-        return db.collection(USERS_COLLECTION).document(driverId)
-            .collection(VEHICLES_COLLECTION).document(vehicleId)
     }
 
     @Suppress("RedundantSuspendModifier")

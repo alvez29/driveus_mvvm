@@ -35,6 +35,8 @@ class UserViewModel : ViewModel() {
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
     private val vehicleFormError = MutableLiveData<MutableMap<VehicleFormEnum, Int>>(mutableMapOf())
     private val redirectVehicle = MutableLiveData(false)
+    private val isDriver = MutableLiveData(false)
+    private val hasAnySuscription = MutableLiveData(false)
     private val vehicleById: MutableLiveData<Vehicle> = MutableLiveData(null)
     private val isDriverAndSuscribed = MutableLiveData(false)
 
@@ -185,6 +187,18 @@ class UserViewModel : ViewModel() {
             isDriverAndSuscribed.postValue(user?.isDriver == true && boolSus)
         }
         return isDriverAndSuscribed
+    }
+
+    fun hasAnySuscription(userId: String): LiveData<Boolean>? {
+        FirestoreRepository.getUserById(userId).addSnapshotListener { value, error ->
+            if (error != null) {
+                Log.w(tag, "Listen failed.", error)
+                hasAnySuscription.postValue(false)
+            }
+            val user = value?.toObject(User::class.java)
+            hasAnySuscription.postValue(user?.channels?.isNotEmpty())
+        }
+        return hasAnySuscription
     }
 
     fun getUserById(id: String): LiveData<DocumentSnapshot> {

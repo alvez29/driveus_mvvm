@@ -72,7 +72,9 @@ class AuthActivity : AppCompatActivity() {
 
     private fun startMainActivity() {
         val mainActivityIntent = Intent(this, MainActivity::class.java)
+        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(mainActivityIntent)
+        this.finish()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -58,12 +58,26 @@ class MyRidesRecordFragment : Fragment() {
 
     }
 
-    private fun myRidesRecordAsPassengerObserver(adapter: MyRidesRecordListAdapter): Observer<in List<DocumentSnapshot>> = Observer<List<DocumentSnapshot>> { docSnap ->
-        adapter.submitList(docSnap.sortedBy { it.getTimestamp("date") })
+    private fun myRidesRecordAsPassengerObserver(adapter: MyRidesRecordListAdapter) = Observer<List<DocumentSnapshot>> {
+        if(it.isEmpty()) {
+            viewBinding?.myRidesRecordListRecyclerAsPassenger?.visibility = View.GONE
+            viewBinding?.myRidesRecordFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.myRidesRecordListRecyclerAsPassenger?.visibility = View.VISIBLE
+            viewBinding?.myRidesRecordFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.GONE
+        }
+        adapter.submitList(it.toList().sortedBy { it.getTimestamp("date") })
     }
 
-    private fun myRidesRecordAsDriverObserver(adapter: MyRidesRecordListAdapter): Observer<in List<DocumentSnapshot>> = Observer<List<DocumentSnapshot>> { docSnap ->
-        adapter.submitList(docSnap.sortedBy { it.getTimestamp("date") })
+    private fun myRidesRecordAsDriverObserver(adapter: MyRidesRecordListAdapter) = Observer<List<DocumentSnapshot>> {
+        if(it.isEmpty()) {
+            viewBinding?.myRidesRecordListRecyclerAsDriver?.visibility = View.GONE
+            viewBinding?.myRidesRecordFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.myRidesRecordListRecyclerAsDriver?.visibility = View.VISIBLE
+            viewBinding?.myRidesRecordFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.GONE
+        }
+        adapter.submitList(it.toList().sortedBy { it.getTimestamp("date") })
     }
 
     private fun setUpRecyclerAsPassengerAdapter(): MyRidesRecordListAdapter {
@@ -84,15 +98,16 @@ class MyRidesRecordFragment : Fragment() {
         return adapter
     }
 
+
     private fun setupFloatingButton() {
         viewBinding?.myRidesRecordListButtonFloatingButton?.setOnClickListener {
-            if (viewBinding?.myRidesRecordListRecyclerAsDriver?.isShown == true) {
-                viewBinding?.myRidesRecordListRecyclerAsDriver?.visibility = View.GONE
-                viewBinding?.myRidesRecordListRecyclerAsPassenger?.visibility = View.VISIBLE
+            if (viewBinding?.myRidesRecordContainerDriver?.isShown == true) {
+                viewBinding?.myRidesRecordContainerDriver?.visibility = View.GONE
+                viewBinding?.myRidesRecordContainerPassenger?.visibility = View.VISIBLE
                 viewBinding?.myRidesRecordListButtonFloatingButton?.setImageResource(R.drawable.ic_round_event_seat_24)
             } else {
-                viewBinding?.myRidesRecordListRecyclerAsDriver?.visibility = View.VISIBLE
-                viewBinding?.myRidesRecordListRecyclerAsPassenger?.visibility = View.GONE
+                viewBinding?.myRidesRecordContainerDriver?.visibility = View.VISIBLE
+                viewBinding?.myRidesRecordContainerPassenger?.visibility = View.GONE
                 viewBinding?.myRidesRecordListButtonFloatingButton?.setImageResource(R.drawable.ic_steering_wheel_24)
             }
         }

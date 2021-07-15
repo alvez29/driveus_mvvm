@@ -80,6 +80,10 @@
     <string name="fragment_ride_form__label__date_time_edit_text">Fecha y hora</string>
     <string name="ride_form_error_date_time_past">El viaje debe resgistrarse en una fecha futura</string>
     <string name="ride_form_error_location_not_found">Localización no reconocida</string>
+    <string name="my_channels_fragment__label__no_channels">Aún no estás suscrito a ningún canal</string>
+    <string name="channel_detail_fragment__label__no_rides">No hay trayectos en este canal</string>
+    <string name="my_channels_fragment__label__no_rides">No tienes trayectos próximamente</string>
+    <string name="my_rides_record__label__no_rides">Aún no tienes trayectos registrados</string>
     <string name="ride_detail__label__price">Precio</string>
     <string name="ride_detail__label__capacity">Aforo</string>
     <string name="ride_detail__label__date">Fecha de salida</string>

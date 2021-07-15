@@ -17,7 +17,6 @@ import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.ui.adapter.AllChannelsListAdapter
 import com.example.driveus_mvvm.view_model.ChannelViewModel
 import com.google.firebase.firestore.DocumentReference
-import java.util.*
 
 class AllChannelsFragment : Fragment() {
 
