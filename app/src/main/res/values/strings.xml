@@ -80,4 +80,8 @@
     <string name="fragment_ride_form__label__date_time_edit_text">Fecha y hora</string>
     <string name="ride_form_error_date_time_past">El viaje debe resgistrarse en una fecha futura</string>
     <string name="ride_form_error_location_not_found">Localización no reconocida</string>
+    <string name="ride_detail__label__price">Precio</string>
+    <string name="ride_detail__label__capacity">Aforo</string>
+    <string name="ride_detail__label__date">Fecha de salida</string>
+    <string name="dialog_passenger__label__title">Pasajeros</string>
 </resources>

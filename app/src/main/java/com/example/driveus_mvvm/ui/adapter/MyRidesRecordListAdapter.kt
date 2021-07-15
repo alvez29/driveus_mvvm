@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.ui.layout.Layout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,20 +12,21 @@ import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.ui.utils.LocationUtils
+import com.google.firebase.firestore.DocumentSnapshot
 import java.text.SimpleDateFormat
 
-private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Ride>>() {
+private val diffCallback = object : DiffUtil.ItemCallback<DocumentSnapshot>() {
 
     override fun areItemsTheSame(
-        oldItem: Pair<String, Ride>,
-        newItem: Pair<String, Ride>
+        oldItem: DocumentSnapshot,
+        newItem: DocumentSnapshot
     ): Boolean {
-        return oldItem.first == newItem.first
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: Pair<String, Ride>,
-        newItem: Pair<String, Ride>
+        oldItem: DocumentSnapshot,
+        newItem: DocumentSnapshot
     ): Boolean {
         return oldItem == newItem
     }
@@ -35,13 +35,13 @@ private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, Ride>>() 
 
 class MyRidesRecordListAdapter(
     private val listener: MyRidesRecordListAdapterListener
-) : ListAdapter<Pair<String, Ride>, MyRidesRecordListAdapter.RideViewHolder>(diffCallback) {
+) : ListAdapter<DocumentSnapshot, MyRidesRecordListAdapter.RideViewHolder>(diffCallback) {
 
     interface MyRidesRecordListAdapterListener {
         fun loadProfilePicture(userId: String?, imageView: ImageView)
+        fun navigateToRideDetail(rideId: String, channelId: String?)
+
     }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RideViewHolder {
         val rideView = LayoutInflater.from(parent.context).inflate(R.layout.row_ride, parent, false)
@@ -50,26 +50,26 @@ class MyRidesRecordListAdapter(
     }
 
     override fun onBindViewHolder(holder: RideViewHolder, position: Int) {
-        val currentRidePair = getItem(position)
+        val currentRide = getItem(position).toObject(Ride::class.java)
 
         val pattern = "HH:mm dd-MM-yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
 
-        val capacityPercentage = currentRidePair.second.capacity?.toDouble()
-            ?.let { currentRidePair.second.passengers.size.toDouble() / it }
+        val capacityPercentage = currentRide?.capacity?.toDouble()
+            ?.let { currentRide.passengers.size.toDouble() / it }
         var capacityDrawable = 0
 
-        currentRidePair.second.date?.let {
+        currentRide?.date?.let {
             holder.date.text = simpleDateFormat.format(it.toDate())
         }
 
         holder.meetingPoint.text = LocationUtils.getAddress(
-            currentRidePair.second.meetingPoint,
+            currentRide?.meetingPoint,
             holder.itemView.context
         )
-        holder.price.text = currentRidePair.second.price.toString()
+        holder.price.text = currentRide?.price.toString()
 
-        listener.loadProfilePicture(currentRidePair.second.driver?.id, holder.profilePicture)
+        listener.loadProfilePicture(currentRide?.driver?.id, holder.profilePicture)
 
         capacityPercentage?.let {
             capacityDrawable = if (capacityPercentage == 1.0) {
@@ -97,6 +97,11 @@ class MyRidesRecordListAdapter(
         val profilePicture: ImageView by lazy { itemView.findViewById(R.id.ride_row__image__profile) }
         val capacityIndicator: ImageView by lazy { itemView.findViewById(R.id.ride_row__image__capacity_indicator) }
 
+        init {
+            itemView.setOnClickListener {
+                getItem(adapterPosition).let { ride -> listener.navigateToRideDetail(ride.id , ride.reference.parent.parent?.id) }
+            }
+        }
     }
 
 }

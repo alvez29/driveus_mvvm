@@ -10,7 +10,7 @@
     android:focusable="true"
     app:cardElevation="5dp"
     style="@style/Widget.MaterialComponents.CardView"
-    app:cardCornerRadius="4dp"
+    app:cardCornerRadius="8dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 
+
 class ProfileFragment : Fragment() {
 
     private var viewBinding: FragmentProfileBinding? = null
@@ -42,7 +43,7 @@ class ProfileFragment : Fragment() {
                 mAlertDialog.dismiss()
             }
             mDialogView.findViewById<View>(R.id.dialog_delete_car__button__accept).setOnClickListener {
-                sharedPref?.getString(getString(R.string.shared_pref_doc_id_key),"")
+                sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
                     ?.let { it1 -> viewModel.deleteVehicleById(it1, vehicleId) }
                 mAlertDialog.dismiss()
             }

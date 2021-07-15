@@ -12,6 +12,9 @@
             android:name="backgroundColor"
             app:argType="string"
             android:defaultValue="blue" />
+        <action
+            android:id="@+id/action_myRidesFragment_to_rideDetailFragment"
+            app:destination="@id/rideDetailFragment" />
 
     </fragment>
 
@@ -71,6 +74,10 @@
         <action android:id="@+id/action_channelDetailFragment_to_rideFormFragment"
                 app:destination="@id/rideFormFragment"/>
 
+        <action
+            android:id="@+id/action_channelDetailFragment_to_rideDetailFragment"
+            app:destination="@id/rideDetailFragment" />
+
     </fragment>
 
     <fragment
@@ -82,21 +89,17 @@
         android:id="@+id/allChannelsFragment"
         android:name="com.example.driveus_mvvm.ui.AllChannelsFragment"
         android:label="AllChannelsFragment" />
-
     <fragment
-    android:id="@+id/rideFormFragment"
-    android:name="com.example.driveus_mvvm.ui.RideFormFragment"
-    android:label="rideFormFragment">
-
-        <argument
-                android:name="backgroundColor"
-                app:argType="string"
-                android:defaultValue="blue" />
-        <argument
-                android:name="channelId"
-                app:argType="string"
-                android:defaultValue="" />
-
-    </fragment>
+        android:id="@+id/myComingRidesFragment"
+        android:name="com.example.driveus_mvvm.ui.MyComingRidesFragment"
+        android:label="MyComingRidesFragment" />
+    <fragment
+        android:id="@+id/myRidesRecordFragment"
+        android:name="com.example.driveus_mvvm.ui.MyRidesRecordFragment"
+        android:label="MyRidesRecordFragment" />
+    <fragment
+        android:id="@+id/rideDetailFragment"
+        android:name="com.example.driveus_mvvm.ui.RideDetailFragment"
+        android:label="RideDetailFragment" >
 
 </navigation>

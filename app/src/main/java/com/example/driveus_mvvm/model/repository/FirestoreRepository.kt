@@ -21,8 +21,15 @@ object FirestoreRepository {
 
     //USER FUNCTIONS -----------------------------------------------------
 
+
     fun getUserById(userId: String) : DocumentReference {
         return db.collection(USERS_COLLECTION).document(userId)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getUserByIdSync(userId: String) : DocumentSnapshot? {
+        return db.collection(USERS_COLLECTION).document(userId).get().await()
     }
 
     fun getUserByUID(uid: String): Query {
@@ -101,7 +108,13 @@ object FirestoreRepository {
     }
 
     fun getAllVehiclesByUserId(id: String): CollectionReference {
-        return db.collection("users").document(id).collection("vehicles")
+        return db.collection(USERS_COLLECTION).document(id)
+            .collection(VEHICLES_COLLECTION)
+    }
+
+    fun getVehicleById(vehicleId: String, driverId: String): DocumentReference {
+        return db.collection(USERS_COLLECTION).document(driverId)
+            .collection(VEHICLES_COLLECTION).document(vehicleId)
     }
 
     @Suppress("RedundantSuspendModifier")
@@ -122,9 +135,10 @@ object FirestoreRepository {
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun addVehicle(vehicle: Vehicle, userId: String) {
-        db.collection("users").document(userId).collection("vehicles").add(vehicle)
+        db.collection(USERS_COLLECTION).document(userId)
+            .collection(VEHICLES_COLLECTION).add(vehicle)
     }
-   
+
     //RIDES FUNCTIONS ----------------------------------------------------
 
     fun getRidesFromChannel(channelDocId: String) : Query {
@@ -139,4 +153,8 @@ object FirestoreRepository {
             .collection(RIDES_COLLECTION).add(ride)
     }
 
+    fun getRideById(channelDocId: String , rideDocId: String): DocumentReference {
+        return db.collection(CHANNELS_COLLECTION).document(channelDocId)
+            .collection(RIDES_COLLECTION).document(rideDocId)
+    }
 }

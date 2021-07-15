@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
@@ -17,6 +18,7 @@ import com.example.driveus_mvvm.databinding.FragmentMyComingRidesBinding
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.ui.adapter.MyComingRidesListAdapter
 import com.example.driveus_mvvm.view_model.RideViewModel
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 
 class MyComingRidesFragment : Fragment() {
@@ -43,15 +45,28 @@ class MyComingRidesFragment : Fragment() {
             }
         }
 
+        override fun navigateToRideDetail(rideId: String, channelId: String?) {
+            val action = channelId?.let {
+                MyRidesFragmentDirections
+                        .actionMyRidesFragmentToRideDetailFragment()
+                        .setRideId(rideId)
+                        .setChannelId(it)
+            }
+
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
+
     }
 
-    private fun myComingRidesAsPassengerObserver(adapter: MyComingRidesListAdapter) = Observer<Map<String, Ride>> {
-        adapter.submitList(it.toList().sortedBy { pair -> pair.second.date })
+    private fun myComingRidesAsPassengerObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> { docSnap ->
+        adapter.submitList(docSnap.sortedBy { it.getTimestamp("date") })
 
     }
 
-    private fun myComingRidesAsDriverObserver(adapter: MyComingRidesListAdapter) = Observer<Map<String, Ride>> {
-        adapter.submitList(it.toList().sortedBy { pair -> pair.second.date })
+    private fun myComingRidesAsDriverObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> { docSnap ->
+        adapter.submitList(docSnap.sortedBy { it.getTimestamp("date") })
 
     }
 

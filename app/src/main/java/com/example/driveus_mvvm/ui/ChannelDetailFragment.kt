@@ -66,6 +66,19 @@ class ChannelDetailFragment : Fragment() {
             }
         }
 
+        override fun navigateToRideDetail(rideId: String) {
+            val action = channelId?.let {
+                ChannelDetailFragmentDirections
+                    .actionChannelDetailFragmentToRideDetailFragment()
+                    .setRideId(rideId)
+                    .setChannelId(it)
+            }
+
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
+
     }
 
     private fun setupRecyclerAdapter(): RidesListAdapter {
