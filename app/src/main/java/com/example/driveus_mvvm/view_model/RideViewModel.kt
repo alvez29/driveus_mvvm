@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
@@ -13,6 +15,13 @@ import com.example.driveus_mvvm.ui.enums.RideFormEnum
 import com.example.driveus_mvvm.ui.utils.DateTimeUtils
 import com.example.driveus_mvvm.ui.utils.LocationUtils
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.math.BigDecimal
 import java.sql.Time
 
 class RideViewModel : ViewModel() {
@@ -24,15 +33,14 @@ class RideViewModel : ViewModel() {
     private val rideById: MutableLiveData<Ride> = MutableLiveData(null)
     private val passengersList: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
     private val meetingPoint: MutableLiveData<GeoPoint> = MutableLiveData(GeoPoint(0.0, 0.0))
-
-    private val hasRidesAsDriver = MutableLiveData(false)
-    private val hasRidesAsPassenger = MutableLiveData(false)
+    private var meetingGeoPoint: GeoPoint? = null
 
     private val redirectRide = MutableLiveData(false)
     private val rideFormError = MutableLiveData<MutableMap<RideFormEnum, Int>>(mutableMapOf())
 
     private fun  validateRideForm(textInputs: Map<RideFormEnum, String>, context: Context): Boolean {
         val errorMap = mutableMapOf<RideFormEnum, Int>()
+        var res = true
 
         //Capacity
         if (textInputs[RideFormEnum.CAPACITY].isNullOrBlank()){
@@ -97,15 +105,6 @@ class RideViewModel : ViewModel() {
         }
 
     }
-
-    fun hasRidesAsPassenger(): MutableLiveData<Boolean> {
-        return hasRidesAsPassenger
-    }
-
-    fun hasRidesAsDriver(): MutableLiveData<Boolean> {
-        return hasRidesAsDriver
-    }
-
 
     //TODO:Actualizar meeting point
     fun getMeetingPoint(): LiveData<GeoPoint> {
@@ -304,8 +303,6 @@ class RideViewModel : ViewModel() {
                 passengersList.postValue(resList)
             }
         }
-
         return passengersList
     }
-
 }

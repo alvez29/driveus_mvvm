@@ -60,7 +60,7 @@ class MyComingRidesFragment : Fragment() {
 
     }
 
-    private fun myComingRidesAsPassengerObserver(adapter: MyComingRidesListAdapter) = Observer<Map<String, Ride>> {
+    private fun myComingRidesAsPassengerObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> {
         if (it.isEmpty()){
             viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.GONE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.VISIBLE
@@ -68,10 +68,10 @@ class MyComingRidesFragment : Fragment() {
             viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.VISIBLE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.GONE
         }
-        adapter.submitList(it.toList().sortedBy { pair -> pair.second.date })
+        adapter.submitList(it.toList().sortedBy { it.getTimestamp("date") })
     }
 
-    private fun myComingRidesAsDriverObserver(adapter: MyComingRidesListAdapter) = Observer<Map<String, Ride>> {
+    private fun myComingRidesAsDriverObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> {
         if (it.isEmpty()){
             viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.GONE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.VISIBLE
@@ -79,7 +79,7 @@ class MyComingRidesFragment : Fragment() {
             viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.VISIBLE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.GONE
         }
-        adapter.submitList(it.toList().sortedBy { pair -> pair.second.date })
+        adapter.submitList(it.toList().sortedBy { it.getTimestamp("date") })
 
     }
 

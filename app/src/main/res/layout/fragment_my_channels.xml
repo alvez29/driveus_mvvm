@@ -39,7 +39,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/my_channels_fragment__label__no_channels"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                     android:gravity="center"
                     android:layout_marginStart="16dp"
