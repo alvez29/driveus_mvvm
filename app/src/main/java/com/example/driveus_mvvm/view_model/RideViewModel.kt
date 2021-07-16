@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.driveus_mvvm.R
-import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
@@ -22,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.math.BigDecimal
-import java.sql.Time
 
 class RideViewModel : ViewModel() {
 
@@ -304,5 +302,17 @@ class RideViewModel : ViewModel() {
             }
         }
         return passengersList
+    }
+
+
+    fun addPassengerInARide(channelId: String, rideId: String, passengerId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val passengerDocRef: DocumentReference? = FirestoreRepository.getUserByIdSync(passengerId)?.reference
+            if (passengerDocRef != null) {
+                FirestoreRepository.addPassengerInARide(channelId, rideId, passengerDocRef)
+            }
+            val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
+            FirestoreRepository.addRideInAPassenger(passengerId, rideReference.reference)
+        }
     }
 }

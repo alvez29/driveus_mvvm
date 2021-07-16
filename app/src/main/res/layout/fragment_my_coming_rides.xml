@@ -26,11 +26,13 @@
 
         <LinearLayout
                 android:id="@+id/my_coming_rides_fragment__container__no_rides_linear_layout_passenger"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/channel_detail_fragment__container__no_rides_passenger"
@@ -88,8 +90,10 @@
         <LinearLayout
                 android:id="@+id/my_coming_rides_fragment__container__no_rides_linear_layout_driver"
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 

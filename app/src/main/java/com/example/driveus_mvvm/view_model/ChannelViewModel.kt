@@ -116,9 +116,6 @@ class ChannelViewModel : ViewModel() {
                     }
                 }
             }
-            if (resMap.isEmpty() ){
-                hasAnyRide.postValue(false)
-            }
             channelRides.postValue(resMap)
         }
 
@@ -150,5 +147,4 @@ class ChannelViewModel : ViewModel() {
             }
         }
     }
-
 }

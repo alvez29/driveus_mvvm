@@ -88,4 +88,5 @@
     <string name="ride_detail__label__capacity">Aforo</string>
     <string name="ride_detail__label__date">Fecha de salida</string>
     <string name="dialog_passenger__label__title">Pasajeros</string>
+    <string name="ride_detail__label__button">Unirse</string>
 </resources>
