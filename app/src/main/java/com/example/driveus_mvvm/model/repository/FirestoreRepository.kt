@@ -2,6 +2,7 @@ package com.example.driveus_mvvm.model.repository
 
 
 import androidx.annotation.WorkerThread
+import com.example.driveus_mvvm.model.entities.Payout
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
@@ -16,7 +17,8 @@ object FirestoreRepository {
     private const val USERS_COLLECTION = "users"
     private const val RIDES_COLLECTION = "rides"
     private const val VEHICLES_COLLECTION = "vehicles"
-    
+    private const val PAYOUTS_COLLECTION = "payouts"
+
     private val db by lazy { FirebaseFirestore.getInstance() }
 
     //USER FUNCTIONS -----------------------------------------------------
@@ -175,5 +177,13 @@ object FirestoreRepository {
     suspend fun addRideInAPassenger(userId: String, rideDocRef: DocumentReference?) {
         db.collection(USERS_COLLECTION).document(userId)
             .update("ridesAsPassenger", FieldValue.arrayUnion(rideDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addSimplePayout(channelId: String, rideId: String, payout: Payout) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .collection(PAYOUTS_COLLECTION).add(payout)
     }
 }

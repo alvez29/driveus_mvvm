@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.driveus_mvvm.R
+import com.example.driveus_mvvm.model.entities.Payout
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
+import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.enums.RideFormEnum
 import com.example.driveus_mvvm.ui.utils.DateTimeUtils
@@ -25,6 +27,7 @@ import java.math.BigDecimal
 class RideViewModel : ViewModel() {
 
     private val tag = "FIRESTORE_RIDE_VIEW_MODEL"
+    private val msgListenFailed = "Listen failed."
 
     private val ridesAsPassenger: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
     private val ridesAsDriver: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
@@ -104,6 +107,16 @@ class RideViewModel : ViewModel() {
 
     }
 
+    private fun createSimplePayout(passengerDocRef: DocumentReference, price: Double): Payout {
+        return Payout(
+                    creationDate = Timestamp.now(),
+                    paidDate = null,
+                    passenger = passengerDocRef,
+                    price = price,
+                    isPaid = false
+        )
+    }
+
     //TODO:Actualizar meeting point
     fun getMeetingPoint(): LiveData<GeoPoint> {
         return meetingPoint
@@ -112,7 +125,7 @@ class RideViewModel : ViewModel() {
     fun getComingRidesAsPassenger(userId: String): LiveData<List<DocumentSnapshot>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
             if ( error != null) {
-                Log.w(tag, "Listen failed.", error)
+                Log.w(tag, msgListenFailed, error)
                 ridesAsPassenger.value = emptyList()
             }
 
@@ -122,7 +135,7 @@ class RideViewModel : ViewModel() {
             userObject?.ridesAsPassenger?.forEach { docReference ->
                 docReference?.addSnapshotListener { rideDoc, error ->
                     if ( error != null) {
-                        Log.w(tag, "Listen failed.", error)
+                        Log.w(tag, msgListenFailed, error)
                         ridesAsPassenger.value = emptyList()
                     }
 
@@ -145,7 +158,7 @@ class RideViewModel : ViewModel() {
     fun getComingRidesAsDriver(userId: String): LiveData<List<DocumentSnapshot>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
             if ( error != null) {
-                Log.w(tag, "Listen failed.", error)
+                Log.w(tag, msgListenFailed, error)
                 ridesAsDriver.value = emptyList()
             }
 
@@ -155,7 +168,7 @@ class RideViewModel : ViewModel() {
             userObject?.ridesAsDriver?.forEach { docReference ->
                 docReference?.addSnapshotListener { rideDoc, error ->
                     if ( error != null) {
-                        Log.w(tag, "Listen failed.", error)
+                        Log.w(tag, msgListenFailed, error)
                         ridesAsDriver.value = mutableListOf()
                     }
 
@@ -178,7 +191,7 @@ class RideViewModel : ViewModel() {
     fun getRidesAsPassenger(userId: String): LiveData<List<DocumentSnapshot>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
             if ( error != null) {
-                Log.w(tag, "Listen failed.", error)
+                Log.w(tag, msgListenFailed, error)
                 ridesAsPassenger.value = emptyList()
             }
 
@@ -188,7 +201,7 @@ class RideViewModel : ViewModel() {
             userObject?.ridesAsPassenger?.forEach { docReference ->
                 docReference?.addSnapshotListener { rideDoc, error ->
                     if ( error != null) {
-                        Log.w(tag, "Listen failed.", error)
+                        Log.w(tag, msgListenFailed, error)
                         ridesAsPassenger.value = emptyList()
                     }
 
@@ -206,7 +219,7 @@ class RideViewModel : ViewModel() {
     fun getRidesAsDriver(userId: String): LiveData<List<DocumentSnapshot>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
             if ( error != null) {
-                Log.w(tag, "Listen failed.", error)
+                Log.w(tag, msgListenFailed, error)
                 ridesAsDriver.value = emptyList()
             }
 
@@ -216,7 +229,7 @@ class RideViewModel : ViewModel() {
             userObject?.ridesAsDriver?.forEach { docReference ->
                 docReference?.addSnapshotListener { rideDoc, error ->
                     if ( error != null) {
-                        Log.w(tag, "Listen failed.", error)
+                        Log.w(tag, msgListenFailed, error)
                         ridesAsDriver.value = emptyList()
                     }
 
@@ -236,7 +249,7 @@ class RideViewModel : ViewModel() {
             channelId?.let {
                 FirestoreRepository.getRideById(channelId, rideId).addSnapshotListener { value, error ->
                     if ( error != null) {
-                        Log.w(tag, "Listen failed.", error)
+                        Log.w(tag, msgListenFailed, error)
                         rideById.value = null
                         meetingPoint.value = GeoPoint(0.0,0.0)
                     }
@@ -266,18 +279,20 @@ class RideViewModel : ViewModel() {
     fun addNewRide(inputs: Map<RideFormEnum, String>, userId: String, vehicleId: String, channelId: String, context: Context) {
         if (validateRideForm(inputs, context)) {
             viewModelScope.launch(Dispatchers.IO) {
-                try {
-                    val userDocumentId = FirestoreRepository.getUserById(userId)
-                    val vehicleDocRef = FirestoreRepository.getVehicleById(userId, vehicleId)
-                    FirestoreRepository.updateVehicleIsInRide(userId, vehicleDocRef.id)
+                    try {
+                        val vehicleDocRef = FirestoreRepository.getVehicleById(userId, vehicleId)
+                        val userDocumentId = FirestoreRepository.getUserById(userId)
+                        vehicleDocRef?.id?.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
                     var rideDocRef: DocumentReference? = null
-                    getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
-                        rideDocRef =  FirestoreRepository.addNewRide(it, channelId).await()
-                    }
+                        if (vehicleDocRef != null) {
+                            getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
+                                rideDocRef =  FirestoreRepository.addNewRide(it, channelId).await()
+                            }
+                        }
                     FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
                     redirectRide.postValue(true)
                 } catch (e: Exception) {
-                    Log.w(tag, "Listen failed.", e)
+                    Log.w(tag, msgListenFailed, e)
                 }
             }
         }
@@ -312,7 +327,16 @@ class RideViewModel : ViewModel() {
                 FirestoreRepository.addPassengerInARide(channelId, rideId, passengerDocRef)
             }
             val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
+            val ride = rideReference.toObject(Ride::class.java)
             FirestoreRepository.addRideInAPassenger(passengerId, rideReference.reference)
+            val payout = passengerDocRef?.let { passengerDocumentReference ->
+                ride?.price?.let { price ->
+                        createSimplePayout(passengerDocumentReference, price)
+                }
+             }
+            if (payout != null) {
+                FirestoreRepository.addSimplePayout(channelId, rideId, payout)
+            }
         }
     }
 }

@@ -64,19 +64,22 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
                     (childFragmentManager.findFragmentById(R.id.ride_detail__map__meeting_point) as? SupportMapFragment)?.getMapAsync(this)
                     userViewModel.getUserById(driverRef.id).observe(viewLifecycleOwner, userObserver)
                     userViewModel.getVehicleById(vehicleRef.id, driverRef.id).observe(viewLifecycleOwner, vehicleObserver)
-                    showJoinButton(driverRef.id, rideObj.date, rideObj.passengers.map { it.id })
+                    showJoinButton(driverRef.id, rideObj.date, rideObj.passengers.map { it.id }, rideObj.capacity)
                 }
             }
         }
     }
 
-    private fun showJoinButton(driverId: String?, rideDate: Timestamp?, passenger: List<String>) {
+    private fun showJoinButton(driverId: String?, rideDate: Timestamp?, passengers: List<String>, capacity: Int?) {
         val currentUserId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
 
-        if (driverId != currentUserId
-            && rideDate?.toDate()?.after(Timestamp.now().toDate()) == true
-            && passenger.contains(currentUserId).not()) {
-            viewBinding?.rideDetailButtonJoin?.visibility = View.VISIBLE
+        if (capacity != null) {
+            if (driverId != currentUserId
+                && rideDate?.toDate()?.after(Timestamp.now().toDate()) == true
+                && passengers.contains(currentUserId).not()
+                && capacity > passengers.size) {
+                viewBinding?.rideDetailButtonJoin?.visibility = View.VISIBLE
+            }
         }
     }
 
