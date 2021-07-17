@@ -10,4 +10,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="filled_input">#1F000000</color>
+    <color name="cancel">#D50000</color>
 </resources>

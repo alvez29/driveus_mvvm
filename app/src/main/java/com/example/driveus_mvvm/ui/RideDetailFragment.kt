@@ -73,12 +73,16 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     private fun showJoinButton(driverId: String?, rideDate: Timestamp?, passengers: List<String>, capacity: Int?) {
         val currentUserId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
 
-        if (capacity != null) {
-            if (driverId != currentUserId
-                && rideDate?.toDate()?.after(Timestamp.now().toDate()) == true
-                && passengers.contains(currentUserId).not()
+        if (capacity != null
+            && driverId != currentUserId
+            && rideDate?.toDate()?.after(Timestamp.now().toDate()) == true) {
+            if ( passengers.contains(currentUserId).not()
                 && capacity > passengers.size) {
                 viewBinding?.rideDetailButtonJoin?.visibility = View.VISIBLE
+                viewBinding?.rideDetailButtonNotJoin?.visibility = View.GONE
+            } else if(passengers.contains(currentUserId)){
+                viewBinding?.rideDetailButtonJoin?.visibility = View.GONE
+                viewBinding?.rideDetailButtonNotJoin?.visibility = View.VISIBLE
             }
         }
     }
@@ -292,17 +296,27 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpJoinButton() {
+    private fun setUpJoinsButton() {
+        val userId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
         viewBinding?.rideDetailButtonJoin?.setOnClickListener {
-            sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                ?.let { userId ->
-                    channelId?.let { channelId ->
-                        rideId?.let { rideId ->
+                channelId?.let { channelId ->
+                    rideId?.let { rideId ->
+                        if (userId != null) {
                             rideViewModel.addPassengerInARide(channelId, rideId, userId)
                         }
                     }
                 }
             viewBinding?.rideDetailButtonJoin?.visibility = View.GONE
+        }
+        viewBinding?.rideDetailButtonNotJoin?.setOnClickListener {
+            if (userId != null) {
+                channelId?.let {
+                        channelId ->
+                    rideId?.let { rideId ->
+                        rideViewModel.removePassengerInARide(channelId, rideId, userId)
+                    }
+                }
+            }
         }
     }
 
@@ -329,7 +343,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        setUpJoinButton()
+        setUpJoinsButton()
 
     }
 

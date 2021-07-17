@@ -339,4 +339,22 @@ class RideViewModel : ViewModel() {
             }
         }
     }
+
+    fun removePassengerInARide(channelId: String, rideId: String, passengerId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val passengerDocRef: DocumentReference? = FirestoreRepository.getUserByIdSync(passengerId)?.reference
+            if (passengerDocRef != null) {
+                FirestoreRepository.removePassengerInARide(channelId, rideId, passengerDocRef)
+            }
+            val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
+            FirestoreRepository.removeRideInAPassenger(passengerId, rideReference.reference)
+
+            val payoutId = passengerDocRef?.let {
+                FirestoreRepository.getPayoutByUserAndRideSync(channelId, rideId, it)?.documents?.get(0)?.id
+            }
+            if (payoutId != null) {
+                FirestoreRepository.deleteSimplePayout(channelId, rideId, payoutId)
+            }
+        }
+    }
 }
