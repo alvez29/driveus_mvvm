@@ -2,6 +2,7 @@ package com.example.driveus_mvvm.model.repository
 
 
 import androidx.annotation.WorkerThread
+import com.example.driveus_mvvm.model.entities.Payout
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
@@ -16,7 +17,8 @@ object FirestoreRepository {
     private const val USERS_COLLECTION = "users"
     private const val RIDES_COLLECTION = "rides"
     private const val VEHICLES_COLLECTION = "vehicles"
-    
+    private const val PAYOUTS_COLLECTION = "payouts"
+
     private val db by lazy { FirebaseFirestore.getInstance() }
 
     //USER FUNCTIONS -----------------------------------------------------
@@ -125,7 +127,8 @@ object FirestoreRepository {
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deleteVehicleById(userID: String, vehicleId: String) {
-        db.collection("users").document(userID).collection("vehicles").document(vehicleId).delete()
+        db.collection("users").document(userID)
+            .collection("vehicles").document(vehicleId).delete()
     }
 
     @Suppress("RedundantSuspendModifier")
@@ -142,6 +145,18 @@ object FirestoreRepository {
                 .collection(RIDES_COLLECTION).whereGreaterThan("date", Timestamp.now())
     }
 
+    fun getRideById(channelDocId: String , rideDocId: String): DocumentReference {
+        return db.collection(CHANNELS_COLLECTION).document(channelDocId)
+            .collection(RIDES_COLLECTION).document(rideDocId)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getRideByIdSync(channelDocId: String, rideDocId: String): DocumentSnapshot {
+        return db.collection(CHANNELS_COLLECTION).document(channelDocId)
+            .collection(RIDES_COLLECTION).document(rideDocId).get().await()
+    }
+
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun addNewRide(ride: Ride, channelDocId: String): Task<DocumentReference> {
@@ -149,8 +164,26 @@ object FirestoreRepository {
             .collection(RIDES_COLLECTION).add(ride)
     }
 
-    fun getRideById(channelDocId: String , rideDocId: String): DocumentReference {
-        return db.collection(CHANNELS_COLLECTION).document(channelDocId)
-            .collection(RIDES_COLLECTION).document(rideDocId)
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    fun addPassengerInARide(channelId: String, rideId: String, passengerReference: DocumentReference) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .update("passengers", FieldValue.arrayUnion(passengerReference))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addRideInAPassenger(userId: String, rideDocRef: DocumentReference?) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("ridesAsPassenger", FieldValue.arrayUnion(rideDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addSimplePayout(channelId: String, rideId: String, payout: Payout) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .collection(PAYOUTS_COLLECTION).add(payout)
     }
 }

@@ -63,18 +63,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/ride_detail__label__destination_zone"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            tools:text="El Viso del Alcor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ride_detail__image__destination_zone"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/ride_detail__label__destination_zone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                tools:text="El Viso del Alcor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ride_detail__image__destination_zone"
+                app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,6 +91,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ride_detail__container__title_container"
         tools:text="lucia_5" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/ride_detail__button__join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="?colorSecondaryVariant"
+            android:textColor="@color/white"
+            android:text= "@string/ride_detail__label__button"
+            android:fontFamily="@font/montserrat_bold"
+            android:visibility="gone"
+            app:icon="@drawable/ic_baseline_add_24"
+            app:iconTint="@color/white"
+            app:layout_constraintTop_toTopOf="@+id/ride_detail__label__username"
+            app:layout_constraintBottom_toBottomOf="@+id/ride_detail__label__username"
+            app:layout_constraintEnd_toEndOf="@+id/ride_detail__label__username"
+            tools:visibility="visible"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ride_detail__container__basic_information"

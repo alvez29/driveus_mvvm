@@ -35,7 +35,6 @@ class UserViewModel : ViewModel() {
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
     private val vehicleFormError = MutableLiveData<MutableMap<VehicleFormEnum, Int>>(mutableMapOf())
     private val redirectVehicle = MutableLiveData(false)
-    private val isDriver = MutableLiveData(false)
     private val hasAnySuscription = MutableLiveData(false)
     private val vehicleById: MutableLiveData<Vehicle> = MutableLiveData(null)
     private val isDriverAndSuscribed = MutableLiveData(false)
@@ -327,7 +326,7 @@ class UserViewModel : ViewModel() {
                 updateUserRole(id, value)
 
                 val documents = value?.documents
-                var mapIdVehicles:MutableMap<String, Vehicle> = mutableMapOf()
+                val mapIdVehicles:MutableMap<String, Vehicle> = mutableMapOf()
 
                 if (documents != null) {
                     for (d in documents) {
