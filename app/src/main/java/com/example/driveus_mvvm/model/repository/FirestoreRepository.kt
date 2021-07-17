@@ -181,9 +181,44 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun removeRideInAPassenger(userId: String, rideDocRef: DocumentReference?) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("ridesAsPassenger", FieldValue.arrayRemove(rideDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    fun removePassengerInARide(channelId: String, rideId: String, passengerReference: DocumentReference) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .update("passengers", FieldValue.arrayRemove(passengerReference))
+    }
+
+
+
+    //PAYOUT FUNCTIONS ----------------------------------------------------
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun addSimplePayout(channelId: String, rideId: String, payout: Payout) {
         db.collection(CHANNELS_COLLECTION).document(channelId)
             .collection(RIDES_COLLECTION).document(rideId)
             .collection(PAYOUTS_COLLECTION).add(payout)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteSimplePayout(channelId: String, rideId: String, payoutId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .collection(PAYOUTS_COLLECTION).document(payoutId).delete()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getPayoutByUserAndRideSync(channelId: String, rideId: String, passengerReference: DocumentReference): QuerySnapshot? {
+       return db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .collection(PAYOUTS_COLLECTION).whereEqualTo("passenger", passengerReference).limit(1L).get().await()
     }
 }
