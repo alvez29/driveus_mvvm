@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ import com.example.driveus_mvvm.ui.adapter.MyComingRidesListAdapter
 import com.example.driveus_mvvm.view_model.RideViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
+import java.util.*
 
 class MyComingRidesFragment : Fragment() {
 
@@ -103,15 +105,23 @@ class MyComingRidesFragment : Fragment() {
 
 
     private fun setupFloatingButton() {
-        viewBinding?.myComingRidesListButtonFloatingButton?.setOnClickListener {
+        viewBinding?.myComingRidesFragmentButtonRoleButton?.setOnClickListener {
+            val drawableWheel = context?.let { it1 -> ContextCompat.getDrawable(it1, R.drawable.ic_steering_wheel_24) }
+            val drawableSeat = context?.let { it1 -> ContextCompat.getDrawable(it1, R.drawable.ic_round_event_seat_24) }
+
             if (viewBinding?.myComingRidesContainerDriver?.isShown == true) {
                 viewBinding?.myComingRidesContainerPassenger?.visibility = View.VISIBLE
                 viewBinding?.myComingRidesContainerDriver?.visibility = View.GONE
-                viewBinding?.myComingRidesListButtonFloatingButton?.setImageResource(R.drawable.ic_round_event_seat_24)
+                viewBinding?.myComingRidesFragmentButtonRoleButton
+                        ?.setCompoundDrawablesWithIntrinsicBounds(drawableSeat, null, null, null)
+                viewBinding?.myComingRidesFragmentButtonRoleButton?.text = getString(R.string.my_rides_record_list__label__role_button_passenger)
+
             } else {
                 viewBinding?.myComingRidesContainerPassenger?.visibility = View.GONE
                 viewBinding?.myComingRidesContainerDriver?.visibility = View.VISIBLE
-                viewBinding?.myComingRidesListButtonFloatingButton?.setImageResource(R.drawable.ic_steering_wheel_24)
+                viewBinding?.myComingRidesFragmentButtonRoleButton
+                        ?.setCompoundDrawablesWithIntrinsicBounds(drawableWheel, null, null, null)
+                viewBinding?.myComingRidesFragmentButtonRoleButton?.text = getString(R.string.my_rides_record_list__label__role_button_driver)
             }
         }
     }

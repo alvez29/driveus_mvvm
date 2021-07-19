@@ -127,8 +127,8 @@ object FirestoreRepository {
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deleteVehicleById(userID: String, vehicleId: String) {
-        db.collection("users").document(userID)
-            .collection("vehicles").document(vehicleId).delete()
+        db.collection(USERS_COLLECTION).document(userID)
+            .collection(VEHICLES_COLLECTION).document(vehicleId).delete()
     }
 
     @Suppress("RedundantSuspendModifier")
@@ -197,6 +197,12 @@ object FirestoreRepository {
 
 
     //PAYOUT FUNCTIONS ----------------------------------------------------
+
+    fun getPayoutsFromRide(channelId: String, rideId: String): CollectionReference {
+        return db.collection(CHANNELS_COLLECTION).document(channelId)
+                .collection(RIDES_COLLECTION).document(rideId)
+                .collection(PAYOUTS_COLLECTION)
+    }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread

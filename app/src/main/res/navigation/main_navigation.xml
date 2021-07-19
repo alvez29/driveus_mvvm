@@ -133,6 +133,30 @@
                 android:name="channelId"
                 app:argType="string"
                 android:defaultValue="" />
+        <action
+            android:id="@+id/action_rideDetailFragment_to_ridePayoutsListFragment"
+            app:destination="@id/ridePayoutsListFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/ridePayoutsListFragment"
+        android:name="com.example.driveus_mvvm.ui.RidePayoutsListFragment"
+        android:label="RidePayoutsListFragment" >
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="yellow" />
+
+        <argument
+            android:name="rideId"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="channelId"
+            app:argType="string"
+            android:defaultValue="" />
 
     </fragment>
 

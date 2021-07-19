@@ -126,6 +126,23 @@
             app:layout_constraintEnd_toEndOf="@+id/ride_detail__label__username"
             tools:visibility="gone"/>
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/ride_detail__button__payouts_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/yellow_500"
+        android:textColor="@color/white"
+        android:text="@string/menu__item__payouts"
+        android:fontFamily="@font/montserrat_bold"
+        android:visibility="gone"
+        app:icon="@drawable/ic_round_attach_money_24"
+        app:iconTint="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/ride_detail__label__username"
+        app:layout_constraintBottom_toBottomOf="@+id/ride_detail__label__username"
+        app:layout_constraintEnd_toEndOf="@+id/ride_detail__label__username"
+        tools:visibility="gone"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ride_detail__container__basic_information"
         android:layout_width="0dp"

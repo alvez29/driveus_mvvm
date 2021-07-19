@@ -11,7 +11,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/my_rides_record__button__list_button_role"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -23,7 +23,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible"/>
 
         <LinearLayout
                 android:id="@+id/my_rides_record_fragment__container__no_rides_linear_layout_passenger"
@@ -32,7 +33,7 @@
                 android:layout_height="0dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:visibility="gone" tools:visibility="visible">
+                android:visibility="gone" tools:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cmy_rides_record__fragment__container__no_rides_passenger"
@@ -74,7 +75,7 @@
             android:layout_height="0dp"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/my_rides_record__button__list_button_role"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -95,7 +96,7 @@
                 android:layout_height="0dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:visibility="gone" tools:visibility="visible">
+                android:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cmy_rides_record__fragment__container__no_rides_driver"
@@ -131,18 +132,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/my_rides_record__list__button__floating_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:tint="?colorSecondaryVariant"
-            android:src="@drawable/ic_round_event_seat_24"
-            android:backgroundTint="?colorSecondaryVariant"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/my_rides_record__button__list_button_role"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?colorSecondaryVariant"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:fontFamily="@font/montserrat_bold"
+        android:drawableStart="@drawable/ic_round_event_seat_24"
+        android:paddingHorizontal="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/my_rides_record_list__label__role_button_passenger" />
 
 
 

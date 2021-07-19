@@ -44,17 +44,15 @@ class ChannelDetailFragment : Fragment() {
         }
     }
 
-    private val hasAnyRideObserver = Observer<Boolean> {
-        if (it) {
-            viewBinding?.channelDetailListRidesList?.visibility = View.VISIBLE
-            viewBinding?.channelDetailFragmentContainerNoRidesLinearLayout?.visibility = View.GONE
-        } else {
+    private fun ridesObserver(adapter: RidesListAdapter) = Observer<Map<String, Ride>> { map ->
+        if (map.isEmpty()) {
             viewBinding?.channelDetailListRidesList?.visibility = View.GONE
             viewBinding?.channelDetailFragmentContainerNoRidesLinearLayout?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.channelDetailListRidesList?.visibility = View.VISIBLE
+            viewBinding?.channelDetailFragmentContainerNoRidesLinearLayout?.visibility = View.GONE
         }
-    }
 
-    private fun ridesObserver(adapter: RidesListAdapter) = Observer<Map<String, Ride>> { map ->
         adapter.submitList(map.toList().sortedBy { it.second.date })
     }
 
@@ -123,8 +121,6 @@ class ChannelDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = setupRecyclerAdapter()
-
-        viewModel.hasAnyRide().observe(viewLifecycleOwner, hasAnyRideObserver)
 
         channelId?.let {
             viewModel.getRidesFromChannel(it).observe(viewLifecycleOwner, ridesObserver(adapter))

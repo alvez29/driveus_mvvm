@@ -38,6 +38,7 @@ class RideViewModel : ViewModel() {
     private val redirectRide = MutableLiveData(false)
     private val rideFormError = MutableLiveData<MutableMap<RideFormEnum, Int>>(mutableMapOf())
 
+
     private fun  validateRideForm(textInputs: Map<RideFormEnum, String>, context: Context, seats: Int): Boolean {
         val errorMap = mutableMapOf<RideFormEnum, Int>()
         var res = true
@@ -279,24 +280,29 @@ class RideViewModel : ViewModel() {
 
 
     fun addNewRide(inputs: Map<RideFormEnum, String>, userId: String, vehicleId: String, channelId: String, context: Context) {
-            viewModelScope.launch(Dispatchers.IO) {
-                    try {
-                        val vehicleDocRef = FirestoreRepository.getVehicleById(vehicleId,userId)
-                        val seats: Int? = vehicleDocRef.get().await().getDouble("seats")?.toInt()
-                        if (seats?.let { validateRideForm(inputs, context, it) } == true) {
-                            val userDocumentId = FirestoreRepository.getUserById(userId)
-                            vehicleDocRef.id.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
-                            var rideDocRef: DocumentReference? = null
-                                getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
-                                    rideDocRef = FirestoreRepository.addNewRide(it, channelId).await()
-                            }
-                            FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
-                            redirectRide.postValue(true)
-                         }
-                    } catch (e: Exception) {
-                    Log.w(tag, msgListenFailed, e)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val vehicleDocRef = FirestoreRepository.getVehicleById(vehicleId,userId)
+                val seats: Int? = vehicleDocRef.get().await().getDouble("seats")?.toInt()
+                
+                if (seats?.let { validateRideForm(inputs, context, it) } == true) {
+                    val userDocumentId = FirestoreRepository.getUserById(userId)
+                    var rideDocRef: DocumentReference? = null
+           
+                    vehicleDocRef.id.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
+                    
+                    getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
+                            rideDocRef = FirestoreRepository.addNewRide(it, channelId).await()
+                        }
+                    
+                    FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
+                    redirectRide.postValue(true)
+                 }
+                
+            } catch (e: Exception) {
+                Log.w(tag, msgListenFailed, e)
             }
+        }
     }
     
     fun getPassengersList(channelId: String, rideId: String) : MutableLiveData<List<DocumentSnapshot>> {

@@ -91,5 +91,8 @@
     <string name="ride_detail__label__button">Unirse</string>
     <string name="ride_form_error_mas_capacity">Este vehículo no dispone de tantas plazas</string>
     <string name="ride_detail__label__button_not_join">Eliminarse</string>
+    <string name="fragment_ride_payouts_detail_list__label__total_money">TOTAL</string>
+    <string name="my_rides_record_list__label__role_button_passenger">VIAJES COMO PASAJERO</string>
+    <string name="my_rides_record_list__label__role_button_driver">VIAJES COMO CONDUCTOR</string>
     <string name="ride_form_error_max_capacity">Este vehículo no dispone de tantas plazas</string>
 </resources>
