@@ -39,7 +39,7 @@ class RideViewModel : ViewModel() {
     private val redirectRide = MutableLiveData(false)
     private val rideFormError = MutableLiveData<MutableMap<RideFormEnum, Int>>(mutableMapOf())
 
-    private fun  validateRideForm(textInputs: Map<RideFormEnum, String>, context: Context): Boolean {
+    private fun validateRideForm(textInputs: Map<RideFormEnum, String>, context: Context): Boolean {
         val errorMap = mutableMapOf<RideFormEnum, Int>()
         var res = true
 
@@ -277,23 +277,26 @@ class RideViewModel : ViewModel() {
 
 
     fun addNewRide(inputs: Map<RideFormEnum, String>, userId: String, vehicleId: String, channelId: String, context: Context) {
-        if (validateRideForm(inputs, context)) {
             viewModelScope.launch(Dispatchers.IO) {
+                if (validateRideForm(inputs, context)) {
+
                     try {
                         val vehicleDocRef = FirestoreRepository.getVehicleById(userId, vehicleId)
                         val userDocumentId = FirestoreRepository.getUserById(userId)
-                        vehicleDocRef?.id?.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
-                    var rideDocRef: DocumentReference? = null
-                        if (vehicleDocRef != null) {
-                            getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
-                                rideDocRef =  FirestoreRepository.addNewRide(it, channelId).await()
-                            }
+
+                        vehicleDocRef.id.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
+
+                        var rideDocRef: DocumentReference? = null
+
+                        getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
+                            rideDocRef =  FirestoreRepository.addNewRide(it, channelId).await()
                         }
-                    FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
-                    redirectRide.postValue(true)
-                } catch (e: Exception) {
-                    Log.w(tag, msgListenFailed, e)
-                }
+
+                        FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
+                        redirectRide.postValue(true)
+                    } catch (e: Exception) {
+                        Log.w(tag, msgListenFailed, e)
+                    }
             }
         }
     }

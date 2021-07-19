@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private fun applyBackgroundColor(arguments: Bundle?) {
         when(arguments?.getString(BACKGROUND_COLOR_KEY)) {
             "yellow" -> {
-                supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.yellow_500)))
+                supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.yellow_300)))
             }
             "blue" -> {
                 supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.teal_300)))

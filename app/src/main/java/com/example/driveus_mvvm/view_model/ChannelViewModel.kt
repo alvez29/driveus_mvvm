@@ -7,28 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.model.entities.Ride
-import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class ChannelViewModel : ViewModel() {
 
     private val tag = "FIRESTORE_CHANNEL_VIEW_MODEL"
 
-    //Mapa con clave id de los documentos y valor el propio Channel
     private val allChannels: MutableLiveData<Map<String, Channel>> = MutableLiveData(mutableMapOf())
     private val userChannels: MutableLiveData<Map<String, Channel>> = MutableLiveData(mutableMapOf())
     private val channelRides: MutableLiveData<Map<String, Ride>> = MutableLiveData(mutableMapOf())
     private val channelById: MutableLiveData<Channel> = MutableLiveData()
-    private val hasAnyRide = MutableLiveData(true)
-
-    fun hasAnyRide(): LiveData<Boolean> {
-        return hasAnyRide
-    }
 
     fun getChannelById(channelDocId: String) : LiveData<Channel> {
         FirestoreRepository.getChannelById(channelDocId).addSnapshotListener { value, error ->

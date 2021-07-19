@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentRideDetailBinding
@@ -64,13 +65,14 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
                     (childFragmentManager.findFragmentById(R.id.ride_detail__map__meeting_point) as? SupportMapFragment)?.getMapAsync(this)
                     userViewModel.getUserById(driverRef.id).observe(viewLifecycleOwner, userObserver)
                     userViewModel.getVehicleById(vehicleRef.id, driverRef.id).observe(viewLifecycleOwner, vehicleObserver)
-                    showJoinButton(driverRef.id, rideObj.date, rideObj.passengers.map { it.id }, rideObj.capacity)
+                    showButtons(driverRef.id, rideObj.date, rideObj.passengers.map { it.id }, rideObj.capacity)
+                    setupPayoutButton()
                 }
             }
         }
     }
 
-    private fun showJoinButton(driverId: String?, rideDate: Timestamp?, passengers: List<String>, capacity: Int?) {
+    private fun showButtons(driverId: String?, rideDate: Timestamp?, passengers: List<String>, capacity: Int?) {
         val currentUserId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
 
         if (capacity != null
@@ -84,6 +86,8 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
                 viewBinding?.rideDetailButtonJoin?.visibility = View.GONE
                 viewBinding?.rideDetailButtonNotJoin?.visibility = View.VISIBLE
             }
+        } else if (driverId == currentUserId) {
+            viewBinding?.rideDetailButtonPayoutsList?.visibility = View.VISIBLE
         }
     }
 
@@ -110,6 +114,22 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
             dialogFragment.show(childFragmentManager, "dialog")
         }
 
+    }
+
+    private fun setupPayoutButton() {
+        viewBinding?.rideDetailButtonPayoutsList?.setOnClickListener {
+            val action = channelId?.let { it1 ->
+                rideId?.let { it2 ->
+                    RideDetailFragmentDirections.actionRideDetailFragmentToRidePayoutsListFragment()
+                            .setChannelId(it1)
+                            .setRideId(it2)
+                }
+            }
+
+            if (action != null) {
+                findNavController().navigate(action)
+            }
+        }
     }
 
     //TODO: método duplicado
@@ -337,6 +357,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
 
         setupMapToggleButton()
         setupCarDescriptionBehaviour()
+
         channelId?.let { chId ->
             rideId?.let { rdId ->
                 setupPassengersList(chId, rdId)
@@ -344,7 +365,6 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         }
 
         setUpJoinsButton()
-
     }
 
     @SuppressLint("MissingPermission")
