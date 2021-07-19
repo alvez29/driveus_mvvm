@@ -10,7 +10,6 @@ import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.Payout
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
-import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.enums.RideFormEnum
 import com.example.driveus_mvvm.ui.utils.DateTimeUtils
@@ -39,13 +38,17 @@ class RideViewModel : ViewModel() {
     private val redirectRide = MutableLiveData(false)
     private val rideFormError = MutableLiveData<MutableMap<RideFormEnum, Int>>(mutableMapOf())
 
-    private fun validateRideForm(textInputs: Map<RideFormEnum, String>, context: Context): Boolean {
+
+    private fun  validateRideForm(textInputs: Map<RideFormEnum, String>, context: Context, seats: Int): Boolean {
         val errorMap = mutableMapOf<RideFormEnum, Int>()
         var res = true
 
         //Capacity
         if (textInputs[RideFormEnum.CAPACITY].isNullOrBlank()){
             errorMap[RideFormEnum.CAPACITY] = R.string.sign_up_form_error_not_empty
+            res = false
+        } else if (compareValues(textInputs[RideFormEnum.CAPACITY]?.toInt(), seats) >= 0) {
+            errorMap[RideFormEnum.CAPACITY] = R.string.ride_form_error_max_capacity
             res = false
         }
 
@@ -277,26 +280,27 @@ class RideViewModel : ViewModel() {
 
 
     fun addNewRide(inputs: Map<RideFormEnum, String>, userId: String, vehicleId: String, channelId: String, context: Context) {
-            viewModelScope.launch(Dispatchers.IO) {
-                if (validateRideForm(inputs, context)) {
-
-                    try {
-                        val vehicleDocRef = FirestoreRepository.getVehicleById(userId, vehicleId)
-                        val userDocumentId = FirestoreRepository.getUserById(userId)
-
-                        vehicleDocRef.id.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
-
-                        var rideDocRef: DocumentReference? = null
-
-                        getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
-                            rideDocRef =  FirestoreRepository.addNewRide(it, channelId).await()
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val vehicleDocRef = FirestoreRepository.getVehicleById(vehicleId,userId)
+                val seats: Int? = vehicleDocRef.get().await().getDouble("seats")?.toInt()
+                
+                if (seats?.let { validateRideForm(inputs, context, it) } == true) {
+                    val userDocumentId = FirestoreRepository.getUserById(userId)
+                    var rideDocRef: DocumentReference? = null
+           
+                    vehicleDocRef.id.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
+                    
+                    getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
+                            rideDocRef = FirestoreRepository.addNewRide(it, channelId).await()
                         }
-
-                        FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
-                        redirectRide.postValue(true)
-                    } catch (e: Exception) {
-                        Log.w(tag, msgListenFailed, e)
-                    }
+                    
+                    FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
+                    redirectRide.postValue(true)
+                 }
+                
+            } catch (e: Exception) {
+                Log.w(tag, msgListenFailed, e)
             }
         }
     }
