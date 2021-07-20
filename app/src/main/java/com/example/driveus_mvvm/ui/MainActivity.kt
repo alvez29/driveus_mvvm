@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivityMainBinding
@@ -54,7 +55,18 @@ class MainActivity : AppCompatActivity() {
     private fun configureBottomBarNavigation() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_activity__container__fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
+
+        //Vinculamos la barra de navegación con el controller de Navigation
         viewBinding?.mainActivityToolbarBottomNavView?.setupWithNavController(navController)
+
+        //Código para que no se refresque la pantalla si pulsamos en el mismo fragmento en el que estamos
+        viewBinding?.mainActivityToolbarBottomNavView?.setOnNavigationItemSelectedListener {
+            if(it.itemId != viewBinding?.mainActivityToolbarBottomNavView?.selectedItemId)
+                NavigationUI.onNavDestinationSelected(it, navController)
+            true
+        }
+
+        //Definimos el color de fondo al cambiar
         navController.addOnDestinationChangedListener(backgroundColorListener)
     }
 
