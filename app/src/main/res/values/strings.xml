@@ -95,4 +95,5 @@
     <string name="my_rides_record_list__label__role_button_passenger">VIAJES COMO PASAJERO</string>
     <string name="my_rides_record_list__label__role_button_driver">VIAJES COMO CONDUCTOR</string>
     <string name="ride_form_error_max_capacity">Este vehículo no dispone de tantas plazas</string>
+    <string name="channel_detail__label__filter_text">Filtrar por día y periodo</string>
 </resources>

@@ -82,7 +82,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/car_row__layout__expandable">
                     <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/car_row__image__seat"
+                            android:id="@+id/channel_detail__image__no_element"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="72dp"
@@ -99,7 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/browser_actions_bg_grey"
-                            app:layout_constraintStart_toEndOf="@id/car_row__image__seat"
+                            app:layout_constraintStart_toEndOf="@id/channel_detail__image__no_element"
                             app:layout_constraintTop_toTopOf="parent"/>
                     <TextView
                             android:id="@+id/car_row__label_seat_value"

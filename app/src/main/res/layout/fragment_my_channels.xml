@@ -24,7 +24,7 @@
                 android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/car_row__image__seat"
+                    android:id="@+id/channel_detail__image__no_element"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:tint="#1F0000"
