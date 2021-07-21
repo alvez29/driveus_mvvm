@@ -19,6 +19,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        //Necesario para el time range picker
+        maven { url 'https://jitpack.io' }
     }
 }
 

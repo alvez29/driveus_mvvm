@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.driveus_mvvm"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -81,9 +81,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
+    //Time range picker
+    implementation "com.github.zion830:RangeTimePickerDialog:1.2"
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
 
 }

@@ -7,6 +7,8 @@ import java.util.*
 object DateTimeUtils {
 
     fun dateStringToTimestamp(dateTimeStr: String): Timestamp {
+        //El string tendra el formato dd/MM/yyyy HH:mm
+
         val dateArrayStr = dateTimeStr.split(" ")
         val dateStr: String = dateArrayStr[0].toString()
         val timeStr: String = dateArrayStr[1].toString()
@@ -23,5 +25,29 @@ object DateTimeUtils {
         val date = Date(year, month, day, hour, min)
 
         return Timestamp(date)
+    }
+
+    fun getStartAndEndDateFromFilterString(filterString: String): Pair<Timestamp, Timestamp> {
+        //El string tendrá la forma dd/MM/yyyy de HH:mm a HH:mm
+
+        var startDateStr = ""
+        var endDateStr = ""
+
+        val filterStringSplit = filterString.split("de")
+        val startHour = filterStringSplit[1].split("a").map { it.trim() }
+
+        startDateStr = "${filterStringSplit[0].trim()} ${startHour[0]}"
+        endDateStr = "${filterStringSplit[0].trim()} ${startHour[1]}"
+
+        return Pair(dateStringToTimestamp(startDateStr), dateStringToTimestamp(endDateStr))
+
+    }
+
+    fun fixMinuteString(minute: Int): String {
+        return if (minute < 10) {
+            "0${minute}"
+        } else {
+            minute.toString()
+        }
     }
 }
