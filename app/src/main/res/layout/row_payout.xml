@@ -18,27 +18,47 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <CheckBox
+            android:id="@+id/payout_row__button__checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/payout_row__image__profile_picture"
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/payout_row__button__checkbox"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/circular_crop_profile_picture_example" />
 
         <TextView
             android:id="@+id/payout_row__label__username"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:fontFamily="@font/lekton_regular"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/payout_row__label__price"
-            app:layout_constraintStart_toEndOf="@+id/payout_row__image__profile_picture"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintBottom_toTopOf="@id/payout_row__label__paid_date"
+            app:layout_constraintStart_toEndOf="@id/payout_row__image__profile_picture"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Maria Gonzalez" />
+
+        <TextView
+            android:id="@+id/payout_row__label__paid_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/montserrat_italic"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/payout_row__label__price"
+            app:layout_constraintStart_toEndOf="@id/payout_row__image__profile_picture"
+            tools:text="pagado el 15/04/2021 14:00" />
 
         <TextView
             android:id="@+id/payout_row__label__price"

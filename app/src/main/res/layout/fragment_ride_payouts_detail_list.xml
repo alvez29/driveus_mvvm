@@ -34,7 +34,10 @@
             android:fontFamily="@font/montserrat_bold"
             android:text="@string/fragment_ride_payouts_detail_list__label__total_money"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fragment_ride_payouts_detail_list__label__total_price"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

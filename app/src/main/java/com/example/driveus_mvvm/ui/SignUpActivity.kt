@@ -1,8 +1,10 @@
 package com.example.driveus_mvvm.ui
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,10 +31,21 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private val redirectObserver = Observer<Boolean> {
-        if (it) {
-            startMainActivity()
+    private val redirectObserver = Observer<Pair<Boolean, String>> {
+        if (it.first) {
+            try {
+                saveDocIdInSession(it.second)
+                startMainActivity()
+            } catch (e: Exception) {
+                Log.d(getString(R.string.sign_up_error_save_session_tag), e.message.toString())
+            }
         }
+    }
+
+    private fun saveDocIdInSession(docId: String?) {
+        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        prefs.putString(getString(R.string.shared_pref_doc_id_key), docId)
+        prefs.apply()
     }
 
     private fun getInputs() : Map<SignUpFormEnum, String>{
@@ -48,7 +61,9 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun startMainActivity() {
         val mainActivityIntent = Intent(this, MainActivity::class.java)
+        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(mainActivityIntent)
+        this.finish()
     }
 
 

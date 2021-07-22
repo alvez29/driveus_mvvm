@@ -3,6 +3,7 @@ package com.example.driveus_mvvm.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.model.entities.Payout
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import java.util.*
 
 private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, QueryDocumentSnapshot>>() {
 
@@ -30,6 +32,9 @@ class PayoutsListAdapter(
 
     interface RideListAdapterListener {
         fun loadProfilePicture(userId: String?, imageView: ImageView)
+        fun pressItem(payout: QueryDocumentSnapshot)
+        fun showItemPaid(payoutViewHolder: PayoutViewHolder, date: Date?)
+        fun showItemUnpaid(payoutViewHolder: PayoutViewHolder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PayoutsListAdapter.PayoutViewHolder {
@@ -45,13 +50,26 @@ class PayoutsListAdapter(
         listener.loadProfilePicture(payout.passenger?.id, holder.profilePicture)
         holder.price.text = priceStr
         holder.username.text = getItem(position).first
+        if (payout.isPaid) {
+            listener.showItemPaid(holder, payout.paidDate?.toDate())
+        } else {
+            listener.showItemUnpaid(holder)
+        }
+
     }
 
     inner class PayoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profilePicture: ImageView by lazy { itemView.findViewById(R.id.payout_row__image__profile_picture) }
         val username: TextView by lazy { itemView.findViewById(R.id.payout_row__label__username) }
         val price: TextView by lazy { itemView.findViewById(R.id.payout_row__label__price) }
+        val paidDate: TextView by lazy { itemView.findViewById(R.id.payout_row__label__paid_date) }
+        val checkbox: CheckBox by lazy { itemView.findViewById(R.id.payout_row__button__checkbox) }
 
+        init {
+            checkbox.setOnClickListener {
+                listener.pressItem(getItem(adapterPosition).second)
+            }
+        }
     }
 
 }

@@ -60,8 +60,8 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun createUser(user: User){
-        db.collection(USERS_COLLECTION).add(user)
+    suspend fun createUser(user: User): Task<DocumentReference> {
+        return db.collection(USERS_COLLECTION).add(user)
     }
     
     //CHANNEL FUNCTIONS --------------------------------------------------
@@ -226,5 +226,41 @@ object FirestoreRepository {
        return db.collection(CHANNELS_COLLECTION).document(channelId)
             .collection(RIDES_COLLECTION).document(rideId)
             .collection(PAYOUTS_COLLECTION).whereEqualTo("passenger", passengerReference).limit(1L).get().await()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun checkPayoutAsPaidUpdateBoolean(channelId: String, rideId: String, payoutId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+                .collection(RIDES_COLLECTION).document(rideId)
+                .collection(PAYOUTS_COLLECTION).document(payoutId)
+                .update("isPaid", true).await()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun checkPayoutAsPaidUpdatePaidDate(channelId: String, rideId: String, payoutId: String, paidDate: Timestamp) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+                .collection(RIDES_COLLECTION).document(rideId)
+                .collection(PAYOUTS_COLLECTION).document(payoutId)
+                .update("paidDate", paidDate).await()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun checkPayoutAsUnpaidUpdateBoolean(channelId: String, rideId: String, payoutId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+                .collection(RIDES_COLLECTION).document(rideId)
+                .collection(PAYOUTS_COLLECTION).document(payoutId)
+                .update("isPaid", false).await()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun checkPayoutAsUnpaidUpdatePaidDate(channelId: String, rideId: String, payoutId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+                .collection(RIDES_COLLECTION).document(rideId)
+                .collection(PAYOUTS_COLLECTION).document(payoutId)
+                .update("paidDate", null).await()
     }
 }

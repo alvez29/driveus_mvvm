@@ -12,4 +12,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="filled_input">#1F000000</color>
     <color name="cancel">#D50000</color>
+    <color name="unpaid">#B00002</color>
+    <color name="paid">#02b000</color>
+    <color name="disbled_payout_grey">#e5e5e5</color>
 </resources>
