@@ -17,7 +17,7 @@ object LocationUtils {
     fun getLocation(location: String?, context: Context) : GeoPoint? {
         val geocoder = Geocoder(context, Locale.getDefault())
         var address = location?.let { geocoder.getFromLocationName(it,  10) }
-        address = address?.filter { it.countryName == "Spain" }
+        address = address?.filter { it.countryCode == "ES" }
         return if (address?.isEmpty() == true){
             GeoPoint(0.0, 0.0)
         } else {
