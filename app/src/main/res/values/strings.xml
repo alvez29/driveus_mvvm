@@ -100,4 +100,5 @@
     <string name="fragment_ride_form__label__time_end_repeat_edit_text">Fecha límite (máx 4 meses)</string>
     <string name="ride_form_error_no_days_of_week">Ningún día seleccionado</string>
     <string name="ride_form_error_limit_4_months">Máximo de 4 meses de antelación</string>
+    <string name="channel_detail__label__filter_text">Filtrar por día y periodo</string>
 </resources>
