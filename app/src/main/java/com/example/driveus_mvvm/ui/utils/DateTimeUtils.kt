@@ -7,7 +7,7 @@ import java.util.*
 object DateTimeUtils {
 
 
-    fun dateStringToTimestamp(dateTimeStr: String): Timestamp {
+    fun dateTimeStringToTimestamp(dateTimeStr: String): Timestamp {
         //El string tendra el formato dd/MM/yyyy HH:mm
 
         val dateArrayStr = dateTimeStr.split(" ")
@@ -29,6 +29,7 @@ object DateTimeUtils {
     }
 
     fun dateStringToDate(dateStr: String): Date {
+        //El string de la fecha tendrá el formato dd/MM/yyyy
         val dateSplit = dateStr.split("/")
         val day: Int = dateSplit[0].toInt()
         val month: Int = dateSplit[1].toInt() - 1
@@ -37,17 +38,14 @@ object DateTimeUtils {
         return Date(year, month, day)
     }
 
-    fun dateStringToTimestamp(dateStr: String): Timestamp {
-        return Timestamp(dateStringToDate(dateStr))
-    }
-
-    fun strToListIntDaysOfTheWeek(daysOfTheWeekStr: String): List<Int> {
-        var daysOfTheWeekStr = daysOfTheWeekStr.replace("[", "")
+    fun strToListIntDaysOfTheWeek(daysOfTheWeekInputStr: String): List<Int> {
+        var daysOfTheWeekStr = daysOfTheWeekInputStr.replace("[", "")
         daysOfTheWeekStr = daysOfTheWeekStr.replace("]", "")
         val listDayOfWeekStr = daysOfTheWeekStr.split(",")
         val listDayOfWeekInt = mutableListOf<Int>()
+
         listDayOfWeekStr.forEach {
-            when(it.trim()) {
+            when (it.trim()) {
                 "SUNDAY" -> listDayOfWeekInt.add(1)
                 "MONDAY" -> listDayOfWeekInt.add(2)
                 "TUESDAY" -> listDayOfWeekInt.add(3)
@@ -57,13 +55,15 @@ object DateTimeUtils {
                 "SATURDAY" -> listDayOfWeekInt.add(7)
             }
         }
+
         return listDayOfWeekInt
+    }
 
     fun getStartAndEndDateFromFilterString(filterString: String): Pair<Timestamp, Timestamp> {
         //El string tendrá la forma dd/MM/yyyy de HH:mm a HH:mm
 
-        var startDateStr = ""
-        var endDateStr = ""
+        var startDateStr: String
+        var endDateStr: String
 
         val filterStringSplit = filterString.split("de")
         val startHour = filterStringSplit[1].split("a").map { it.trim() }
@@ -71,7 +71,7 @@ object DateTimeUtils {
         startDateStr = "${filterStringSplit[0].trim()} ${startHour[0]}"
         endDateStr = "${filterStringSplit[0].trim()} ${startHour[1]}"
 
-        return Pair(dateStringToTimestamp(startDateStr), dateStringToTimestamp(endDateStr))
+        return Pair(dateTimeStringToTimestamp(startDateStr), dateTimeStringToTimestamp(endDateStr))
 
     }
 

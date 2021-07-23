@@ -7,11 +7,8 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.net.Uri
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
-import com.example.driveus_mvvm.R
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.firebase.storage.FirebaseStorage
 
 object ImageUtils {
     fun convertUriToBitmap(imageUri: Uri?, activity: Activity?): Bitmap? {

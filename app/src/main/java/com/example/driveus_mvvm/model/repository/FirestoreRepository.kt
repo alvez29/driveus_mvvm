@@ -2,14 +2,18 @@ package com.example.driveus_mvvm.model.repository
 
 
 import androidx.annotation.WorkerThread
+import com.example.driveus_mvvm.BuildConfig
 import com.example.driveus_mvvm.model.entities.Payout
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
+
 
 object FirestoreRepository {
 
@@ -19,7 +23,43 @@ object FirestoreRepository {
     private const val VEHICLES_COLLECTION = "vehicles"
     private const val PAYOUTS_COLLECTION = "payouts"
 
-    private val db by lazy { FirebaseFirestore.getInstance() }
+    private val db by lazy { getFirestoreInstance() }
+
+    private fun getFirestoreInstance(): FirebaseFirestore {
+        val firestore = FirebaseFirestore.getInstance()
+
+        if (BuildConfig.EMULATORS_MODE?.toBoolean()) {
+            firestore.useEmulator("10.0.2.2", BuildConfig.FIRESTORE_PORT?.toInt())
+
+            val settings = FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build()
+
+            firestore.firestoreSettings = settings
+        }
+
+        return firestore
+    }
+
+    fun getFirebaseStorageInstance(): FirebaseStorage {
+        val storage = FirebaseStorage.getInstance()
+
+        if (BuildConfig.EMULATORS_MODE?.toBoolean()) {
+            storage.useEmulator("10.0.2.2", BuildConfig.STORAGE_PORT?.toInt())
+        }
+
+        return storage
+    }
+
+    fun getFirebaseAuthInstance(): FirebaseAuth {
+        val auth = FirebaseAuth.getInstance()
+
+        if (BuildConfig.EMULATORS_MODE?.toBoolean()) {
+            auth.useEmulator("10.0.2.2", BuildConfig.AUTH_PORT?.toInt())
+        }
+
+        return auth
+    }
 
     //USER FUNCTIONS -----------------------------------------------------
 
@@ -145,7 +185,7 @@ object FirestoreRepository {
                 .collection(RIDES_COLLECTION).whereGreaterThan("date", Timestamp.now())
     }
 
-    fun getRideById(channelDocId: String , rideDocId: String): DocumentReference {
+    fun getRideById(channelDocId: String, rideDocId: String): DocumentReference {
         return db.collection(CHANNELS_COLLECTION).document(channelDocId)
             .collection(RIDES_COLLECTION).document(rideDocId)
     }

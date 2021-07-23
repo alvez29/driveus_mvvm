@@ -20,6 +20,7 @@ import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentChannelDetailBinding
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.model.entities.Ride
+import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.RidesListAdapter
 import com.example.driveus_mvvm.ui.utils.DateTimeUtils
 import com.example.driveus_mvvm.view_model.ChannelViewModel
@@ -33,17 +34,18 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private var viewBinding: FragmentChannelDetailBinding? = null
     private val channelId by lazy { arguments?.getString("channelId") }
-    private val viewModel : ChannelViewModel by lazy { ViewModelProvider(this)[ChannelViewModel::class.java] }
+    private val channelViewModel : ChannelViewModel by lazy { ViewModelProvider(this)[ChannelViewModel::class.java] }
     private val userViewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
+    private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
 
     private val channelObserver = Observer<Channel> {
         viewBinding?.channelDetailLabelChannelOriginZone?.text = it.originZone
         viewBinding?.channelDetailLabelChannelDestinationZone?.text = it.destinationZone
     }
 
-    private val isDriverAndSuscribedObserver = Observer<Boolean> {
+    private val isDriverObserver = Observer<Boolean> {
         if (it){
             viewBinding?.channelDetailButtonFloatingButton?.visibility = View.VISIBLE
         } else {
@@ -109,7 +111,7 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private val ridesListAdapterListener = object : RidesListAdapter.RideListAdapterListener {
 
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
-            FirebaseStorage.getInstance().reference.child("users/$userId").downloadUrl.addOnSuccessListener {
+            firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
                 Glide.with(this@ChannelDetailFragment)
                     .load(it)
                     .circleCrop()
@@ -190,15 +192,12 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val adapter = setupRecyclerAdapter()
 
         channelId?.let {
-            viewModel.getRidesFromChannel(it).observe(viewLifecycleOwner, ridesObserver(adapter))
-            viewModel.getChannelById(it).observe(viewLifecycleOwner, channelObserver)
+            channelViewModel.getRidesFromChannel(it).observe(viewLifecycleOwner, ridesObserver(adapter))
+            channelViewModel.getChannelById(it).observe(viewLifecycleOwner, channelObserver)
         }
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")?.let { userId ->
-            channelId?.let { channelId ->
-                userViewModel.isDriverAndSuscribed(userId, channelId)?.observe(viewLifecycleOwner, isDriverAndSuscribedObserver)
-            }
+            userViewModel.isDriver(userId).observe(viewLifecycleOwner, isDriverObserver)
         }
-
         rideForm()
     }
 }

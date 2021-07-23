@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentMyRidesRecordBinding
+import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.MyRidesRecordListAdapter
 import com.example.driveus_mvvm.view_model.RideViewModel
 import com.google.firebase.firestore.DocumentSnapshot
@@ -27,10 +28,11 @@ class MyRidesRecordFragment : Fragment() {
     private var viewBinding: FragmentMyRidesRecordBinding? = null
     private val rideViewModel : RideViewModel by lazy { ViewModelProvider(this)[RideViewModel::class.java] }
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
+    private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
 
     private val myRidesRecordListAdapterListener = object : MyRidesRecordListAdapter.MyRidesRecordListAdapterListener {
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
-            FirebaseStorage.getInstance().reference.child("users/$userId").downloadUrl.addOnSuccessListener {
+            firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
                 Glide.with(this@MyRidesRecordFragment)
                     .load(it)
                     .circleCrop()

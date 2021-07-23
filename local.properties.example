@@ -1,0 +1,13 @@
+## This file must *NOT* be checked into Version Control Systems,
+# as it contains information specific to your local configuration.
+#
+# Location of the SDK. This is only used by Gradle.
+# For customization when using a Version Control System, please read the
+# header note.
+#Tue Jun 22 19:23:26 CEST 2021
+sdk.dir=*ruta al SDK local de Android*
+MAPS_API_KEY=*Introduce la api key de google map*
+EMULATORS_MODE=*true/false según si queremos ejecutar las instancias en emulador o sobre la base de datos en la nube*
+AUTH_PORT=*puerto en local de la instancia de Firebase Auth (solo aplica en modo emuladores)*
+FIRESTORE_PORT=*puerto en local de la instancia de Firebase Firestore (solo aplica en modo emuladores)*
+STORAGE_PORT=*puerto en local de la instancia de Firebase Storge (solo aplica en modo emuladores)*

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentRidePayoutsDetailListBinding
+import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.PayoutsListAdapter
 import com.example.driveus_mvvm.view_model.PayoutViewModel
 import com.google.firebase.firestore.QueryDocumentSnapshot
@@ -29,11 +30,12 @@ class RidePayoutsListFragment: Fragment() {
     private val payoutViewModel : PayoutViewModel by lazy { ViewModelProvider(this)[PayoutViewModel::class.java] }
     private val rideId by lazy { arguments?.getString("rideId") }
     private val channelId by lazy { arguments?.getString("channelId") }
+    private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
 
     private val adapterListener = object : PayoutsListAdapter.RideListAdapterListener {
 
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
-            FirebaseStorage.getInstance().reference.child("users/$userId").downloadUrl.addOnSuccessListener {
+            firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
                 Glide.with(this@RidePayoutsListFragment)
                         .load(it)
                         .circleCrop()

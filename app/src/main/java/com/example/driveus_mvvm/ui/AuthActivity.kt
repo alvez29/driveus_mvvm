@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivityAuthBinding
+import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -17,9 +17,10 @@ class AuthActivity : AppCompatActivity() {
 
     private var viewBinding : ActivityAuthBinding? = null
     private val viewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
+    private val firebaseAuth: FirebaseAuth = FirestoreRepository.getFirebaseAuthInstance()
 
     private fun checkSession() {
-        if (FirebaseAuth.getInstance().currentUser != null) {
+        if (firebaseAuth.currentUser != null) {
             viewBinding?.authLayout?.visibility = View.INVISIBLE
             startMainActivity()
         }
@@ -36,7 +37,7 @@ class AuthActivity : AppCompatActivity() {
 
         viewBinding?.activityAuthButtonLogInButton?.setOnClickListener{
             if (viewBinding?.activityAuthInputEmailEditText?.text?.isNotEmpty() == true && viewBinding?.activityAuthInputPasswordEditText?.text?.isNotEmpty() == true) {
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(viewBinding?.activityAuthInputEmailEditText?.text.toString(),
+                firebaseAuth.signInWithEmailAndPassword(viewBinding?.activityAuthInputEmailEditText?.text.toString(),
                     viewBinding?.activityAuthInputPasswordEditText?.text.toString())
                         .addOnSuccessListener {
                             it.user?.uid?.let { uid ->

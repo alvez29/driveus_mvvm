@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.DialogPassengersListBinding
 import com.example.driveus_mvvm.view_model.RideViewModel
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 
 class PassengersDialogFragment(
