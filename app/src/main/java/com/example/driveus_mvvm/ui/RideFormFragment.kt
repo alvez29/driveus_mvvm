@@ -15,10 +15,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentRideFormBinding
 import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.ui.enums.RideFormEnum
+import com.example.driveus_mvvm.ui.utils.DateTimeUtils
 import com.example.driveus_mvvm.view_model.RideViewModel
 import com.example.driveus_mvvm.view_model.UserViewModel
 import java.util.*
@@ -52,6 +54,12 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
                 RideFormEnum.PRICE -> viewBinding?.fragmentRideFormLabelPriceEditText?.error = getString(v)
                 RideFormEnum.DATETIME -> viewBinding?.fragmentRideFormLabelDateTimeEditText?.error = getString(v)
                 RideFormEnum.MEETING_POINT -> viewBinding?.fragmentRideFormLabelMeetingPointEditText?.error = getString(v)
+                RideFormEnum.TIME_REPEAT -> viewBinding?.fragmentRideFormLabelTimeRepeatEditText?.error = getString(v)
+                RideFormEnum.DAY_LIMIT -> viewBinding?.fragmentRideFormLabelDateEndRepeatEditText?.error = getString(v)
+                RideFormEnum.DAYS_OF_THE_WEEK -> {
+                    viewBinding?.fragmentRideFormIconErrorDaysOfWeek?.error = getString(v)
+                    viewBinding?.fragmentRideFormLabelErrorDaysOfWeek?.setText(getString(v))
+                }
             }
         }
     }
@@ -61,7 +69,11 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
             RideFormEnum.PRICE to viewBinding?.fragmentRideFormLabelPriceEditText?.text.toString(),
             RideFormEnum.CAPACITY to viewBinding?.fragmentRideFormLabelCapacityEditText?.text.toString(),
             RideFormEnum.DATETIME to viewBinding?.fragmentRideFormLabelDateTimeEditText?.text.toString(),
-            RideFormEnum.MEETING_POINT to viewBinding?.fragmentRideFormLabelMeetingPointEditText?.text.toString()
+            RideFormEnum.MEETING_POINT to viewBinding?.fragmentRideFormLabelMeetingPointEditText?.text.toString(),
+            RideFormEnum.DAY_LIMIT to viewBinding?.fragmentRideFormLabelDateEndRepeatEditText?.text.toString(),
+            RideFormEnum.TIME_REPEAT to viewBinding?.fragmentRideFormLabelTimeRepeatEditText?.text.toString(),
+            RideFormEnum.DAYS_OF_THE_WEEK to viewBinding?.fragmentRideFormInputDayWeek?.selectedDays.toString(),
+            RideFormEnum.REPEAT to viewBinding?.fragmentRideFormCheckBoxRepeat?.isChecked.toString()
         )
     }
 
@@ -80,6 +92,19 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
         year = cal.get(Calendar.YEAR)
     }
 
+    private fun getDateLimitCalendar() {
+        val cal: Calendar = Calendar.getInstance()
+        day = cal.get(Calendar.DAY_OF_MONTH)
+        month = cal.get(Calendar.MONTH)
+        year = cal.get(Calendar.YEAR)
+    }
+
+    private fun getTimeRepeat() {
+        val cal: Calendar = Calendar.getInstance()
+        minute = cal.get(Calendar.MINUTE)
+        hour = cal.get(Calendar.HOUR)
+    }
+
     private val vehiclesObserver = Observer<Map<String, Vehicle>> { document ->
         idAndVehicle = document as MutableMap<String, Vehicle>?
         val vehicleListString: MutableList<String> = mutableListOf()
@@ -89,6 +114,22 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
         val adpt = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, vehicleListString) }
         val spinner = viewBinding?.fragmentRideFormLabelVehicleSpinner
         spinner?.adapter = adpt
+    }
+
+    private fun selectDateLimit() {
+        viewBinding?.fragmentRideFormLabelDateEndRepeatEditText?.setOnClickListener {
+            viewBinding?.fragmentRideFormLabelDateEndRepeatEditText?.error = null
+            getDateLimitCalendar()
+            context?.let { it1 -> DatePickerDialog(it1, this, year, month, day).show() }
+        }
+    }
+
+    private fun selectTimeRepeat() {
+        viewBinding?.fragmentRideFormLabelTimeRepeatEditText?.setOnClickListener {
+            viewBinding?.fragmentRideFormLabelTimeRepeatEditText?.error = null
+            getTimeRepeat()
+            TimePickerDialog(context, this, hour, minute, true).show()
+        }
     }
 
     private fun selectDateTime() {
@@ -112,6 +153,33 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
         }
     }
 
+    private fun setupRepeatable() {
+        viewBinding?.fragmentRideFormCheckBoxRepeat?.setOnClickListener {
+            if (viewBinding?.fragmentRideFormIconErrorDaysOfWeek?.error.isNullOrBlank().not()) {
+                viewBinding?.fragmentRideFormLabelErrorDaysOfWeek?.setText("")
+                viewBinding?.fragmentRideFormIconErrorDaysOfWeek?.error = null
+            }
+            if (viewBinding?.fragmentRideFormCheckBoxRepeat?.isChecked == true) {
+                viewBinding?.fragmentRideFormContainerDateTimeNoRepeat?.visibility = View.GONE
+                viewBinding?.fragmentRideFormContainerDateTimeRepeat?.visibility = View.VISIBLE
+            } else {
+                viewBinding?.fragmentRideFormContainerDateTimeNoRepeat?.visibility = View.VISIBLE
+                viewBinding?.fragmentRideFormContainerDateTimeRepeat?.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun goneErrorSelectDayOfWeek() {
+        viewBinding?.fragmentRideFormInputDayWeek?.dayPressedListener = object: MaterialDayPicker.DayPressedListener {
+
+            override fun onDayPressed(weekday: MaterialDayPicker.Weekday, isSelected: Boolean) {
+                viewBinding?.fragmentRideFormLabelErrorDaysOfWeek?.setText("")
+                viewBinding?.fragmentRideFormIconErrorDaysOfWeek?.error = null
+            }
+        }
+    }
+
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val idKeys: List<String>? = idAndVehicle?.keys?.toList()
         vehicleDocRef = idKeys?.get(position)
@@ -127,16 +195,24 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
         savedMonth = month+1
         savedYear = year
 
-        getDateTimeCalendar()
-
-        TimePickerDialog(context, this, hour, minute, true).show()
+        if (viewBinding?.fragmentRideFormCheckBoxRepeat?.isChecked == false) {
+            getDateTimeCalendar()
+            TimePickerDialog(context, this, hour, minute, true).show()
+        } else {
+            getDateLimitCalendar()
+            viewBinding?.fragmentRideFormLabelDateEndRepeatEditText?.setText("$savedDay/$savedMonth/$savedYear")
+        }
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         savedHour = hourOfDay
         savedMinute = minute
-
-        viewBinding?.fragmentRideFormLabelDateTimeEditText?.setText("$savedDay/$savedMonth/$savedYear $savedHour:$savedMinute")
+        val finalMinute = DateTimeUtils.fixMinuteString(savedMinute)
+        if (viewBinding?.fragmentRideFormCheckBoxRepeat?.isChecked == false) {
+            viewBinding?.fragmentRideFormLabelDateTimeEditText?.setText("$savedDay/$savedMonth/$savedYear $savedHour:$finalMinute")
+        } else {
+            viewBinding?.fragmentRideFormLabelTimeRepeatEditText?.setText("$savedHour:$finalMinute")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -153,9 +229,12 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
             ?.let { userViewModel.getVehiclesByUserId(it).
                 observe(viewLifecycleOwner, vehiclesObserver)
             }
-
+        setupRepeatable()
         selectDateTime()
+        selectDateLimit()
+        selectTimeRepeat()
         submitNewRide()
+        goneErrorSelectDayOfWeek()
         viewBinding?.fragmentRideFormLabelVehicleSpinner?.onItemSelectedListener = this
     }
 }
