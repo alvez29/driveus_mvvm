@@ -18,10 +18,13 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.math.BigDecimal
+import java.util.*
 
 class RideViewModel : ViewModel() {
 
@@ -65,19 +68,6 @@ class RideViewModel : ViewModel() {
                 res = false
             }
         }
-        //Date and Time
-        if (textInputs[RideFormEnum.DATETIME].isNullOrBlank()){
-            errorMap[RideFormEnum.DATETIME] = R.string.sign_up_form_error_not_empty
-            res = false
-        } else {
-            val dateTimeStr = textInputs[RideFormEnum.DATETIME]
-            val dateTimeTS: Timestamp? = dateTimeStr?.let { DateTimeUtils.dateStringToTimestamp(it) }
-
-            if (dateTimeTS?.toDate()?.before(Timestamp.now().toDate()) == true){
-                errorMap[RideFormEnum.DATETIME] = R.string.ride_form_error_date_time_past
-                res = false
-            }
-        }
 
         //Meeting Point
         if (textInputs[RideFormEnum.MEETING_POINT].isNullOrBlank()) {
@@ -91,6 +81,56 @@ class RideViewModel : ViewModel() {
             }
         }
 
+        if (textInputs[RideFormEnum.REPEAT].equals("true")){
+            //Day of week repeat
+            if (textInputs[RideFormEnum.DAYS_OF_THE_WEEK] == "[]") {
+                errorMap[RideFormEnum.DAYS_OF_THE_WEEK] = R.string.ride_form_error_no_days_of_week
+                res = false
+            }
+
+            //Time of repeat rides
+            if (textInputs[RideFormEnum.TIME_REPEAT].isNullOrBlank()){
+                errorMap[RideFormEnum.TIME_REPEAT] = R.string.sign_up_form_error_not_empty
+                res = false
+            }
+
+            //Date limit
+            if (textInputs[RideFormEnum.DAY_LIMIT].isNullOrBlank()) {
+                errorMap[RideFormEnum.DAY_LIMIT] = R.string.sign_up_form_error_not_empty
+                res = false
+            } else {
+                val dateStr = textInputs[RideFormEnum.DAY_LIMIT]
+                val dateTS: Date? = dateStr?.let { DateTimeUtils.dateStringToDate(it) }
+                val limit = Calendar.getInstance().apply {
+                    this.add(Calendar.DAY_OF_MONTH, 120)
+                }
+
+                //Limit no puede estar en el pasado
+                if (dateTS?.before(Timestamp.now().toDate()) == true){
+                    errorMap[RideFormEnum.DAY_LIMIT] = R.string.ride_form_error_date_time_past
+                    res = false
+
+                    //Maximo 4 meses de límite
+                } else if (compareValues(limit.time, dateTS) < 0) {
+                    errorMap[RideFormEnum.DAY_LIMIT] = R.string.ride_form_error_limit_4_months
+                    res = false
+                }
+            }
+        } else {
+            //Date and Time
+            if (textInputs[RideFormEnum.DATETIME].isNullOrBlank()){
+                errorMap[RideFormEnum.DATETIME] = R.string.sign_up_form_error_not_empty
+                res = false
+            } else {
+                val dateTimeStr = textInputs[RideFormEnum.DATETIME]
+                val dateTimeTS: Timestamp? = dateTimeStr?.let { DateTimeUtils.dateTimeStringToTimestamp(it) }
+
+                if (dateTimeTS?.toDate()?.before(Timestamp.now().toDate()) == true){
+                    errorMap[RideFormEnum.DATETIME] = R.string.ride_form_error_date_time_past
+                    res = false
+                }
+            }
+        }
         rideFormError.postValue(errorMap)
         return res
     }
@@ -101,7 +141,7 @@ class RideViewModel : ViewModel() {
             Ride(
                 capacity = inputs[RideFormEnum.CAPACITY]?.toInt(),
                 price = inputs[RideFormEnum.PRICE]?.toDouble(),
-                date =  inputs[RideFormEnum.DATETIME]?.let { DateTimeUtils.dateStringToTimestamp(it) },
+                date =  inputs[RideFormEnum.DATETIME]?.let { DateTimeUtils.dateTimeStringToTimestamp(it) },
                 driver = userId,
                 meetingPoint = it,
                 vehicle = vehicleDocRef
@@ -278,27 +318,49 @@ class RideViewModel : ViewModel() {
         return rideFormError
     }
 
+    private suspend fun addSingleRide(userId: String, vehicleDocRef: DocumentReference, inputs: Map<RideFormEnum, String>, channelId: String) {
+        val userDocumentId = FirestoreRepository.getUserById(userId)
+        var rideDocRef: DocumentReference? = null
 
+        vehicleDocRef.id.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
+
+        getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
+            rideDocRef = FirestoreRepository.addNewRide(it, channelId).await()
+        }
+        FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
+    }
+
+    private suspend fun addRepeatableRides(userId: String, vehicleDocRef: DocumentReference, inputs: Map<RideFormEnum, String>, channelId: String) {
+        val eachRideInput = inputs as MutableMap<RideFormEnum, String>
+        val limit = inputs[RideFormEnum.DAY_LIMIT]?.let { DateTimeUtils.dateStringToDate(it) }
+        val aDay = Calendar.getInstance()
+        val listDayOfWeek = inputs[RideFormEnum.DAYS_OF_THE_WEEK]?.let { DateTimeUtils.strToListIntDaysOfTheWeek(it) }
+        while (compareValues(limit, aDay.time) >= 0) {
+            if (listDayOfWeek?.contains(aDay.get(Calendar.DAY_OF_WEEK)) == true){
+                eachRideInput[RideFormEnum.DATETIME] = "${aDay.get(Calendar.DAY_OF_MONTH)}/${aDay.get(Calendar.MONTH)+1}/${aDay.get(Calendar.YEAR)} ${inputs[RideFormEnum.TIME_REPEAT]}"
+                addSingleRide(userId, vehicleDocRef, eachRideInput, channelId)
+            }
+           aDay.add(Calendar.DAY_OF_MONTH, 1)
+        }
+    }
+
+
+    @OptIn(DelicateCoroutinesApi::class)
     fun addNewRide(inputs: Map<RideFormEnum, String>, userId: String, vehicleId: String, channelId: String, context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
+        //OJO: Scope de toda la aplicación. No usar a la ligera
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val vehicleDocRef = FirestoreRepository.getVehicleById(vehicleId,userId)
                 val seats: Int? = vehicleDocRef.get().await().getDouble("seats")?.toInt()
-                
+
                 if (seats?.let { validateRideForm(inputs, context, it) } == true) {
-                    val userDocumentId = FirestoreRepository.getUserById(userId)
-                    var rideDocRef: DocumentReference? = null
-           
-                    vehicleDocRef.id.let { FirestoreRepository.updateVehicleIsInRide(userId, it) }
-                    
-                    getRideFromInputs(inputs, userDocumentId, vehicleDocRef)?.let {
-                            rideDocRef = FirestoreRepository.addNewRide(it, channelId).await()
-                        }
-                    
-                    FirestoreRepository.addRideToUserAsDriver(userId, rideDocRef)
                     redirectRide.postValue(true)
+                    if (inputs[RideFormEnum.REPEAT] == "true"){
+                        addRepeatableRides(userId, vehicleDocRef,inputs,channelId)
+                    } else {
+                        addSingleRide(userId, vehicleDocRef, inputs, channelId)
+                    }
                  }
-                
             } catch (e: Exception) {
                 Log.w(tag, msgListenFailed, e)
             }
@@ -365,3 +427,4 @@ class RideViewModel : ViewModel() {
         }
     }
 }
+

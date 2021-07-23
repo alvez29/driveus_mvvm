@@ -12,4 +12,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="filled_input">#1F000000</color>
     <color name="cancel">#D50000</color>
+    <color name="daySelected">?colorSecondaryVariant</color>
 </resources>

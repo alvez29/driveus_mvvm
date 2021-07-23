@@ -6,6 +6,7 @@ import java.util.*
 
 object DateTimeUtils {
 
+
     fun dateStringToTimestamp(dateTimeStr: String): Timestamp {
         //El string tendra el formato dd/MM/yyyy HH:mm
 
@@ -26,6 +27,37 @@ object DateTimeUtils {
 
         return Timestamp(date)
     }
+
+    fun dateStringToDate(dateStr: String): Date {
+        val dateSplit = dateStr.split("/")
+        val day: Int = dateSplit[0].toInt()
+        val month: Int = dateSplit[1].toInt() - 1
+        val year: Int = dateSplit[2].toInt() - 1900
+
+        return Date(year, month, day)
+    }
+
+    fun dateStringToTimestamp(dateStr: String): Timestamp {
+        return Timestamp(dateStringToDate(dateStr))
+    }
+
+    fun strToListIntDaysOfTheWeek(daysOfTheWeekStr: String): List<Int> {
+        var daysOfTheWeekStr = daysOfTheWeekStr.replace("[", "")
+        daysOfTheWeekStr = daysOfTheWeekStr.replace("]", "")
+        val listDayOfWeekStr = daysOfTheWeekStr.split(",")
+        val listDayOfWeekInt = mutableListOf<Int>()
+        listDayOfWeekStr.forEach {
+            when(it.trim()) {
+                "SUNDAY" -> listDayOfWeekInt.add(1)
+                "MONDAY" -> listDayOfWeekInt.add(2)
+                "TUESDAY" -> listDayOfWeekInt.add(3)
+                "WEDNESDAY" -> listDayOfWeekInt.add(4)
+                "THURSDAY" -> listDayOfWeekInt.add(5)
+                "FRIDAY" -> listDayOfWeekInt.add(6)
+                "SATURDAY" -> listDayOfWeekInt.add(7)
+            }
+        }
+        return listDayOfWeekInt
 
     fun getStartAndEndDateFromFilterString(filterString: String): Pair<Timestamp, Timestamp> {
         //El string tendrá la forma dd/MM/yyyy de HH:mm a HH:mm
