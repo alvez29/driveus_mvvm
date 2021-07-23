@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.view_model
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.util.Patterns
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class UserViewModel : ViewModel() {
 
@@ -29,7 +31,7 @@ class UserViewModel : ViewModel() {
 
     private val userDocumentById: MutableLiveData<DocumentSnapshot> = MutableLiveData()
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
-    private val redirect = MutableLiveData(false)
+    private val redirect = MutableLiveData(Pair<Boolean, String>(false, ""))
     private val imageTrigger =  MutableLiveData(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
@@ -135,10 +137,10 @@ class UserViewModel : ViewModel() {
                     val uid: String? = it.result?.user?.uid
                     viewModelScope.launch(Dispatchers.IO) {
                         uid?.let {
-                            FirestoreRepository.createUser(getUserFromInputs(inputs, uid))
+                            val userReference = FirestoreRepository.createUser(getUserFromInputs(inputs, uid)).await()
+                            redirect.postValue(Pair(true, userReference.id))
                         }
                     }
-                    redirect.postValue(true)
 
                 //Si no es exitoso tratamos las excepciones que nos devuelve FirebaseAuth
                 } else {
@@ -154,7 +156,7 @@ class UserViewModel : ViewModel() {
         return formErrors
     }
 
-    fun getRedirect(): LiveData<Boolean> {
+    fun getRedirect(): LiveData<Pair<Boolean, String>> {
         return redirect
     }
 
