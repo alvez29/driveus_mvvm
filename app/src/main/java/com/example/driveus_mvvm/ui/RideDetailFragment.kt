@@ -22,6 +22,7 @@ import com.example.driveus_mvvm.databinding.FragmentRideDetailBinding
 import com.example.driveus_mvvm.model.entities.Channel
 import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.Vehicle
+import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.model.toLatLng
 import com.example.driveus_mvvm.ui.utils.ImageUtils
 import com.example.driveus_mvvm.ui.utils.LocationUtils
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirestoreRegistrar
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
@@ -50,7 +52,10 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
     private val rideId by lazy { arguments?.getString("rideId") }
     private val channelId by lazy { arguments?.getString("channelId") }
+
     private var actualGoogleMap: GoogleMap? = null
+
+    private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
 
     private val meetingPointObserver = Observer<GeoPoint> {
         setupMapMarker(it)
@@ -134,7 +139,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
 
     //TODO: método duplicado
     private fun loadProfilePicture(userId: String?, imageView: ImageView) {
-        FirebaseStorage.getInstance().reference.child("users/$userId").downloadUrl.addOnSuccessListener {
+        firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
             context?.let { it1 ->
                 Glide.with(it1)
                     .load(it)

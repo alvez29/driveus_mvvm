@@ -17,6 +17,7 @@ import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentProfileBinding
 import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
+import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.VehicleListAdapter
 import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +29,8 @@ class ProfileFragment : Fragment() {
 
     private var viewBinding: FragmentProfileBinding? = null
     private val viewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
+    private val firebaseAuth: FirebaseAuth = FirestoreRepository.getFirebaseAuthInstance()
+    private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
 
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
@@ -90,7 +93,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logOut() {
-        FirebaseAuth.getInstance().signOut()
+        firebaseAuth.signOut()
         sharedPref?.edit()?.clear()?.apply()
         val authIntent = Intent(activity, AuthActivity::class.java)
         authIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -114,7 +117,7 @@ class ProfileFragment : Fragment() {
 
     private fun showImage() {
         val imageName = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-        FirebaseStorage.getInstance().reference.child("users/$imageName").downloadUrl.addOnSuccessListener {
+        firebaseStorage.reference.child("users/$imageName").downloadUrl.addOnSuccessListener {
             viewBinding?.fragmentProfileImage?.let { it1 ->
                 Glide.with(this)
                     .load(it.toString())

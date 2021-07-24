@@ -1,6 +1,5 @@
 package com.example.driveus_mvvm.view_model
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.util.Patterns
@@ -16,7 +15,6 @@ import com.example.driveus_mvvm.ui.enums.VehicleFormEnum
 import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -31,7 +29,7 @@ class UserViewModel : ViewModel() {
 
     private val userDocumentById: MutableLiveData<DocumentSnapshot> = MutableLiveData()
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
-    private val redirect = MutableLiveData(Pair<Boolean, String>(false, ""))
+    private val redirect = MutableLiveData(Pair(false, ""))
     private val imageTrigger =  MutableLiveData(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
@@ -39,7 +37,10 @@ class UserViewModel : ViewModel() {
     private val redirectVehicle = MutableLiveData(false)
     private val hasAnySuscription = MutableLiveData(false)
     private val vehicleById: MutableLiveData<Vehicle> = MutableLiveData(null)
-    private val isDriverAndSuscribed = MutableLiveData(false)
+    private val isDriver = MutableLiveData(false)
+
+    private val firebaseAuth: FirebaseAuth = FirestoreRepository.getFirebaseAuthInstance()
+    private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
         val errorMap = mutableMapOf<SignUpFormEnum, Int>()
@@ -127,7 +128,7 @@ class UserViewModel : ViewModel() {
         if (validateForm(inputs, usernameInUse) ) {
 
             //Una vez validados creamos la instancia del usuario en FirebaseAuth
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+            firebaseAuth.createUserWithEmailAndPassword(
                 inputs[SignUpFormEnum.EMAIL].toString(),
                 inputs[SignUpFormEnum.PASSWORD].toString()
             ).addOnCompleteListener {
@@ -168,26 +169,17 @@ class UserViewModel : ViewModel() {
         return FirestoreRepository.getUserByUID(uid)
     }
 
-    fun isDriverAndSuscribed(userId: String, channelId: String): LiveData<Boolean>? {
+    fun isDriver(userId: String): LiveData<Boolean> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { value, error ->
             if (error != null) {
                 Log.w(tag, "Listen failed.", error)
-                isDriverAndSuscribed.postValue(false)
+                isDriver.postValue(false)
             }
             val user: User? = value?.toObject(User::class.java)
-            val channels: List<DocumentReference?>? = user?.channels
-            var boolSus = false
-            if (channels != null) {
-                for (c in channels) {
-                    if (c?.id == channelId){
-                        boolSus = true
-                        break
-                    }
-                }
-            }
-            isDriverAndSuscribed.postValue(user?.isDriver == true && boolSus)
+
+            isDriver.postValue(user?.isDriver == true)
         }
-        return isDriverAndSuscribed
+        return isDriver
     }
 
     fun hasAnySuscription(userId: String): LiveData<Boolean>? {
@@ -226,7 +218,7 @@ class UserViewModel : ViewModel() {
 
     fun uploadProfileImageToFirebase(imageUri: Uri, userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val storeReference = FirebaseStorage.getInstance().getReference("users/$userId")
+            val storeReference = firebaseStorage.getReference("users/$userId")
             storeReference.putFile(imageUri).addOnSuccessListener {
                 val currentValueIT: Boolean? = imageTrigger.value
                 currentValueIT?.let {
@@ -238,7 +230,7 @@ class UserViewModel : ViewModel() {
 
     fun deleteImageByUserId(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val storeReference = FirebaseStorage.getInstance().getReference("users/$userId")
+            val storeReference = firebaseStorage.getReference("users/$userId")
             storeReference.delete().addOnSuccessListener {
                 val currentValueIT: Boolean? = imageTrigger.value
                 currentValueIT?.let {

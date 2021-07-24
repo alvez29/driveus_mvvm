@@ -1,24 +1,16 @@
 package com.example.driveus_mvvm.ui
 
 
-import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivityMainBinding
-import com.example.driveus_mvvm.model.entities.User
-import com.example.driveus_mvvm.view_model.UserViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 
 
 class MainActivity : AppCompatActivity() {
