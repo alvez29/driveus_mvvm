@@ -3,6 +3,7 @@ package com.example.driveus_mvvm.ui
 import android.Manifest
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -37,7 +38,6 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirestoreRegistrar
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
@@ -321,27 +321,61 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpJoinsButton() {
-        val userId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-        viewBinding?.rideDetailButtonJoin?.setOnClickListener {
-                channelId?.let { channelId ->
-                    rideId?.let { rideId ->
-                        if (userId != null) {
-                            rideViewModel.addPassengerInARide(channelId, rideId, userId)
-                        }
-                    }
-                }
-            viewBinding?.rideDetailButtonJoin?.visibility = View.GONE
+    private fun dialogJoin() {
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_join_ride_button, null)
+        val mBuilder = AlertDialog.Builder(context)
+            .setView(mDialogView)
+            .setTitle(getString(R.string.dialog_join_ride_title))
+
+        val mAlertDialog = mBuilder.show()
+
+        mDialogView.findViewById<View>(R.id.dialog_join_ride__button__cancel).setOnClickListener {
+            mAlertDialog.dismiss()
         }
-        viewBinding?.rideDetailButtonNotJoin?.setOnClickListener {
-            if (userId != null) {
-                channelId?.let {
-                        channelId ->
-                    rideId?.let { rideId ->
-                        rideViewModel.removePassengerInARide(channelId, rideId, userId)
+
+        mDialogView.findViewById<View>(R.id.dialog_join_ride__button__accept).setOnClickListener {
+            channelId?.let { channelId ->
+                rideId?.let { rideId ->
+                    sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                        ?.let { userId -> rideViewModel.addPassengerInARide(channelId, rideId, userId)
                     }
                 }
             }
+            mAlertDialog.dismiss()
+            viewBinding?.rideDetailButtonJoin?.visibility = View.GONE
+        }
+    }
+
+    private fun dialogDisjoin() {
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_disjoin_ride_button, null)
+        val mBuilder = AlertDialog.Builder(context)
+            .setView(mDialogView)
+            .setTitle(getString(R.string.dialog_disjoin_ride_title))
+
+        val mAlertDialog = mBuilder.show()
+
+        mDialogView.findViewById<View>(R.id.dialog_disjoin_ride__button__cancel).setOnClickListener {
+            mAlertDialog.dismiss()
+        }
+
+        mDialogView.findViewById<View>(R.id.dialog_disjoin_ride__button__accept).setOnClickListener {
+            channelId?.let { channelId ->
+                rideId?.let { rideId ->
+                    sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                        ?.let { userId -> rideViewModel.removePassengerInARide(channelId, rideId, userId)
+                        }
+                }
+            }
+            mAlertDialog.dismiss()
+        }
+    }
+
+        private fun setUpJoinsButton() {
+        viewBinding?.rideDetailButtonJoin?.setOnClickListener {
+                dialogJoin()
+        }
+        viewBinding?.rideDetailButtonNotJoin?.setOnClickListener {
+            dialogDisjoin()
         }
     }
 

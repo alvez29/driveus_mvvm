@@ -234,9 +234,13 @@ object FirestoreRepository {
             .update("passengers", FieldValue.arrayRemove(passengerReference))
     }
 
-
-
     //PAYOUT FUNCTIONS ----------------------------------------------------
+
+    suspend fun getPayoutById(channelId: String, rideId: String, payoutId: String): DocumentSnapshot? {
+        return db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .collection(PAYOUTS_COLLECTION).document(payoutId).get().await()
+    }
 
     fun getPayoutsFromRide(channelId: String, rideId: String): CollectionReference {
         return db.collection(CHANNELS_COLLECTION).document(channelId)
@@ -246,10 +250,24 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun addSimplePayout(channelId: String, rideId: String, payout: Payout) {
-        db.collection(CHANNELS_COLLECTION).document(channelId)
+    suspend fun addSimplePayout(channelId: String, rideId: String, payout: Payout): Task<DocumentReference> {
+         return db.collection(CHANNELS_COLLECTION).document(channelId)
             .collection(RIDES_COLLECTION).document(rideId)
             .collection(PAYOUTS_COLLECTION).add(payout)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addPayoutInADriver(driverId: String, payoutDocRef: DocumentReference?) {
+        db.collection(USERS_COLLECTION).document(driverId)
+            .update("payoutsAsDriver", FieldValue.arrayUnion(payoutDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addPayoutInAPassenger(passengerId: String, payoutDocRef: DocumentReference?) {
+        db.collection(USERS_COLLECTION).document(passengerId)
+            .update("payoutsAsPassenger", FieldValue.arrayUnion(payoutDocRef))
     }
 
     @Suppress("RedundantSuspendModifier")
@@ -302,5 +320,47 @@ object FirestoreRepository {
                 .collection(RIDES_COLLECTION).document(rideId)
                 .collection(PAYOUTS_COLLECTION).document(payoutId)
                 .update("paidDate", null).await()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deletePayoutFromPassenger(userId: String, payoutDocRef: DocumentReference) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("payoutsAsPassenger", FieldValue.arrayRemove(payoutDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deletePayoutFromDriver(userId: String, payoutDocRef: DocumentReference) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("payoutsAsDriver", FieldValue.arrayRemove(payoutDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addPayoutFromPassenger(userId: String, payoutDocRef: DocumentReference) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("payoutsAsPassenger", FieldValue.arrayUnion(payoutDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addPayoutFromDriver(userId: String, payoutDocRef: DocumentReference) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("payoutsAsDriver", FieldValue.arrayUnion(payoutDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addDebtInADriver(driverId: String, payoutDocRef: DocumentReference?) {
+        db.collection(USERS_COLLECTION).document(driverId)
+            .update("debtsAsDriver", FieldValue.arrayUnion(payoutDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun addDebtInAPassenger(passengerId: String, payoutDocRef: DocumentReference?) {
+        db.collection(USERS_COLLECTION).document(passengerId)
+            .update("debtsAsPassenger", FieldValue.arrayUnion(payoutDocRef))
     }
 }

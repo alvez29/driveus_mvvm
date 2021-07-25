@@ -102,4 +102,20 @@
     <string name="ride_form_error_limit_4_months">Máximo de 4 meses de antelación</string>
     <string name="channel_detail__label__filter_text">Filtrar por día y periodo</string>
     <string name="sign_up_error_save_session_tag">Error al iniciar sesión</string>
+    <string name="dialog_join_ride__label__accept">Aceptar</string>
+    <string name="dialog_join_ride__label__cancel">Cancelar</string>
+    <string name="dialog_join_ride__text__">Al apuntarse a un viaje se genera una deuda con el conductor. ¿Está
+        seguro?
+    </string>
+    <string name="dialog_disjoin_ride__text__">Si se elimina de la lista de pasajeros no podrá ocupar una plaza en este
+        viaje (si ya ha pagado se le generará una deuda al conductor). ¿Está seguro?
+    </string>
+    <string name="dialog_check_payout_as_unpaid_label">Si marca el pago como no saldado, se volverá a generar una deuda
+        del pasajero hacia usted. ¿Desea continuar?
+    </string>
+    <string name="dialog_join_ride_title">Unirse al viaje</string>
+    <string name="dialog_disjoin_ride_title">Borrarse de la lista de pasajeros</string>
+    <string name="dialog_check_payout_as_unpaid_title">Marcar trayecto como no pagado</string>
+    <string name="payouts_fragment_button__label__driver">COBROS COMO CONDUCTOR</string>
+    <string name="payouts_fragment_button__label__passenger">DEUDAS COMO PASAJERO</string>
 </resources>

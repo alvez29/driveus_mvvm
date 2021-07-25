@@ -1,11 +1,14 @@
 package com.example.driveus_mvvm.ui
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,11 +19,11 @@ import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentRidePayoutsDetailListBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
-import com.example.driveus_mvvm.ui.adapter.PayoutsListAdapter
+import com.example.driveus_mvvm.ui.adapter.PayoutsRideDetailsListAdapter
 import com.example.driveus_mvvm.view_model.PayoutViewModel
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,8 +34,9 @@ class RidePayoutsListFragment: Fragment() {
     private val rideId by lazy { arguments?.getString("rideId") }
     private val channelId by lazy { arguments?.getString("channelId") }
     private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
+    private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
-    private val adapterListener = object : PayoutsListAdapter.RideListAdapterListener {
+    private val adapterListener = object : PayoutsRideDetailsListAdapter.RideListAdapterListener {
 
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
             firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
@@ -50,23 +54,21 @@ class RidePayoutsListFragment: Fragment() {
             }
         }
 
-        override fun pressItem(payout: QueryDocumentSnapshot) {
+        override fun pressItem(payout: QueryDocumentSnapshot, checkBox: CheckBox) {
             if (payout.getBoolean("isPaid") == true) {
-                channelId?.let { chnId ->
-                    rideId?.let { rdId ->
-                        payoutViewModel.checkPayoutAsUnpaid(chnId, rdId, payout.id)
-                    }
-                }
+                checkBox.isChecked = true
+                dialogCheckAsUnpaid(payout.reference, checkBox)
             } else {
                 channelId?.let { chnId ->
                     rideId?.let { rdId ->
-                        payoutViewModel.checkPayoutAsPaid(chnId, rdId, payout.id)
+                        payoutViewModel.checkPayoutAsPaid(chnId, rdId, payout.reference, payout.get("passenger") as DocumentReference
+                        )
                     }
                 }
             }
         }
 
-        override fun showItemPaid(payoutViewHolder: PayoutsListAdapter.PayoutViewHolder, date: Date?) {
+        override fun showItemPaid(payoutViewHolder: PayoutsRideDetailsListAdapter.PayoutViewHolder, date: Date?) {
             val pattern = "HH:mm dd-MM-yyyy"
             val simpleDateFormat = SimpleDateFormat(pattern)
 
@@ -91,7 +93,7 @@ class RidePayoutsListFragment: Fragment() {
             }
         }
 
-        override fun showItemUnpaid(payoutViewHolder: PayoutsListAdapter.PayoutViewHolder) {
+        override fun showItemUnpaid(payoutViewHolder: PayoutsRideDetailsListAdapter.PayoutViewHolder) {
             val priceColor = context?.let { ContextCompat.getColor(it, R.color.unpaid) }
             val backgroundColor = context?.let { ContextCompat.getColor(it, R.color.disbled_payout_grey) }
 
@@ -111,7 +113,31 @@ class RidePayoutsListFragment: Fragment() {
         }
     }
 
-    private fun payoutsObserver(adapter: PayoutsListAdapter) = Observer<Map<String, QueryDocumentSnapshot>> { docSnapList ->
+    private fun dialogCheckAsUnpaid(payouDocRef: DocumentReference, checkBox: CheckBox) {
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_check_payout_as_unpaid, null)
+        val mBuilder = AlertDialog.Builder(context)
+            .setView(mDialogView)
+            .setTitle(getString(R.string.dialog_check_payout_as_unpaid_title))
+
+        val mAlertDialog = mBuilder.show()
+
+        mDialogView.findViewById<View>(R.id.dialog_check_payout_as_unpaid__button__cancel).setOnClickListener{
+            mAlertDialog.dismiss()
+        }
+
+        mDialogView.findViewById<View>(R.id.dialog_check_payout_as_unpaid__accept).setOnClickListener{
+            channelId?.let { chnId ->
+                rideId?.let { rideId ->
+                    payoutViewModel.checkPayoutAsUnpaid(chnId, rideId, payouDocRef, sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), ""))
+                }
+            }
+            checkBox.isChecked = false
+            mAlertDialog.dismiss()
+        }
+
+    }
+
+    private fun payoutsObserver(adapter: PayoutsRideDetailsListAdapter) = Observer<Map<String, QueryDocumentSnapshot>> { docSnapList ->
         adapter.submitList(docSnapList.toList())
 
         val totalPrice = docSnapList.filter { it.component2().getBoolean("isPaid") == true }
@@ -122,8 +148,8 @@ class RidePayoutsListFragment: Fragment() {
 
     }
 
-    private fun setupRecyclerAdapter() : PayoutsListAdapter {
-        val adapter = PayoutsListAdapter(adapterListener)
+    private fun setupRecyclerAdapter() : PayoutsRideDetailsListAdapter {
+        val adapter = PayoutsRideDetailsListAdapter(adapterListener)
 
         viewBinding?.ridePayoutsDetailListPayoutsList?.adapter = adapter
         viewBinding?.ridePayoutsDetailListPayoutsList?.layoutManager = LinearLayoutManager(context)
