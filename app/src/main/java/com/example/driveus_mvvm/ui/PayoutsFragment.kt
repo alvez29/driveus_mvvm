@@ -98,13 +98,14 @@ class PayoutsFragment : Fragment() {
 
         viewBinding?.fragmentPayoutButtonRoleButton?.setOnClickListener {
             if (viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility == View.VISIBLE) {
-                viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.my_rides_record_list__label__role_button_passenger)
-                viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableSeat, null, null, null)
+                viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.payouts_fragment_button__label__driver)
+                viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableWheel, null, null, null)
                 viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.GONE
                 viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.VISIBLE
             } else {
-                viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.payouts_fragment_button__label__driver)
-                viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableWheel, null, null, null)
+                viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.my_rides_record_list__label__role_button_passenger)
+                viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableSeat, null, null, null)
+
                 viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.VISIBLE
                 viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.GONE
             }
