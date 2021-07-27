@@ -98,7 +98,7 @@
             app:layout_constraintBottom_toTopOf="@id/fragment_payout__button__role_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_payout__container__filter"/>
+            app:layout_constraintTop_toBottomOf="@id/fragment_payout__button__debts_button"/>
 
     <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/fragment_payout__button__role_button"
