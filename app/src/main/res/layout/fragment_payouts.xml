@@ -7,6 +7,22 @@
         android:layout_height="match_parent"
         android:background="@color/yellow_300">
 
+    <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/fragment_payout__button__debts_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/cancel"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:fontFamily="@font/montserrat_bold"
+            android:drawableStart="@drawable/ic_round_error_outline_24"
+            android:drawableTint="@color/black"
+            android:paddingHorizontal="32dp"
+            android:text="@string/fragment_payout__label__debts_button"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_payout__list__payouts_list_passenger"
@@ -16,7 +32,7 @@
             app:layout_constraintBottom_toTopOf="@id/fragment_payout__button__role_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/fragment_payout__button__debts_button"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_payout__list__payouts_list_driver"

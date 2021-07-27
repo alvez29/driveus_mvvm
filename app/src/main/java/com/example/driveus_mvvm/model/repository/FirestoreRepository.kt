@@ -28,7 +28,7 @@ object FirestoreRepository {
     private fun getFirestoreInstance(): FirebaseFirestore {
         val firestore = FirebaseFirestore.getInstance()
 
-        if (BuildConfig.EMULATORS_MODE?.toBoolean()) {
+        if (BuildConfig.EMULATORS_MODE.toBoolean()) {
             firestore.useEmulator("10.0.2.2", BuildConfig.FIRESTORE_PORT?.toInt())
 
             val settings = FirebaseFirestoreSettings.Builder()
@@ -44,7 +44,7 @@ object FirestoreRepository {
     fun getFirebaseStorageInstance(): FirebaseStorage {
         val storage = FirebaseStorage.getInstance()
 
-        if (BuildConfig.EMULATORS_MODE?.toBoolean()) {
+        if (BuildConfig.EMULATORS_MODE.toBoolean()) {
             storage.useEmulator("10.0.2.2", BuildConfig.STORAGE_PORT?.toInt())
         }
 
@@ -54,7 +54,7 @@ object FirestoreRepository {
     fun getFirebaseAuthInstance(): FirebaseAuth {
         val auth = FirebaseAuth.getInstance()
 
-        if (BuildConfig.EMULATORS_MODE?.toBoolean()) {
+        if (BuildConfig.EMULATORS_MODE.toBoolean()) {
             auth.useEmulator("10.0.2.2", BuildConfig.AUTH_PORT?.toInt())
         }
 
@@ -283,7 +283,7 @@ object FirestoreRepository {
     suspend fun getPayoutByUserAndRideSync(channelId: String, rideId: String, passengerReference: DocumentReference): QuerySnapshot? {
        return db.collection(CHANNELS_COLLECTION).document(channelId)
             .collection(RIDES_COLLECTION).document(rideId)
-            .collection(PAYOUTS_COLLECTION).whereEqualTo("passenger", passengerReference).limit(1L).get().await()
+            .collection(PAYOUTS_COLLECTION).whereEqualTo("passenger", passengerReference).whereEqualTo("isDebt", false).limit(1L).get().await()
     }
 
     @Suppress("RedundantSuspendModifier")
@@ -324,6 +324,15 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun payoutToDebt(channelId: String, rideId: String, payoutId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .collection(PAYOUTS_COLLECTION).document(payoutId)
+            .update("isDebt", true).await()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun deletePayoutFromPassenger(userId: String, payoutDocRef: DocumentReference) {
         db.collection(USERS_COLLECTION).document(userId)
             .update("payoutsAsPassenger", FieldValue.arrayRemove(payoutDocRef))
@@ -334,6 +343,20 @@ object FirestoreRepository {
     suspend fun deletePayoutFromDriver(userId: String, payoutDocRef: DocumentReference) {
         db.collection(USERS_COLLECTION).document(userId)
             .update("payoutsAsDriver", FieldValue.arrayRemove(payoutDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteDebtFromPassenger(userId: String, payoutDocRef: DocumentReference) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("debtsAsPassenger", FieldValue.arrayRemove(payoutDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteDebtFromDriver(userId: String, payoutDocRef: DocumentReference) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("debtsAsDriver", FieldValue.arrayRemove(payoutDocRef))
     }
 
     @Suppress("RedundantSuspendModifier")

@@ -30,7 +30,7 @@ class RideViewModel : ViewModel() {
 
     private val tag = "FIRESTORE_RIDE_VIEW_MODEL"
     private val msgListenFailed = "Listen failed."
-    private val opFailed = "operaton Failed"
+    private val opFailed = "Operation Failed"
 
     private val ridesAsPassenger: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
     private val ridesAsDriver: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
@@ -434,10 +434,13 @@ class RideViewModel : ViewModel() {
                     val hasRidePaid: Boolean = FirestoreRepository.getPayoutById(channelId, rideId, payoutDocRef.id)?.get("isPaid") as Boolean
                     FirestoreRepository.deletePayoutFromPassenger(passengerId, payoutDocRef)
                     ride?.driver?.id?.let { FirestoreRepository.deletePayoutFromDriver(it, payoutDocRef) }
-                    FirestoreRepository.deleteSimplePayout(channelId, rideId, payoutDocRef.id)
                     if (hasRidePaid) {
                         ride?.driver?.id?.let { FirestoreRepository.addDebtInADriver(it, payoutDocRef) }
                         FirestoreRepository.addDebtInAPassenger(passengerId, payoutDocRef)
+                        FirestoreRepository.checkPayoutAsUnpaidUpdateBoolean(channelId,rideId, payoutDocRef.id)
+                        FirestoreRepository.payoutToDebt(channelId,rideId, payoutDocRef.id)
+                    } else {
+                        FirestoreRepository.deleteSimplePayout(channelId, rideId, payoutDocRef.id)
                     }
                 }
             } catch (e: Exception) {

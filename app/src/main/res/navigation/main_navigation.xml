@@ -37,6 +37,9 @@
               android:name="com.example.driveus_mvvm.ui.PayoutsFragment"
               android:label="PayoutsFragment">
 
+        <action android:id="@+id/action_payoutsFragment_to_payoutDebtsFragment"
+                app:destination="@id/payoutDebtsFragment"/>
+
         <argument
             android:name="backgroundColor"
             app:argType="string"
@@ -44,11 +47,23 @@
 
     </fragment>
 
+    <fragment android:id="@+id/payoutDebtsFragment"
+              android:name="com.example.driveus_mvvm.ui.PayoutDebtsFragment"
+              android:label="PayoutDebtsFragment">
+
+        <argument
+                android:name="backgroundColor"
+                app:argType="string"
+                android:defaultValue="yellow" />
+
+    </fragment>
+
     <fragment android:id="@+id/profileFragment"
               android:name="com.example.driveus_mvvm.ui.ProfileFragment"
               android:label="ProfileFragment">
 
-        <action android:id="@+id/action_profileFragment_to_addCarFragment2" app:destination="@id/addCarFragment"/>
+        <action android:id="@+id/action_profileFragment_to_addCarFragment2"
+                app:destination="@id/addCarFragment"/>
 
     </fragment>
 

@@ -26,45 +26,45 @@ private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, DocumentS
 
 }
 
-class PayoutListAdapter(
-    private val listener: PayoutListAdapter.PayoutListAdapterListener
-) : ListAdapter<Pair<String, DocumentSnapshot>, PayoutListAdapter.PayoutViewHolder>(diffCallback) {
+class DebtListAdapter (
+    private val listener: DebtListAdapterListener
+): ListAdapter<Pair<String, DocumentSnapshot>, DebtListAdapter.DebtViewHolder>(diffCallback) {
 
-    interface PayoutListAdapterListener {
+    interface DebtListAdapterListener {
         fun loadProfilePicture(userId: String?, imageView: ImageView)
         fun pressCheckbox(payoutDocSnap: DocumentSnapshot, checkBox: CheckBox)
-        fun amITheDriver(passengerId: String): Boolean
+        fun amIThePassenger(passengerId: String): Boolean
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PayoutListAdapter.PayoutViewHolder {
-        val payoutListView = LayoutInflater.from(parent.context).inflate(R.layout.row_payout, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DebtListAdapter.DebtViewHolder {
+        val debtListView = LayoutInflater.from(parent.context).inflate(R.layout.row_payout, parent, false)
 
-        return PayoutViewHolder(payoutListView)
+        return DebtViewHolder(debtListView)
     }
 
-    override fun onBindViewHolder(holder: PayoutListAdapter.PayoutViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DebtListAdapter.DebtViewHolder, position: Int) {
         val payout = getItem(position).second.toObject(Payout::class.java)
         val priceStr = "${payout?.price} €"
 
         val pattern = "HH:mm dd-MM-yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
-        val crationDate = payout?.creationDate?.toDate()
-        val dateValue = simpleDateFormat.format(crationDate).split(" ")
-        val dateStr = "Creado a las ${dateValue[0]} el día ${dateValue[1]}"
+        val paidDate = payout?.paidDate?.toDate()
+        val dateValue = simpleDateFormat.format(paidDate).split(" ")
+        val dateStr = "Pagado a las ${dateValue[0]} el día ${dateValue[1]}"
 
         listener.loadProfilePicture(payout?.passenger?.id, holder.profilePicture)
         holder.price.text = priceStr
         holder.username.text = getItem(position).first
         holder.createDate.text = dateStr
 
-        if (listener.amITheDriver(payout?.passenger?.id.toString())){
+        if (listener.amIThePassenger(payout?.passenger?.id.toString())){
             holder.checkbox.visibility = View.VISIBLE
         } else {
             holder.checkbox.visibility = View.GONE
         }
     }
 
-    inner class PayoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class DebtViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profilePicture: ImageView by lazy { itemView.findViewById(R.id.payout_row__image__profile_picture) }
         val username: TextView by lazy { itemView.findViewById(R.id.payout_row__label__username) }
         val price: TextView by lazy { itemView.findViewById(R.id.payout_row__label__price) }

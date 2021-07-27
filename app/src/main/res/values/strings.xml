@@ -118,4 +118,7 @@
     <string name="dialog_check_payout_as_unpaid_title">Marcar trayecto como no pagado</string>
     <string name="payouts_fragment_button__label__driver">COBROS COMO CONDUCTOR</string>
     <string name="payouts_fragment_button__label__passenger">DEUDAS COMO PASAJERO</string>
+    <string name="fragment_payout__label__debts_button">¡DEUDAS DE VIAJES NO REALIZADOS!</string>
+    <string name="fragment_payout_debt__label__title_passenger">Deudas pendientes de cobro como pasajero</string>
+    <string name="fragment_payout_debt__label__title_driver">Deudas pendientes de pago como conductor</string>
 </resources>

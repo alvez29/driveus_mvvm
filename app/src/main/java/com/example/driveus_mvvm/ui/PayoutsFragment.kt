@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
@@ -66,6 +67,14 @@ class PayoutsFragment : Fragment() {
         }
     }
 
+    private val hasDebtsObserver = Observer<Boolean> {
+        if (it) {
+            viewBinding?.fragmentPayoutButtonDebtsButton?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.fragmentPayoutButtonDebtsButton?.visibility = View.GONE
+        }
+    }
+
     private fun payoutsAsPassengerObserver(adapter: PayoutListAdapter) = Observer<List<Pair<String, DocumentSnapshot>>> { docSnapList ->
         adapter.submitList(docSnapList)
     }
@@ -103,12 +112,21 @@ class PayoutsFragment : Fragment() {
                 viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.GONE
                 viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.VISIBLE
             } else {
-                viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.my_rides_record_list__label__role_button_passenger)
+                viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.payouts_fragment_button__label__passenger)
                 viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableSeat, null, null, null)
 
                 viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.VISIBLE
                 viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.GONE
             }
+        }
+    }
+
+    private fun setupButtonDebts() {
+        sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+            ?.let { payoutViewModel.userHasDebts(it).observe(viewLifecycleOwner, hasDebtsObserver) }
+        viewBinding?.fragmentPayoutButtonDebtsButton?.setOnClickListener {
+            val action = PayoutsFragmentDirections.actionPayoutsFragmentToPayoutDebtsFragment()
+            findNavController().navigate(action)
         }
     }
 
@@ -125,6 +143,7 @@ class PayoutsFragment : Fragment() {
         val adapterDriver = setupRecyclerAdapterDriver()
 
         setupButtonRole()
+        setupButtonDebts()
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key),"")
             ?.let {
