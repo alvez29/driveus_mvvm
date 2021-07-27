@@ -27,11 +27,17 @@ class PayoutViewModel : ViewModel() {
     private val hasDebts: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>(false) }
 
     fun userHasDebts(userId: String): MutableLiveData<Boolean> {
-        var res = false
         viewModelScope.launch(Dispatchers.IO) {
-            val user: User? = FirestoreRepository.getUserByIdSync(userId)?.toObject(User::class.java)
-            res = user?.debtsAsDriver?.isNotEmpty() == true || user?.debtsAsPassenger?.isNotEmpty() == true
-            hasDebts.postValue(res)
+            FirestoreRepository.getUserById(userId).addSnapshotListener { value, error ->
+                if (error != null) {
+                    hasDebts.value = false
+                    Log.d(tag, error.message.toString())
+                }
+
+                val user = value?.toObject(User::class.java)
+                val res = user?.debtsAsDriver?.isNotEmpty() == true || user?.debtsAsPassenger?.isNotEmpty() == true
+                hasDebts.postValue(res)
+            }
         }
         return hasDebts
     }

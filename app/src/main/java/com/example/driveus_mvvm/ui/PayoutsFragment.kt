@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -28,8 +29,17 @@ class PayoutsFragment : Fragment() {
 
     private var viewBinding: FragmentPayoutsBinding? = null
     private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
-    private val payoutViewModel : PayoutViewModel by lazy { ViewModelProvider(this)[PayoutViewModel::class.java] }
+    private val payoutViewModel: PayoutViewModel by lazy { ViewModelProvider(this)[PayoutViewModel::class.java] }
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
+
+    private val dialogCallback = object: PayoutUsernameFilterDialogFragment.PayoutUserNameFilterDialogFragmentCallback {
+
+        override fun selectedUserName(username: String) {
+            viewBinding?.fragmentPayoutLabelFilter?.text = username
+            viewBinding?.fragmentPayoutImageClearFilter?.visibility = View.VISIBLE
+        }
+
+    }
 
     private val adapterListener = object : PayoutListAdapter.PayoutListAdapterListener {
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
@@ -57,6 +67,19 @@ class PayoutsFragment : Fragment() {
             }
         }
 
+        override fun navigateToRide(payoutDocSnap: DocumentSnapshot) {
+            val channelId = payoutDocSnap.reference.parent.parent?.parent?.parent?.id
+            val rideId = payoutDocSnap.reference.parent.parent?.id
+
+            if (channelId != null && rideId != null) {
+                val action = PayoutsFragmentDirections.actionPayoutsFragmentToRideDetailFragment()
+                        .setChannelId(channelId)
+                        .setRideId(rideId)
+
+                findNavController().navigate(action)
+            }
+        }
+
         override fun amITheDriver(passengerId: String): Boolean {
             var res = false
             val userId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
@@ -75,12 +98,43 @@ class PayoutsFragment : Fragment() {
         }
     }
 
+    private fun configurePayoutsFilter(docSnapList: List<Pair<String, DocumentSnapshot>>?, adapter: PayoutListAdapter) {
+        val dialog = PayoutUsernameFilterDialogFragment(dialogCallback, getUsernamesList(docSnapList))
+
+        viewBinding?.fragmentPayoutContainerFilter?.setOnClickListener {
+            dialog.show(childFragmentManager, "usernameDialog")
+        }
+
+        viewBinding?.fragmentPayoutImageClearFilter?.setOnClickListener {
+            viewBinding?.fragmentPayoutLabelFilter?.text = ""
+            viewBinding?.fragmentPayoutImageClearFilter?.visibility = View.GONE
+        }
+
+        viewBinding?.fragmentPayoutLabelFilter?.addTextChangedListener { filterText ->
+            if (filterText.toString().isBlank()){
+                adapter.submitList(docSnapList)
+            } else {
+                val filteredList = docSnapList?.filter {
+                    it.first == filterText.toString()
+                }
+
+                adapter.submitList(filteredList)
+            }
+        }
+    }
+
+
     private fun payoutsAsPassengerObserver(adapter: PayoutListAdapter) = Observer<List<Pair<String, DocumentSnapshot>>> { docSnapList ->
         adapter.submitList(docSnapList)
     }
 
+    private fun getUsernamesList(docSnapList: List<Pair<String, DocumentSnapshot>>?): Set<String>? {
+        return docSnapList?.map { it.first }?.toSet()
+    }
+
     private fun payoutsAsDriverObserver(adapter: PayoutListAdapter) = Observer<List<Pair<String, DocumentSnapshot>>> { docSnapList ->
-        adapter.submitList(docSnapList.toList())
+        adapter.submitList(docSnapList)
+        configurePayoutsFilter(docSnapList, adapter)
     }
 
     private fun setupRecyclerAdapterPassenger() : PayoutListAdapter {
@@ -107,11 +161,15 @@ class PayoutsFragment : Fragment() {
 
         viewBinding?.fragmentPayoutButtonRoleButton?.setOnClickListener {
             if (viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility == View.VISIBLE) {
+                viewBinding?.fragmentPayoutContainerFilter?.visibility = View.VISIBLE
+
                 viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.payouts_fragment_button__label__driver)
                 viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableWheel, null, null, null)
                 viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.GONE
                 viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.VISIBLE
             } else {
+                viewBinding?.fragmentPayoutContainerFilter?.visibility = View.GONE
+
                 viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.payouts_fragment_button__label__passenger)
                 viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableSeat, null, null, null)
 

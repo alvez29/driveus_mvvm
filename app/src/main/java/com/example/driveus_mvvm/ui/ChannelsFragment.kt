@@ -21,12 +21,12 @@ class ChannelsFragment : Fragment() {
                 TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
                     when(position) {
                         0 -> {
-                            tab.text = getString(R.string.channels_fragment__label__tab_explore)
-                            tab.icon = context?.let { ContextCompat.getDrawable(it,R.drawable.ic_round_search_24) }
-                        }
-                        1 -> {
                             tab.text = getString(R.string.channels_fragment__label__tab_my_channels)
                             tab.icon = context?.let { ContextCompat.getDrawable(it,R.drawable.ic_round_bookmarks_24) }
+                        }
+                        1 -> {
+                            tab.text = getString(R.string.channels_fragment__label__tab_explore)
+                            tab.icon = context?.let { ContextCompat.getDrawable(it,R.drawable.ic_round_search_24) }
                         }
                     }
                 }.attach()

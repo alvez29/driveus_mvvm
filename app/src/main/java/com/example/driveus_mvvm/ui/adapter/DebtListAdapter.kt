@@ -34,6 +34,7 @@ class DebtListAdapter (
         fun loadProfilePicture(userId: String?, imageView: ImageView)
         fun pressCheckbox(payoutDocSnap: DocumentSnapshot, checkBox: CheckBox)
         fun amIThePassenger(passengerId: String): Boolean
+        fun navigateToRideDetail(payoutDocSnap: DocumentSnapshot)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DebtListAdapter.DebtViewHolder {
@@ -74,6 +75,10 @@ class DebtListAdapter (
         init {
             checkbox.setOnClickListener {
                 listener.pressCheckbox(getItem(adapterPosition).second, checkbox)
+            }
+
+            itemView.setOnClickListener {
+                listener.navigateToRideDetail(getItem(adapterPosition).second)
             }
         }
     }

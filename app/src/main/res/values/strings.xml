@@ -121,4 +121,6 @@
     <string name="fragment_payout__label__debts_button">¡DEUDAS DE VIAJES NO REALIZADOS!</string>
     <string name="fragment_payout_debt__label__title_passenger">Deudas pendientes de cobro como pasajero</string>
     <string name="fragment_payout_debt__label__title_driver">Deudas pendientes de pago como conductor</string>
+    <string name="fragment_payout_label_filter_hint">Filtrar entre mis pasajeros</string>
+    <string name="dialog_payout_users_list_title">Selecciona un usuario</string>
 </resources>

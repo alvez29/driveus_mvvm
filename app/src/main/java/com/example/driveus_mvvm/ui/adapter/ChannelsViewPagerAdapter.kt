@@ -14,10 +14,10 @@ class ChannelsViewPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragmen
 
         when(position){
             0 -> {
-                fragment = AllChannelsFragment()
+                fragment = MyChannelsFragment()
             }
             1 -> {
-                fragment = MyChannelsFragment()
+                fragment = AllChannelsFragment()
             }
         }
 

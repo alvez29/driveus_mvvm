@@ -270,6 +270,63 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         viewBinding?.rideDetailLabelColor?.visibility = status
     }
 
+    private fun dialogJoin() {
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_join_ride_button, null)
+        val mBuilder = AlertDialog.Builder(context)
+                .setView(mDialogView)
+                .setTitle(getString(R.string.dialog_join_ride_title))
+
+        val mAlertDialog = mBuilder.show()
+
+        mDialogView.findViewById<View>(R.id.dialog_join_ride__button__cancel).setOnClickListener {
+            mAlertDialog.dismiss()
+        }
+
+        mDialogView.findViewById<View>(R.id.dialog_join_ride__button__accept).setOnClickListener {
+            channelId?.let { channelId ->
+                rideId?.let { rideId ->
+                    sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                            ?.let { userId -> rideViewModel.addPassengerInARide(channelId, rideId, userId)
+                            }
+                }
+            }
+            mAlertDialog.dismiss()
+            viewBinding?.rideDetailButtonJoin?.visibility = View.GONE
+        }
+    }
+
+    private fun dialogDisjoin() {
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_disjoin_ride_button, null)
+        val mBuilder = AlertDialog.Builder(context)
+                .setView(mDialogView)
+                .setTitle(getString(R.string.dialog_disjoin_ride_title))
+
+        val mAlertDialog = mBuilder.show()
+
+        mDialogView.findViewById<View>(R.id.dialog_disjoin_ride__button__cancel).setOnClickListener {
+            mAlertDialog.dismiss()
+        }
+
+        mDialogView.findViewById<View>(R.id.dialog_disjoin_ride__button__accept).setOnClickListener {
+            channelId?.let { channelId ->
+                rideId?.let { rideId ->
+                    sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                            ?.let { userId -> rideViewModel.removePassengerInARide(channelId, rideId, userId)
+                            }
+                }
+            }
+            mAlertDialog.dismiss()
+        }
+    }
+
+    private fun setUpJoinsButton() {
+        viewBinding?.rideDetailButtonJoin?.setOnClickListener {
+            dialogJoin()
+        }
+        viewBinding?.rideDetailButtonNotJoin?.setOnClickListener {
+            dialogDisjoin()
+        }
+    }
 
     //AUXILIAR MAP FUNCTIONS ------------------------------
 
@@ -318,64 +375,6 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
 
         } else {
             activateMyLocation()
-        }
-    }
-
-    private fun dialogJoin() {
-        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_join_ride_button, null)
-        val mBuilder = AlertDialog.Builder(context)
-            .setView(mDialogView)
-            .setTitle(getString(R.string.dialog_join_ride_title))
-
-        val mAlertDialog = mBuilder.show()
-
-        mDialogView.findViewById<View>(R.id.dialog_join_ride__button__cancel).setOnClickListener {
-            mAlertDialog.dismiss()
-        }
-
-        mDialogView.findViewById<View>(R.id.dialog_join_ride__button__accept).setOnClickListener {
-            channelId?.let { channelId ->
-                rideId?.let { rideId ->
-                    sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                        ?.let { userId -> rideViewModel.addPassengerInARide(channelId, rideId, userId)
-                    }
-                }
-            }
-            mAlertDialog.dismiss()
-            viewBinding?.rideDetailButtonJoin?.visibility = View.GONE
-        }
-    }
-
-    private fun dialogDisjoin() {
-        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_disjoin_ride_button, null)
-        val mBuilder = AlertDialog.Builder(context)
-            .setView(mDialogView)
-            .setTitle(getString(R.string.dialog_disjoin_ride_title))
-
-        val mAlertDialog = mBuilder.show()
-
-        mDialogView.findViewById<View>(R.id.dialog_disjoin_ride__button__cancel).setOnClickListener {
-            mAlertDialog.dismiss()
-        }
-
-        mDialogView.findViewById<View>(R.id.dialog_disjoin_ride__button__accept).setOnClickListener {
-            channelId?.let { channelId ->
-                rideId?.let { rideId ->
-                    sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                        ?.let { userId -> rideViewModel.removePassengerInARide(channelId, rideId, userId)
-                        }
-                }
-            }
-            mAlertDialog.dismiss()
-        }
-    }
-
-        private fun setUpJoinsButton() {
-        viewBinding?.rideDetailButtonJoin?.setOnClickListener {
-                dialogJoin()
-        }
-        viewBinding?.rideDetailButtonNotJoin?.setOnClickListener {
-            dialogDisjoin()
         }
     }
 

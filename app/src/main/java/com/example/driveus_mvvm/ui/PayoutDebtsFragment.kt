@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
@@ -61,6 +62,19 @@ class PayoutDebtsFragment: Fragment() {
                 res = true
             }
             return res
+        }
+
+        override fun navigateToRideDetail(payoutDocSnap: DocumentSnapshot) {
+            val channelId = payoutDocSnap.reference.parent.parent?.parent?.parent?.id
+            val rideId = payoutDocSnap.reference.parent.parent?.id
+
+            if (channelId != null && rideId != null) {
+                val action = PayoutDebtsFragmentDirections.actionPayoutDebtsFragmentToRideDetailFragment()
+                        .setChannelId(channelId)
+                        .setRideId(rideId)
+
+                findNavController().navigate(action)
+            }
         }
     }
 

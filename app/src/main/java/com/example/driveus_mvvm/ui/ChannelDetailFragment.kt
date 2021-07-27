@@ -75,10 +75,10 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
         viewBinding?.channelDetailInputFilterText?.addTextChangedListener { editableText ->
             if (editableText.toString().isBlank()) {
-                viewBinding?.channelDetailImageClearFilter?.visibility = View.GONE
+                viewBinding?.fragmentPayoutImageClearFilter?.visibility = View.GONE
                 adapter.submitList(map?.toList())
             } else {
-                viewBinding?.channelDetailImageClearFilter?.visibility = View.VISIBLE
+                viewBinding?.fragmentPayoutImageClearFilter?.visibility = View.VISIBLE
                 val startAndEndTimestamp: Pair<Timestamp, Timestamp> = DateTimeUtils.getStartAndEndDateFromFilterString(editableText.toString())
                 val filteredMap = map?.toList()
                     ?.filter {
@@ -94,7 +94,7 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             }
         }
 
-        viewBinding?.channelDetailImageClearFilter?.setOnClickListener {
+        viewBinding?.fragmentPayoutImageClearFilter?.setOnClickListener {
             viewBinding?.channelDetailInputFilterText?.text = ""
         }
     }
@@ -163,8 +163,6 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         }
     }
 
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewBinding = FragmentChannelDetailBinding.inflate(inflater, container, false)
 
@@ -184,7 +182,6 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 .show(parentFragmentManager)
 
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

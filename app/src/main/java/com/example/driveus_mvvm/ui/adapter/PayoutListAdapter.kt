@@ -27,12 +27,13 @@ private val diffCallback = object : DiffUtil.ItemCallback<Pair<String, DocumentS
 }
 
 class PayoutListAdapter(
-    private val listener: PayoutListAdapter.PayoutListAdapterListener
+    private val listener: PayoutListAdapterListener
 ) : ListAdapter<Pair<String, DocumentSnapshot>, PayoutListAdapter.PayoutViewHolder>(diffCallback) {
 
     interface PayoutListAdapterListener {
         fun loadProfilePicture(userId: String?, imageView: ImageView)
         fun pressCheckbox(payoutDocSnap: DocumentSnapshot, checkBox: CheckBox)
+        fun navigateToRide(payoutDocSnap: DocumentSnapshot)
         fun amITheDriver(passengerId: String): Boolean
     }
 
@@ -74,6 +75,10 @@ class PayoutListAdapter(
         init {
             checkbox.setOnClickListener {
                 listener.pressCheckbox(getItem(adapterPosition).second, checkbox)
+            }
+
+            itemView.setOnClickListener {
+                listener.navigateToRide(getItem(adapterPosition).second)
             }
         }
     }
