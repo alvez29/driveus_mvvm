@@ -37,10 +37,35 @@
               android:name="com.example.driveus_mvvm.ui.PayoutsFragment"
               android:label="PayoutsFragment">
 
+        <action android:id="@+id/action_payoutsFragment_to_payoutDebtsFragment"
+                app:destination="@id/payoutDebtsFragment"/>
+
+        <action
+            android:id="@+id/action_payoutsFragment_to_rideDetailFragment"
+            app:destination="@id/rideDetailFragment" />
+
         <argument
             android:name="backgroundColor"
             app:argType="string"
             android:defaultValue="yellow" />
+
+        <argument
+            android:name="usernameFilter"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment android:id="@+id/payoutDebtsFragment"
+              android:name="com.example.driveus_mvvm.ui.PayoutDebtsFragment"
+              android:label="PayoutDebtsFragment">
+
+        <argument
+                android:name="backgroundColor"
+                app:argType="string"
+                android:defaultValue="yellow" />
+        <action
+            android:id="@+id/action_payoutDebtsFragment_to_rideDetailFragment"
+            app:destination="@id/rideDetailFragment" />
 
     </fragment>
 
@@ -48,7 +73,8 @@
               android:name="com.example.driveus_mvvm.ui.ProfileFragment"
               android:label="ProfileFragment">
 
-        <action android:id="@+id/action_profileFragment_to_addCarFragment2" app:destination="@id/addCarFragment"/>
+        <action android:id="@+id/action_profileFragment_to_addCarFragment2"
+                app:destination="@id/addCarFragment"/>
 
     </fragment>
 
@@ -138,6 +164,7 @@
             app:destination="@id/ridePayoutsListFragment" />
 
     </fragment>
+
     <fragment
         android:id="@+id/ridePayoutsListFragment"
         android:name="com.example.driveus_mvvm.ui.RidePayoutsListFragment"
@@ -157,6 +184,17 @@
             android:name="channelId"
             app:argType="string"
             android:defaultValue="" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/payoutUsernameFilterDialog"
+        android:name="com.example.driveus_mvvm.ui.PayoutUsernameFilterDialogFragment"
+        android:label="PayoutUsernameFilterDialog" >
+
+        <action
+            android:id="@+id/action_payoutUsernameFilterDialog_to_payoutsFragment"
+            app:destination="@id/payoutsFragment" />
 
     </fragment>
 

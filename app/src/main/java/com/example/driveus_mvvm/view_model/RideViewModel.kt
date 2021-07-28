@@ -30,6 +30,7 @@ class RideViewModel : ViewModel() {
 
     private val tag = "FIRESTORE_RIDE_VIEW_MODEL"
     private val msgListenFailed = "Listen failed."
+    private val opFailed = "Operation Failed"
 
     private val ridesAsPassenger: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
     private val ridesAsDriver: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
@@ -390,39 +391,60 @@ class RideViewModel : ViewModel() {
 
 
     fun addPassengerInARide(channelId: String, rideId: String, passengerId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val passengerDocRef: DocumentReference? = FirestoreRepository.getUserByIdSync(passengerId)?.reference
-            if (passengerDocRef != null) {
-                FirestoreRepository.addPassengerInARide(channelId, rideId, passengerDocRef)
-            }
-            val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
-            val ride = rideReference.toObject(Ride::class.java)
-            FirestoreRepository.addRideInAPassenger(passengerId, rideReference.reference)
-            val payout = passengerDocRef?.let { passengerDocumentReference ->
-                ride?.price?.let { price ->
-                        createSimplePayout(passengerDocumentReference, price)
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val passengerDocRef: DocumentReference? = FirestoreRepository.getUserByIdSync(passengerId)?.reference
+                if (passengerDocRef != null) {
+                    FirestoreRepository.addPassengerInARide(channelId, rideId, passengerDocRef)
                 }
-             }
-            if (payout != null) {
-                FirestoreRepository.addSimplePayout(channelId, rideId, payout)
+                val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
+                val ride = rideReference.toObject(Ride::class.java)
+                FirestoreRepository.addRideInAPassenger(passengerId, rideReference.reference)
+                val payout = passengerDocRef?.let { passengerDocumentReference ->
+                    ride?.price?.let { price ->
+                        createSimplePayout(passengerDocumentReference, price)
+                    }
+                }
+                if (payout != null) {
+                    val payoutDocRef: DocumentReference = FirestoreRepository.addSimplePayout(channelId, rideId, payout).await()
+                    FirestoreRepository.addPayoutInAPassenger(passengerId, payoutDocRef)
+                    ride?.driver?.id?.let { FirestoreRepository.addPayoutInADriver(it, payoutDocRef) }
+                }
+            } catch (e: Exception) {
+                Log.w(tag, opFailed, e)
             }
         }
     }
 
     fun removePassengerInARide(channelId: String, rideId: String, passengerId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val passengerDocRef: DocumentReference? = FirestoreRepository.getUserByIdSync(passengerId)?.reference
-            if (passengerDocRef != null) {
-                FirestoreRepository.removePassengerInARide(channelId, rideId, passengerDocRef)
-            }
-            val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
-            FirestoreRepository.removeRideInAPassenger(passengerId, rideReference.reference)
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val passengerDocRef: DocumentReference? = FirestoreRepository.getUserByIdSync(passengerId)?.reference
+                if (passengerDocRef != null) {
+                    FirestoreRepository.removePassengerInARide(channelId, rideId, passengerDocRef)
+                }
+                val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
+                FirestoreRepository.removeRideInAPassenger(passengerId, rideReference.reference)
 
-            val payoutId = passengerDocRef?.let {
-                FirestoreRepository.getPayoutByUserAndRideSync(channelId, rideId, it)?.documents?.get(0)?.id
-            }
-            if (payoutId != null) {
-                FirestoreRepository.deleteSimplePayout(channelId, rideId, payoutId)
+                val payoutDocRef: DocumentReference? = passengerDocRef?.let {
+                    FirestoreRepository.getPayoutByUserAndRideSync(channelId, rideId, it)?.documents?.get(0)?.reference
+                }
+                if (payoutDocRef != null) {
+                    val ride: Ride? = FirestoreRepository.getRideById(channelId, rideId).get().await().toObject(Ride::class.java)
+                    val hasRidePaid: Boolean = FirestoreRepository.getPayoutById(channelId, rideId, payoutDocRef.id)?.get("isPaid") as Boolean
+                    FirestoreRepository.deletePayoutFromPassenger(passengerId, payoutDocRef)
+                    ride?.driver?.id?.let { FirestoreRepository.deletePayoutFromDriver(it, payoutDocRef) }
+                    if (hasRidePaid) {
+                        ride?.driver?.id?.let { FirestoreRepository.addDebtInADriver(it, payoutDocRef) }
+                        FirestoreRepository.addDebtInAPassenger(passengerId, payoutDocRef)
+                        FirestoreRepository.checkPayoutAsUnpaidUpdateBoolean(channelId,rideId, payoutDocRef.id)
+                        FirestoreRepository.payoutToDebt(channelId,rideId, payoutDocRef.id)
+                    } else {
+                        FirestoreRepository.deleteSimplePayout(channelId, rideId, payoutDocRef.id)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.w(tag, opFailed, e)
             }
         }
     }

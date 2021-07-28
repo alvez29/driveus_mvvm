@@ -33,7 +33,7 @@ class PassengersDialogFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = parentFragment?.context?.let { ArrayAdapter<String>(it, R.layout.row_passenger, mutableListOf()) }
+        val adapter = parentFragment?.context?.let { ArrayAdapter<String>(it, R.layout.row_username, mutableListOf()) }
         viewBinding?.dialogPassengerListPassengers?.adapter = adapter
 
         viewModel.getPassengersList(channelId, rideId).observe(viewLifecycleOwner, passengersObserver(adapter))

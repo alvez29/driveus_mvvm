@@ -3,6 +3,7 @@ package com.example.driveus_mvvm.ui
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -30,15 +31,20 @@ class MainActivity : AppCompatActivity() {
         when(arguments?.getString(BACKGROUND_COLOR_KEY)) {
             "yellow" -> {
                 supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.yellow_300)))
+                supportActionBar?.setTitle(Html.fromHtml("<font color='#000000'>DriveUs</font>"))
             }
             "blue" -> {
                 supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.teal_300)))
+                supportActionBar?.setTitle(Html.fromHtml("<font color='#FFFFFF'>DriveUs </font>"))
             }
             "pink" -> {
                 supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.pink_200)))
+                supportActionBar?.setTitle(Html.fromHtml("<font color='#FFFFFF'>DriveUs </font>"))
             }
             else -> {
                 supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.black)))
+                supportActionBar?.setTitle(Html.fromHtml("<font color='#FFFFFF'>DriveUs </font>"))
+
             }
         }
 
