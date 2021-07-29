@@ -93,4 +93,7 @@ dependencies {
     //Day of week picker
     implementation 'ca.antonious:materialdaypicker:0.7.4'
 
+    //Lottie
+    implementation "com.airbnb.android:lottie:4.0.0"
+
 }

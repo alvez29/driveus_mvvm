@@ -65,10 +65,10 @@ class MyComingRidesFragment : Fragment() {
 
     private fun myComingRidesAsPassengerObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> {
         if (it.isEmpty()){
-            viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.GONE
+            viewBinding?.myComingRidesFragmentListRecyclerAsPassenger?.visibility = View.GONE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.VISIBLE
         } else {
-            viewBinding?.myComingRidesListRecyclerAsPassenger?.visibility = View.VISIBLE
+            viewBinding?.myComingRidesFragmentListRecyclerAsPassenger?.visibility = View.VISIBLE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.GONE
         }
         adapter.submitList(it.toList().sortedBy { it.getTimestamp("date") })
@@ -76,10 +76,10 @@ class MyComingRidesFragment : Fragment() {
 
     private fun myComingRidesAsDriverObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> {
         if (it.isEmpty()){
-            viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.GONE
+            viewBinding?.myComingRidesFragmentListRecyclerAsDriver?.visibility = View.GONE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.VISIBLE
         } else {
-            viewBinding?.myComingRidesListRecyclerAsDriver?.visibility = View.VISIBLE
+            viewBinding?.myComingRidesFragmentListRecyclerAsPassenger?.visibility = View.VISIBLE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.GONE
         }
         adapter.submitList(it.toList().sortedBy { it.getTimestamp("date") })
@@ -89,8 +89,8 @@ class MyComingRidesFragment : Fragment() {
     private fun setupRecyclerAsDriverAdapter() : MyComingRidesListAdapter {
         val adapter = MyComingRidesListAdapter(myComingRidesListAdapterListener)
 
-        viewBinding?.myComingRidesListRecyclerAsDriver?.adapter = adapter
-        viewBinding?.myComingRidesListRecyclerAsDriver?.layoutManager = LinearLayoutManager(context)
+        viewBinding?.myComingRidesFragmentListRecyclerAsDriver?.adapter = adapter
+        viewBinding?.myComingRidesFragmentListRecyclerAsDriver?.layoutManager = LinearLayoutManager(context)
 
         return adapter
     }
@@ -98,8 +98,8 @@ class MyComingRidesFragment : Fragment() {
     private fun setupRecyclerAsPassengerAdapter() : MyComingRidesListAdapter {
         val adapter = MyComingRidesListAdapter(myComingRidesListAdapterListener)
 
-        viewBinding?.myComingRidesListRecyclerAsPassenger?.adapter = adapter
-        viewBinding?.myComingRidesListRecyclerAsPassenger?.layoutManager = LinearLayoutManager(context)
+        viewBinding?.myComingRidesFragmentListRecyclerAsPassenger?.adapter = adapter
+        viewBinding?.myComingRidesFragmentListRecyclerAsPassenger?.layoutManager = LinearLayoutManager(context)
 
         return adapter
     }
@@ -107,23 +107,29 @@ class MyComingRidesFragment : Fragment() {
 
     private fun setupFloatingButton() {
         viewBinding?.myComingRidesFragmentButtonRoleButton?.setOnClickListener {
+            viewBinding?.myComingRidesFragmentButtonFabChangeRole?.playAnimation()
+
             val drawableWheel = context?.let { it1 -> ContextCompat.getDrawable(it1, R.drawable.ic_steering_wheel_24) }
             val drawableSeat = context?.let { it1 -> ContextCompat.getDrawable(it1, R.drawable.ic_round_event_seat_24) }
 
-            if (viewBinding?.myComingRidesContainerDriver?.isShown == true) {
-                viewBinding?.myComingRidesContainerPassenger?.visibility = View.VISIBLE
-                viewBinding?.myComingRidesContainerDriver?.visibility = View.GONE
+            if (viewBinding?.myComingRidesFragmentContainerDriver?.isShown == true) {
+                viewBinding?.myComingRidesFragmentContainerPassenger?.visibility = View.VISIBLE
+                viewBinding?.myComingRidesFragmentContainerDriver?.visibility = View.GONE
                 viewBinding?.myComingRidesFragmentButtonRoleButton
                         ?.setCompoundDrawablesWithIntrinsicBounds(drawableSeat, null, null, null)
                 viewBinding?.myComingRidesFragmentButtonRoleButton?.text = getString(R.string.my_rides_record_list__label__role_button_passenger)
 
             } else {
-                viewBinding?.myComingRidesContainerPassenger?.visibility = View.GONE
-                viewBinding?.myComingRidesContainerDriver?.visibility = View.VISIBLE
+                viewBinding?.myComingRidesFragmentContainerPassenger?.visibility = View.GONE
+                viewBinding?.myComingRidesFragmentContainerDriver?.visibility = View.VISIBLE
                 viewBinding?.myComingRidesFragmentButtonRoleButton
                         ?.setCompoundDrawablesWithIntrinsicBounds(drawableWheel, null, null, null)
                 viewBinding?.myComingRidesFragmentButtonRoleButton?.text = getString(R.string.my_rides_record_list__label__role_button_driver)
             }
+        }
+
+        viewBinding?.myComingRidesFragmentButtonFabChangeRole?.setOnClickListener {
+            viewBinding?.myComingRidesFragmentButtonRoleButton?.callOnClick()
         }
     }
 
