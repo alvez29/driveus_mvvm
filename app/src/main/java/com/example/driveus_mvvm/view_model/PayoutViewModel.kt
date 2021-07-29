@@ -105,7 +105,7 @@ class PayoutViewModel : ViewModel() {
                 (value?.get("payoutsAsDriver") as? List<DocumentReference>)?.forEach {
                     val payout = it.get().await()
                     val passengerUsername = (payout.get("passenger") as DocumentReference).get().await().get("username").toString()
-                    val pairAux = Pair<String, DocumentSnapshot>(passengerUsername, payout)
+                    val pairAux = Pair<String, DocumentSnapshot>(passengerUsername.toString(), payout)
 
                     auxlist.add(pairAux)
                 }

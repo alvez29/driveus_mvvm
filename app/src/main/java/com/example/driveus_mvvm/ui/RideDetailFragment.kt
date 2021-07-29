@@ -64,6 +64,8 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
 
     private val rideObserver = Observer<Ride> { rideObj ->
         if (rideObj != null) {
+            viewBinding?.rideDetailContainerContent?.visibility = View.VISIBLE
+            viewBinding?.rideDetailContainerNoContent?.visibility = View.GONE
             setupBasicInformation(rideObj)
             rideObj.vehicle?.let { vehicleRef ->
                 rideObj.driver?.let { driverRef ->
@@ -74,6 +76,9 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
                     setupPayoutButton()
                 }
             }
+        } else {
+            viewBinding?.rideDetailContainerContent?.visibility = View.GONE
+            viewBinding?.rideDetailContainerNoContent?.visibility = View.VISIBLE
         }
     }
 
@@ -93,6 +98,11 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
             }
         } else if (driverId == currentUserId) {
             viewBinding?.rideDetailButtonPayoutsList?.visibility = View.VISIBLE
+            if (rideDate?.toDate()?.after(Timestamp.now().toDate()) == true){
+                viewBinding?.rideDetailButtonDeleteRide?.visibility = View.VISIBLE
+            } else {
+                viewBinding?.rideDetailButtonDeleteRide?.visibility = View.GONE
+            }
         }
     }
 
@@ -311,7 +321,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
             channelId?.let { channelId ->
                 rideId?.let { rideId ->
                     sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                            ?.let { userId -> rideViewModel.removePassengerInARide(channelId, rideId, userId)
+                            ?.let { userId -> rideViewModel.removePassengerInARide(channelId, rideId, userId, "")
                             }
                 }
             }
@@ -319,12 +329,34 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpJoinsButton() {
+    private fun setupJoinsButton() {
         viewBinding?.rideDetailButtonJoin?.setOnClickListener {
             dialogJoin()
         }
         viewBinding?.rideDetailButtonNotJoin?.setOnClickListener {
             dialogDisjoin()
+        }
+    }
+
+    private fun setupDeleteButton() {
+        viewBinding?.rideDetailButtonDeleteRide?.setOnClickListener() {
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete_ride, null)
+            val mBuilder = AlertDialog.Builder(context)
+                .setView(mDialogView)
+                .setTitle("Eliminar viaje")
+
+            val mAlertDialog = mBuilder.show()
+
+
+            mDialogView.findViewById<View>(R.id.dialog_delete_ride__button__cancel).setOnClickListener {
+                mAlertDialog.dismiss()
+            }
+
+            mDialogView.findViewById<View>(R.id.dialog_delete_ride__button__accept).setOnClickListener {
+                mAlertDialog.dismiss()
+                rideViewModel.deleteRide(channelId, rideId)
+
+            }
         }
     }
 
@@ -378,6 +410,13 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private val redirectObserver = Observer<Boolean> {
+        if (it) {
+            findNavController().popBackStack()
+        }
+    }
+
+
     // MAIN FUNCTIONS -------------------------------------
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -389,6 +428,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        rideViewModel.getRedirectDelete().observe(viewLifecycleOwner, redirectObserver)
         rideViewModel.getRideById(channelId, rideId).observe(viewLifecycleOwner, rideObserver)
 
         channelId?.let { channelViewModel.getChannelById(it).observe(viewLifecycleOwner, channelObserver) }
@@ -402,7 +442,8 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        setUpJoinsButton()
+        setupDeleteButton()
+        setupJoinsButton()
     }
 
     @SuppressLint("MissingPermission")

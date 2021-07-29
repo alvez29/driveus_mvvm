@@ -228,10 +228,24 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun removeRideInADriver(userId: String, rideDocRef: DocumentReference?) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("ridesAsDriver", FieldValue.arrayRemove(rideDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     fun removePassengerInARide(channelId: String, rideId: String, passengerReference: DocumentReference) {
         db.collection(CHANNELS_COLLECTION).document(channelId)
             .collection(RIDES_COLLECTION).document(rideId)
             .update("passengers", FieldValue.arrayRemove(passengerReference))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteRide(channelId: String, rideId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId).delete().await()
     }
 
     //PAYOUT FUNCTIONS ----------------------------------------------------
@@ -386,4 +400,5 @@ object FirestoreRepository {
         db.collection(USERS_COLLECTION).document(passengerId)
             .update("debtsAsPassenger", FieldValue.arrayUnion(payoutDocRef))
     }
+
 }

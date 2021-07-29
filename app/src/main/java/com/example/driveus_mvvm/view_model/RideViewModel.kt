@@ -40,6 +40,7 @@ class RideViewModel : ViewModel() {
     private var meetingGeoPoint: GeoPoint? = null
 
     private val redirectRide = MutableLiveData(false)
+    private val redirectDelete = MutableLiveData(false)
     private val rideFormError = MutableLiveData<MutableMap<RideFormEnum, Int>>(mutableMapOf())
 
 
@@ -416,7 +417,7 @@ class RideViewModel : ViewModel() {
         }
     }
 
-    fun removePassengerInARide(channelId: String, rideId: String, passengerId: String) {
+    fun removePassengerInARide(channelId: String, rideId: String, passengerId: String, driverParam: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val passengerDocRef: DocumentReference? = FirestoreRepository.getUserByIdSync(passengerId)?.reference
@@ -431,11 +432,15 @@ class RideViewModel : ViewModel() {
                 }
                 if (payoutDocRef != null) {
                     val ride: Ride? = FirestoreRepository.getRideById(channelId, rideId).get().await().toObject(Ride::class.java)
+                    var driverId = ride?.driver?.id
+                    if (driverId == null) {
+                        driverId = driverParam
+                    }
                     val hasRidePaid: Boolean = FirestoreRepository.getPayoutById(channelId, rideId, payoutDocRef.id)?.get("isPaid") as Boolean
                     FirestoreRepository.deletePayoutFromPassenger(passengerId, payoutDocRef)
-                    ride?.driver?.id?.let { FirestoreRepository.deletePayoutFromDriver(it, payoutDocRef) }
+                   FirestoreRepository.deletePayoutFromDriver(driverId, payoutDocRef)
                     if (hasRidePaid) {
-                        ride?.driver?.id?.let { FirestoreRepository.addDebtInADriver(it, payoutDocRef) }
+                        FirestoreRepository.addDebtInADriver(driverId, payoutDocRef)
                         FirestoreRepository.addDebtInAPassenger(passengerId, payoutDocRef)
                         FirestoreRepository.checkPayoutAsUnpaidUpdateBoolean(channelId,rideId, payoutDocRef.id)
                         FirestoreRepository.payoutToDebt(channelId,rideId, payoutDocRef.id)
@@ -447,6 +452,34 @@ class RideViewModel : ViewModel() {
                 Log.w(tag, opFailed, e)
             }
         }
+    }
+
+    fun deleteRide(channelId: String?, rideId: String?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                if (channelId != null && rideId != null) {
+                    val payouts = FirestoreRepository.getPayoutsFromRide(channelId, rideId).get().await()
+                    val rideDocSnap: DocumentSnapshot? = FirestoreRepository.getRideById(channelId, rideId).get().await()
+                    val driverId = (rideDocSnap?.get("driver") as DocumentReference).id
+                    payouts.forEach {
+                        //Tratar cada pago de forma individual
+                        if (driverId != null) {
+                            removePassengerInARide(channelId, rideId, (it.get("passenger") as DocumentReference).id, driverId)
+                        }
+                    }
+                    //Eliminar el viaje
+                    FirestoreRepository.removeRideInADriver(driverId, rideDocSnap.reference)
+                    FirestoreRepository.deleteRide(channelId, rideId)
+                    redirectDelete.postValue(true)
+                }
+            } catch (e: Exception) {
+                Log.w(tag, opFailed, e)
+            }
+        }
+    }
+
+    fun getRedirectDelete(): LiveData<Boolean> {
+        return redirectDelete
     }
 }
 
