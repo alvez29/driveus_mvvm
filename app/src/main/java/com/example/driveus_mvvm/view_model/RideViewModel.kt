@@ -152,17 +152,18 @@ class RideViewModel : ViewModel() {
 
     }
 
-    private fun createSimplePayout(passengerDocRef: DocumentReference, price: Double): Payout {
+    private fun createSimplePayout(passengerDocRef: DocumentReference, price: Double, driverUsername: String, driverDocRef: DocumentReference): Payout {
         return Payout(
                     creationDate = Timestamp.now(),
                     paidDate = null,
                     passenger = passengerDocRef,
+                    driver = driverDocRef,
+                    driverUsername = driverUsername,
                     price = price,
                     isPaid = false
         )
     }
 
-    //TODO:Actualizar meeting point
     fun getMeetingPoint(): LiveData<GeoPoint> {
         return meetingPoint
     }
@@ -401,9 +402,29 @@ class RideViewModel : ViewModel() {
                 val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
                 val ride = rideReference.toObject(Ride::class.java)
                 FirestoreRepository.addRideInAPassenger(passengerId, rideReference.reference)
+
+                //Saber si tiene una deuda asociada
+                val payoutsOfRide = FirestoreRepository.getPayoutsFromRide(channelId, rideId).get().await()
+                payoutsOfRide.forEach {
+                    //Si hay una deuda queda saldada al apuntarse de nuevo
+                    if (it.getDocumentReference("passenger")?.id == passengerId
+                        && it.getBoolean("isDebt") == true) {
+                        FirestoreRepository.deleteDebtFromPassenger(passengerId, it.reference)
+                        ride?.driver?.id?.let { it1 -> FirestoreRepository.deleteDebtFromDriver(it1, it.reference) }
+                        FirestoreRepository.checkPayoutAsPaidUpdateBoolean(channelId, rideId, it.id)
+                        FirestoreRepository.debtToPayout(channelId, rideId, it.id)
+
+                        return@launch
+                    }
+                }
+
                 val payout = passengerDocRef?.let { passengerDocumentReference ->
                     ride?.price?.let { price ->
-                        createSimplePayout(passengerDocumentReference, price)
+                        ride.driver?.get()?.await()
+                            ?.let { it.getString("driverUsername")?.let { driverUsername ->
+                                createSimplePayout(passengerDocumentReference, price,
+                                    driverUsername, it.get("driver") as DocumentReference)
+                            } }
                     }
                 }
                 if (payout != null) {
@@ -438,7 +459,7 @@ class RideViewModel : ViewModel() {
                     }
                     val hasRidePaid: Boolean = FirestoreRepository.getPayoutById(channelId, rideId, payoutDocRef.id)?.get("isPaid") as Boolean
                     FirestoreRepository.deletePayoutFromPassenger(passengerId, payoutDocRef)
-                   FirestoreRepository.deletePayoutFromDriver(driverId, payoutDocRef)
+                    FirestoreRepository.deletePayoutFromDriver(driverId, payoutDocRef)
                     if (hasRidePaid) {
                         FirestoreRepository.addDebtInADriver(driverId, payoutDocRef)
                         FirestoreRepository.addDebtInAPassenger(passengerId, payoutDocRef)

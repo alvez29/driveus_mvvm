@@ -347,6 +347,15 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun debtToPayout(channelId: String, rideId: String, payoutId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .collection(PAYOUTS_COLLECTION).document(payoutId)
+            .update("isDebt", false).await()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun deletePayoutFromPassenger(userId: String, payoutDocRef: DocumentReference) {
         db.collection(USERS_COLLECTION).document(userId)
             .update("payoutsAsPassenger", FieldValue.arrayRemove(payoutDocRef))

@@ -19,6 +19,7 @@ import com.example.driveus_mvvm.databinding.FragmentPayoutsDebtsBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.DebtListAdapter
 import com.example.driveus_mvvm.view_model.PayoutViewModel
+import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
@@ -27,11 +28,22 @@ class PayoutDebtsFragment: Fragment() {
 
     private var viewBinding: FragmentPayoutsDebtsBinding? = null
     private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
+    private val userViewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
     private val payoutViewModel : PayoutViewModel by lazy { ViewModelProvider(this)[PayoutViewModel::class.java] }
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
     private val adapterListener = object : DebtListAdapter.DebtListAdapterListener {
-        override fun loadProfilePicture(userId: String?, imageView: ImageView) {
+        override fun loadProfilePicture(passengerId: String?, driverId: String?, imageView: ImageView) {
+            var userId = ""
+            if (sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "") == passengerId) {
+                if (driverId != null) {
+                    userId = driverId
+                }
+            } else {
+                if (passengerId != null) {
+                    userId = passengerId
+                }
+            }
             firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
                 Glide.with(this@PayoutDebtsFragment)
                     .load(it)
@@ -75,6 +87,21 @@ class PayoutDebtsFragment: Fragment() {
 
                 findNavController().navigate(action)
             }
+        }
+
+        override fun getUsername(passengerId:String, passengerUsername: String?, driverUsername: String?): String {
+            var res = ""
+            val userId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+            if (userId == passengerId) {
+                if (driverUsername != null) {
+                    res = driverUsername
+                }
+            } else {
+                if (passengerUsername != null) {
+                    res = passengerUsername
+                }
+            }
+            return res
         }
     }
 

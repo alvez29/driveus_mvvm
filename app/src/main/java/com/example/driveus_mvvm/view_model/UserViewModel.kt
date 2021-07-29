@@ -15,6 +15,7 @@ import com.example.driveus_mvvm.ui.enums.VehicleFormEnum
 import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
