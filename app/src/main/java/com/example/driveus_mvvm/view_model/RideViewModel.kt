@@ -40,6 +40,7 @@ class RideViewModel : ViewModel() {
     private var meetingGeoPoint: GeoPoint? = null
 
     private val redirectRide = MutableLiveData(false)
+    private val redirectDelete = MutableLiveData(false)
     private val rideFormError = MutableLiveData<MutableMap<RideFormEnum, Int>>(mutableMapOf())
 
 
@@ -151,17 +152,18 @@ class RideViewModel : ViewModel() {
 
     }
 
-    private fun createSimplePayout(passengerDocRef: DocumentReference, price: Double): Payout {
+    private fun createSimplePayout(passengerDocRef: DocumentReference, price: Double, driverUsername: String, driverDocRef: DocumentReference): Payout {
         return Payout(
                     creationDate = Timestamp.now(),
                     paidDate = null,
                     passenger = passengerDocRef,
+                    driver = driverDocRef,
+                    driverUsername = driverUsername,
                     price = price,
                     isPaid = false
         )
     }
 
-    //TODO:Actualizar meeting point
     fun getMeetingPoint(): LiveData<GeoPoint> {
         return meetingPoint
     }
@@ -400,11 +402,30 @@ class RideViewModel : ViewModel() {
                 val rideReference = FirestoreRepository.getRideByIdSync(channelId, rideId)
                 val ride = rideReference.toObject(Ride::class.java)
                 FirestoreRepository.addRideInAPassenger(passengerId, rideReference.reference)
-                val payout = passengerDocRef?.let { passengerDocumentReference ->
-                    ride?.price?.let { price ->
-                        createSimplePayout(passengerDocumentReference, price)
+
+                //Saber si tiene una deuda asociada
+                val payoutsOfRide = FirestoreRepository.getPayoutsFromRide(channelId, rideId).get().await()
+                payoutsOfRide.forEach {
+                    //Si hay una deuda queda saldada al apuntarse de nuevo
+                    if (it.getDocumentReference("passenger")?.id == passengerId
+                        && it.getBoolean("isDebt") == true) {
+                        FirestoreRepository.deleteDebtFromPassenger(passengerId, it.reference)
+                        ride?.driver?.id?.let { it1 -> FirestoreRepository.deleteDebtFromDriver(it1, it.reference) }
+                        FirestoreRepository.checkPayoutAsPaidUpdateBoolean(channelId, rideId, it.id)
+                        FirestoreRepository.debtToPayout(channelId, rideId, it.id)
+
+                        return@launch
                     }
                 }
+
+                val payout = passengerDocRef?.let { passengerDocRef
+                    ride?.price?.let { price ->
+                        ride.driver?.get()?.await()?.getString("username")?.let { driverUsername ->
+                            createSimplePayout(passengerDocRef, price, driverUsername, ride.driver!!)
+                        }
+                    }
+                }
+
                 if (payout != null) {
                     val payoutDocRef: DocumentReference = FirestoreRepository.addSimplePayout(channelId, rideId, payout).await()
                     FirestoreRepository.addPayoutInAPassenger(passengerId, payoutDocRef)
@@ -416,7 +437,7 @@ class RideViewModel : ViewModel() {
         }
     }
 
-    fun removePassengerInARide(channelId: String, rideId: String, passengerId: String) {
+    fun removePassengerInARide(channelId: String, rideId: String, passengerId: String, driverParam: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val passengerDocRef: DocumentReference? = FirestoreRepository.getUserByIdSync(passengerId)?.reference
@@ -431,11 +452,15 @@ class RideViewModel : ViewModel() {
                 }
                 if (payoutDocRef != null) {
                     val ride: Ride? = FirestoreRepository.getRideById(channelId, rideId).get().await().toObject(Ride::class.java)
+                    var driverId = ride?.driver?.id
+                    if (driverId == null) {
+                        driverId = driverParam
+                    }
                     val hasRidePaid: Boolean = FirestoreRepository.getPayoutById(channelId, rideId, payoutDocRef.id)?.get("isPaid") as Boolean
                     FirestoreRepository.deletePayoutFromPassenger(passengerId, payoutDocRef)
-                    ride?.driver?.id?.let { FirestoreRepository.deletePayoutFromDriver(it, payoutDocRef) }
+                    FirestoreRepository.deletePayoutFromDriver(driverId, payoutDocRef)
                     if (hasRidePaid) {
-                        ride?.driver?.id?.let { FirestoreRepository.addDebtInADriver(it, payoutDocRef) }
+                        FirestoreRepository.addDebtInADriver(driverId, payoutDocRef)
                         FirestoreRepository.addDebtInAPassenger(passengerId, payoutDocRef)
                         FirestoreRepository.checkPayoutAsUnpaidUpdateBoolean(channelId,rideId, payoutDocRef.id)
                         FirestoreRepository.payoutToDebt(channelId,rideId, payoutDocRef.id)
@@ -447,6 +472,34 @@ class RideViewModel : ViewModel() {
                 Log.w(tag, opFailed, e)
             }
         }
+    }
+
+    fun deleteRide(channelId: String?, rideId: String?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                if (channelId != null && rideId != null) {
+                    val payouts = FirestoreRepository.getPayoutsFromRide(channelId, rideId).get().await()
+                    val rideDocSnap: DocumentSnapshot? = FirestoreRepository.getRideById(channelId, rideId).get().await()
+                    val driverId = (rideDocSnap?.get("driver") as DocumentReference).id
+
+                    //Tratar la eliminación de cada pago de forma individual
+                    payouts.forEach {
+                        removePassengerInARide(channelId, rideId, (it.get("passenger") as DocumentReference).id, driverId)
+                    }
+
+                    //Eliminar el viaje
+                    FirestoreRepository.removeRideInADriver(driverId, rideDocSnap.reference)
+                    FirestoreRepository.deleteRide(channelId, rideId)
+                    redirectDelete.postValue(true)
+                }
+            } catch (e: Exception) {
+                Log.w(tag, opFailed, e)
+            }
+        }
+    }
+
+    fun getRedirectDelete(): LiveData<Boolean> {
+        return redirectDelete
     }
 }
 

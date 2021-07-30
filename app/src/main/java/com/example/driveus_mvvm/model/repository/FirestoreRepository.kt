@@ -228,10 +228,24 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun removeRideInADriver(userId: String, rideDocRef: DocumentReference?) {
+        db.collection(USERS_COLLECTION).document(userId)
+            .update("ridesAsDriver", FieldValue.arrayRemove(rideDocRef))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     fun removePassengerInARide(channelId: String, rideId: String, passengerReference: DocumentReference) {
         db.collection(CHANNELS_COLLECTION).document(channelId)
             .collection(RIDES_COLLECTION).document(rideId)
             .update("passengers", FieldValue.arrayRemove(passengerReference))
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteRide(channelId: String, rideId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId).delete().await()
     }
 
     //PAYOUT FUNCTIONS ----------------------------------------------------
@@ -333,6 +347,15 @@ object FirestoreRepository {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun debtToPayout(channelId: String, rideId: String, payoutId: String) {
+        db.collection(CHANNELS_COLLECTION).document(channelId)
+            .collection(RIDES_COLLECTION).document(rideId)
+            .collection(PAYOUTS_COLLECTION).document(payoutId)
+            .update("isDebt", false).await()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun deletePayoutFromPassenger(userId: String, payoutDocRef: DocumentReference) {
         db.collection(USERS_COLLECTION).document(userId)
             .update("payoutsAsPassenger", FieldValue.arrayRemove(payoutDocRef))
@@ -386,4 +409,5 @@ object FirestoreRepository {
         db.collection(USERS_COLLECTION).document(passengerId)
             .update("debtsAsPassenger", FieldValue.arrayUnion(payoutDocRef))
     }
+
 }

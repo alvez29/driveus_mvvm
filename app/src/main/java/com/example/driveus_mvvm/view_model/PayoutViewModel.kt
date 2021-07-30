@@ -105,7 +105,7 @@ class PayoutViewModel : ViewModel() {
                 (value?.get("payoutsAsDriver") as? List<DocumentReference>)?.forEach {
                     val payout = it.get().await()
                     val passengerUsername = (payout.get("passenger") as DocumentReference).get().await().get("username").toString()
-                    val pairAux = Pair<String, DocumentSnapshot>(passengerUsername, payout)
+                    val pairAux = Pair<String, DocumentSnapshot>(passengerUsername.toString(), payout)
 
                     auxlist.add(pairAux)
                 }
@@ -183,7 +183,7 @@ class PayoutViewModel : ViewModel() {
     fun checkDebtAsPaid(channelId: String, rideId: String, payoutDocRef: DocumentReference, passenger: DocumentReference) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val driver: DocumentReference = FirestoreRepository.getRideByIdSync(channelId, rideId).get("driver") as DocumentReference
+                val driver: DocumentReference = payoutDocRef.get().await().get("driver") as DocumentReference
                 FirestoreRepository.checkPayoutAsPaidUpdateBoolean(channelId, rideId, payoutDocRef.id)
                 FirestoreRepository.checkPayoutAsPaidUpdatePaidDate(channelId, rideId, payoutDocRef.id, Timestamp.now())
                 FirestoreRepository.deleteDebtFromPassenger(passenger.id, payoutDocRef)

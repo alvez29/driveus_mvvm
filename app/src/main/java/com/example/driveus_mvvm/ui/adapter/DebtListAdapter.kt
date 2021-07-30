@@ -31,10 +31,11 @@ class DebtListAdapter (
 ): ListAdapter<Pair<String, DocumentSnapshot>, DebtListAdapter.DebtViewHolder>(diffCallback) {
 
     interface DebtListAdapterListener {
-        fun loadProfilePicture(userId: String?, imageView: ImageView)
+        fun loadProfilePicture(userId: String?, driverId: String?, imageView: ImageView)
         fun pressCheckbox(payoutDocSnap: DocumentSnapshot, checkBox: CheckBox)
         fun amIThePassenger(passengerId: String): Boolean
         fun navigateToRideDetail(payoutDocSnap: DocumentSnapshot)
+        fun getUsername(passengerId:String, passengerUsername: String?, driverUsername: String?): String
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DebtListAdapter.DebtViewHolder {
@@ -53,9 +54,9 @@ class DebtListAdapter (
         val dateValue = simpleDateFormat.format(paidDate).split(" ")
         val dateStr = "Pagado a las ${dateValue[0]} el día ${dateValue[1]}"
 
-        listener.loadProfilePicture(payout?.passenger?.id, holder.profilePicture)
+        listener.loadProfilePicture(payout?.passenger?.id, payout?.driver?.id, holder.profilePicture)
         holder.price.text = priceStr
-        holder.username.text = getItem(position).first
+        holder.username.text = payout?.passenger?.id?.let { listener.getUsername(it,getItem(position).first, payout.driverUsername) }
         holder.createDate.text = dateStr
 
         if (listener.amIThePassenger(payout?.passenger?.id.toString())){

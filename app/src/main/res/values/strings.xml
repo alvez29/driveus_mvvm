@@ -123,6 +123,11 @@
     <string name="fragment_payout_debt__label__title_driver">Deudas pendientes de pago como conductor</string>
     <string name="fragment_payout_label_filter_hint">Filtrar entre mis pasajeros</string>
     <string name="dialog_payout_users_list_title">Selecciona un usuario</string>
+    <string name="ride_detail__button__delete_ride">Borrar</string>
+    <string name="dialog_delete_ride__text__">Si elimina el viaje se generará una deuda en favor de los pasajeros que ya
+        hayan realizado el pago. ¿Está seguro?
+    </string>
+    <string name="ride_detail__label__deleted">Este viaje ha sido eliminado</string>
     <string name="my_coming_rides_fragment_filter_hint">Filtrar por rango de días</string>
     <string name="my_rides_record_filter_dialog_end_title">Selecciona fecha de fin</string>
     <string name="my_rides_record_filter_dialog_start_title">Selecciona fecha de inicio</string>
