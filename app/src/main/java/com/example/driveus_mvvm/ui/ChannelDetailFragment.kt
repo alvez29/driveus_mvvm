@@ -75,10 +75,10 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
         viewBinding?.channelDetailInputFilterText?.addTextChangedListener { editableText ->
             if (editableText.toString().isBlank()) {
-                viewBinding?.fragmentPayoutImageClearFilter?.visibility = View.GONE
+                viewBinding?.channelDetailImageClearFilter?.visibility = View.GONE
                 adapter.submitList(map?.toList())
             } else {
-                viewBinding?.fragmentPayoutImageClearFilter?.visibility = View.VISIBLE
+                viewBinding?.channelDetailImageClearFilter?.visibility = View.VISIBLE
                 val startAndEndTimestamp: Pair<Timestamp, Timestamp> = DateTimeUtils.getStartAndEndDateFromFilterString(editableText.toString())
                 val filteredMap = map?.toList()
                     ?.filter {
@@ -94,7 +94,7 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             }
         }
 
-        viewBinding?.fragmentPayoutImageClearFilter?.setOnClickListener {
+        viewBinding?.channelDetailImageClearFilter?.setOnClickListener {
             viewBinding?.channelDetailInputFilterText?.text = ""
         }
     }

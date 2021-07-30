@@ -128,4 +128,8 @@
         hayan realizado el pago. ¿Está seguro?
     </string>
     <string name="ride_detail__label__deleted">Este viaje ha sido eliminado</string>
+    <string name="my_coming_rides_fragment_filter_hint">Filtrar por rango de días</string>
+    <string name="my_rides_record_filter_dialog_end_title">Selecciona fecha de fin</string>
+    <string name="my_rides_record_filter_dialog_start_title">Selecciona fecha de inicio</string>
+    <string name="my_rides_record_filter_dialog_toast_validation_error">No puedes seleccionar fechas de fin antes que de comienzo</string>
 </resources>

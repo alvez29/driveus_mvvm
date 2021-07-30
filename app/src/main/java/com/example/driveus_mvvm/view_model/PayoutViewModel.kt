@@ -173,6 +173,7 @@ class PayoutViewModel : ViewModel() {
                 FirestoreRepository.checkPayoutAsPaidUpdatePaidDate(channelId, rideId, payoutDocRef.id, Timestamp.now())
                 FirestoreRepository.deletePayoutFromPassenger(passenger.id, payoutDocRef)
                 FirestoreRepository.deletePayoutFromDriver(driver.id, payoutDocRef)
+
             }catch (e: Exception) {
                 Log.d(tag, e.message.toString())
             }
