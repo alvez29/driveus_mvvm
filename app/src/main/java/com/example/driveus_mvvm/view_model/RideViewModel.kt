@@ -418,15 +418,14 @@ class RideViewModel : ViewModel() {
                     }
                 }
 
-                val payout = passengerDocRef?.let { passengerDocumentReference ->
+                val payout = passengerDocRef?.let { passengerDocRef
                     ride?.price?.let { price ->
-                        ride.driver?.get()?.await()
-                            ?.let { it.getString("driverUsername")?.let { driverUsername ->
-                                createSimplePayout(passengerDocumentReference, price,
-                                    driverUsername, it.get("driver") as DocumentReference)
-                            } }
+                        ride.driver?.get()?.await()?.getString("username")?.let { driverUsername ->
+                            createSimplePayout(passengerDocRef, price, driverUsername, ride.driver!!)
+                        }
                     }
                 }
+
                 if (payout != null) {
                     val payoutDocRef: DocumentReference = FirestoreRepository.addSimplePayout(channelId, rideId, payout).await()
                     FirestoreRepository.addPayoutInAPassenger(passengerId, payoutDocRef)
@@ -482,12 +481,12 @@ class RideViewModel : ViewModel() {
                     val payouts = FirestoreRepository.getPayoutsFromRide(channelId, rideId).get().await()
                     val rideDocSnap: DocumentSnapshot? = FirestoreRepository.getRideById(channelId, rideId).get().await()
                     val driverId = (rideDocSnap?.get("driver") as DocumentReference).id
+
+                    //Tratar la eliminación de cada pago de forma individual
                     payouts.forEach {
-                        //Tratar cada pago de forma individual
-                        if (driverId != null) {
-                            removePassengerInARide(channelId, rideId, (it.get("passenger") as DocumentReference).id, driverId)
-                        }
+                        removePassengerInARide(channelId, rideId, (it.get("passenger") as DocumentReference).id, driverId)
                     }
+
                     //Eliminar el viaje
                     FirestoreRepository.removeRideInADriver(driverId, rideDocSnap.reference)
                     FirestoreRepository.deleteRide(channelId, rideId)
