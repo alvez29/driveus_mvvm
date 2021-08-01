@@ -75,6 +75,15 @@
 
         <action android:id="@+id/action_profileFragment_to_addCarFragment2"
                 app:destination="@id/addCarFragment"/>
+        <action
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editVehicleFragment"
+            app:destination="@id/editVehicleFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editUserNameFragment"
+            app:destination="@id/editUserNameFragment" />
 
     </fragment>
 
@@ -131,10 +140,12 @@
         android:id="@+id/allChannelsFragment"
         android:name="com.example.driveus_mvvm.ui.AllChannelsFragment"
         android:label="AllChannelsFragment" />
+
     <fragment
         android:id="@+id/myComingRidesFragment"
         android:name="com.example.driveus_mvvm.ui.MyComingRidesFragment"
         android:label="MyComingRidesFragment" />
+
     <fragment
         android:id="@+id/myRidesRecordFragment"
         android:name="com.example.driveus_mvvm.ui.MyRidesRecordFragment"
@@ -197,5 +208,28 @@
             app:destination="@id/payoutsFragment" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.driveus_mvvm.ui.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" />
+
+    <fragment
+        android:id="@+id/editVehicleFragment"
+        android:name="com.example.driveus_mvvm.ui.EditVehicleFragment"
+        android:label="EditVehicleFragment" >
+
+        <argument
+            android:name="vehicleId"
+            app:argType="string"/>
+
+        <action
+            android:id="@+id/action_editVehicleFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editUserNameFragment"
+        android:name="com.example.driveus_mvvm.ui.EditUserNameFragment"
+        android:label="EditUserNameFragment" />
 
 </navigation>

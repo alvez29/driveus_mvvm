@@ -35,4 +35,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/main_activity__animation__logout"
+        android:elevation="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_rawRes="@raw/change_password_background"
+        app:lottie_loop="false"
+        app:lottie_autoPlay="false"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

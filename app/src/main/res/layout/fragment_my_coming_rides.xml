@@ -20,11 +20,11 @@
             android:id="@+id/my_coming_rides_fragment__list__recycler_as_passenger"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
                 android:id="@+id/my_coming_rides_fragment__container__no_rides_linear_layout_passenger"
@@ -85,7 +85,7 @@
                 android:id="@+id/my_coming_rides_fragment__list__recycler_as_driver"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

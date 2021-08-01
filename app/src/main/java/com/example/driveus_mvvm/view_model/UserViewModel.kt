@@ -15,7 +15,6 @@ import com.example.driveus_mvvm.ui.enums.VehicleFormEnum
 import com.example.driveus_mvvm.ui.enums.SignUpFormEnum
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -154,6 +153,26 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    private fun validateEditNameAndSurnameForm(inputs: MutableMap<SignUpFormEnum, String>): Boolean {
+        val errorMap = mutableMapOf<SignUpFormEnum, Int>()
+        var res = true
+
+        //Color
+        if (inputs[SignUpFormEnum.NAME].isNullOrBlank()){
+            errorMap[SignUpFormEnum.NAME] = R.string.sign_up_form_error_not_empty
+            res = false
+        }
+
+        //Seats
+        if (inputs[SignUpFormEnum.SURNAME].isNullOrBlank()){
+            errorMap[SignUpFormEnum.SURNAME] = R.string.sign_up_form_error_not_empty
+            res = false
+        }
+
+        formErrors.postValue(errorMap)
+        return res
+    }
+
     fun getFormErrors(): LiveData<MutableMap<SignUpFormEnum, Int>> {
         return formErrors
     }
@@ -217,6 +236,17 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun editNameAndSurname(userId: String, inputs: MutableMap<SignUpFormEnum, String>) {
+        if (validateEditNameAndSurnameForm(inputs)) {
+            viewModelScope.launch(Dispatchers.IO) {
+                FirestoreRepository.updateName(userId, inputs[SignUpFormEnum.NAME])
+                FirestoreRepository.updateSurname(userId, inputs[SignUpFormEnum.SURNAME])
+            }
+
+            redirect.postValue(Pair(true, ""))
+        }
+    }
+
     fun uploadProfileImageToFirebase(imageUri: Uri, userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val storeReference = firebaseStorage.getReference("users/$userId")
@@ -243,7 +273,7 @@ class UserViewModel : ViewModel() {
 
     //VEHICLE FUNCTIONS -----------------------------------------------------
 
-    private fun validateCarForm(textInputs: Map<VehicleFormEnum, String>): Boolean{
+    private fun validateNewVehicle(textInputs: Map<VehicleFormEnum, String>): Boolean{
         val errorMap = mutableMapOf<VehicleFormEnum, Int>()
         var res = true
 
@@ -274,7 +304,27 @@ class UserViewModel : ViewModel() {
         return res
     }
 
-    private fun getCarFromInputs(inputs: Map<VehicleFormEnum, String>): Vehicle {
+    private fun validateEditVehicleForm(toEditVehicle: Vehicle): Boolean {
+        val errorMap = mutableMapOf<VehicleFormEnum, Int>()
+        var res = true
+
+        //Color
+        if (toEditVehicle.color.isNullOrBlank()){
+            errorMap[VehicleFormEnum.COLOR] = R.string.sign_up_form_error_not_empty
+            res = false
+        }
+
+        //Seats
+        if (toEditVehicle.seats.toString().isBlank() || toEditVehicle.seats == 0){
+            errorMap[VehicleFormEnum.SEAT] = R.string.sign_up_form_error_not_empty
+            res = false
+        }
+
+        vehicleFormError.postValue(errorMap)
+        return res
+    }
+
+    private fun getNewVehicleFromInputs(inputs: Map<VehicleFormEnum, String>): Vehicle {
         return Vehicle(
             brand = inputs[VehicleFormEnum.BRAND],
             model = inputs[VehicleFormEnum.MODEL],
@@ -283,6 +333,22 @@ class UserViewModel : ViewModel() {
             description = inputs[VehicleFormEnum.DESCRIPTION])
     }
 
+    private fun getToEditVehicleFromInputs(inputs: Map<VehicleFormEnum, String>, oldVehicle: Vehicle): Vehicle {
+        val newSeats = if (inputs[VehicleFormEnum.SEAT].isNullOrBlank()) {
+            0
+        } else {
+            inputs[VehicleFormEnum.SEAT]?.toInt()
+        }
+
+        return Vehicle(brand = oldVehicle.brand,
+                model = oldVehicle.model,
+                seats = newSeats,
+                color = inputs[VehicleFormEnum.COLOR],
+                description = inputs[VehicleFormEnum.DESCRIPTION],
+                expanded = oldVehicle.expanded,
+                isInRide = oldVehicle.isInRide
+        )
+    }
 
     private fun updateUserRole(id: String, value: QuerySnapshot? ) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -293,9 +359,9 @@ class UserViewModel : ViewModel() {
     }
 
     fun addNewVehicle(inputs: Map<VehicleFormEnum, String>, documentId: String) {
-        if (validateCarForm(inputs)){
+        if (validateNewVehicle(inputs)){
             viewModelScope.launch(Dispatchers.IO){
-                FirestoreRepository.addVehicle(getCarFromInputs(inputs), documentId)
+                FirestoreRepository.addVehicle(getNewVehicleFromInputs(inputs), documentId)
                 FirestoreRepository.updateIsDriver(documentId, true)
             }
             redirectVehicle.postValue(true)
@@ -361,4 +427,16 @@ class UserViewModel : ViewModel() {
             FirestoreRepository.deleteVehicleById(userId, vehicleId)
         }
     }
+
+    fun editVehicle(userId: String, vehicleId: String, oldVehicle: Vehicle, newInputs: Map<VehicleFormEnum, String>) {
+        val toEditVehicle = getToEditVehicleFromInputs(newInputs, oldVehicle)
+        if (validateEditVehicleForm(toEditVehicle)) {
+            viewModelScope.launch(Dispatchers.IO) {
+                FirestoreRepository.updateVehicle(userId, vehicleId, toEditVehicle)
+            }
+
+            redirectVehicle.postValue(true)
+        }
+    }
+
 }
