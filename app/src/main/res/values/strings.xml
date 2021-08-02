@@ -132,4 +132,17 @@
     <string name="my_rides_record_filter_dialog_end_title">Selecciona fecha de fin</string>
     <string name="my_rides_record_filter_dialog_start_title">Selecciona fecha de inicio</string>
     <string name="my_rides_record_filter_dialog_toast_validation_error">No puedes seleccionar fechas de fin antes que de comienzo</string>
+    <string name="menu_top_bar__label__change_password">Cambiar contraseña</string>
+    <string name="fragment_change_password_send_email_message">Al pulsar sobre el botón se te enviará un email donde podrás cambiar la contraseña de tu cuenta</string>
+    <string name="change_password_send_email_failure">Se ha producido un error al enviar el email. Vuelve a intentarlo más tarde</string>
+    <string name="fragment_edit_vehicle__label__title">Editar vehiculo</string>
+    <string name="fragment_edit_vehicle_seats_input_hint">Nuevo número de asientos</string>
+    <string name="fragment_edit_vehicle_color_input_hint">Nuevo color</string>
+    <string name="fragment_edit_vehicle_description_input_hint">Nueva descripción</string>
+    <string name="menu_top_bar__label__edit_user">Cambiar o editar nombre</string>
+    <string name="fragment_edit_user_name_title">Editar nombre</string>
+    <string name="fragment_edit_user_name__input__surname_edit">Apellidos</string>
+    <string name="fragment_edit_user_name__input__name_edit">Nombre</string>
+    <string name="fragment_edit_user_name__button__save">Guardar</string>
+    <string name="fragment_edit_vehicle__button__edit_car">Guardar</string>
 </resources>

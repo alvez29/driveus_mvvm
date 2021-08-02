@@ -79,7 +79,7 @@ class MyComingRidesFragment : Fragment() {
             viewBinding?.myComingRidesFragmentListRecyclerAsDriver?.visibility = View.GONE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.VISIBLE
         } else {
-            viewBinding?.myComingRidesFragmentListRecyclerAsPassenger?.visibility = View.VISIBLE
+            viewBinding?.myComingRidesFragmentListRecyclerAsDriver?.visibility = View.VISIBLE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.GONE
         }
         adapter.submitList(it.toList().sortedBy { it.getTimestamp("date") })

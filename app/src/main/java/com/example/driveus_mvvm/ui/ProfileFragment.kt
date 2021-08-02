@@ -3,7 +3,6 @@ package com.example.driveus_mvvm.ui
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,7 +28,6 @@ class ProfileFragment : Fragment() {
 
     private var viewBinding: FragmentProfileBinding? = null
     private val viewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
-    private val firebaseAuth: FirebaseAuth = FirestoreRepository.getFirebaseAuthInstance()
     private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
 
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
@@ -50,6 +48,11 @@ class ProfileFragment : Fragment() {
                     ?.let { it1 -> viewModel.deleteVehicleById(it1, vehicleId) }
                 mAlertDialog.dismiss()
             }
+        }
+
+        override fun navigateToEditVehicle(vehicleId: String) {
+            val action = ProfileFragmentDirections.actionProfileFragmentToEditVehicleFragment(vehicleId)
+            findNavController().navigate(action)
         }
     }
 
@@ -92,13 +95,9 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun logOut() {
-        firebaseAuth.signOut()
-        sharedPref?.edit()?.clear()?.apply()
-        val authIntent = Intent(activity, AuthActivity::class.java)
-        authIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(authIntent)
-        activity?.finish()
+    private fun setupChangePassword() {
+        val action = ProfileFragmentDirections.actionProfileFragmentToChangePasswordFragment()
+        findNavController().navigate(action)
     }
 
     private fun addNewCar() {
@@ -159,15 +158,23 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun navigateToEditUser() {
+        val action = ProfileFragmentDirections.actionProfileFragmentToEditUserNameFragment()
+        findNavController().navigate(action)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_top_bar, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_top_bar__item__log_out) {
-            logOut()
+        when(item.itemId) {
+            R.id.menu_top_bar__item__log_out -> (activity as MainActivity).logOut()
+            R.id.menu_top_bar__item__change_password -> setupChangePassword()
+            R.id.menu_top_bar__item__edit_user -> navigateToEditUser()
         }
+
         return true
     }
 
@@ -192,4 +199,5 @@ class ProfileFragment : Fragment() {
             pictureOptions()
         }
     }
+
 }

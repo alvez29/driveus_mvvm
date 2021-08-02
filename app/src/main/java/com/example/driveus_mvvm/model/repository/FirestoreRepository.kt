@@ -103,6 +103,20 @@ object FirestoreRepository {
     suspend fun createUser(user: User): Task<DocumentReference> {
         return db.collection(USERS_COLLECTION).add(user)
     }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun updateName(userId: String, newName: String?) {
+        db.collection(USERS_COLLECTION).document(userId)
+                .update("name", newName)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun updateSurname(userId: String, newSurname: String?) {
+        db.collection(USERS_COLLECTION).document(userId)
+                .update("surname", newSurname)
+    }
     
     //CHANNEL FUNCTIONS --------------------------------------------------
 
@@ -177,6 +191,15 @@ object FirestoreRepository {
         db.collection(USERS_COLLECTION).document(userId)
             .collection(VEHICLES_COLLECTION).add(vehicle)
     }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun updateVehicle(userId: String, vehicleId: String, toEditVehicle: Vehicle) {
+        db.collection(USERS_COLLECTION).document(userId)
+                .collection(VEHICLES_COLLECTION).document(vehicleId)
+                .set(toEditVehicle)
+    }
+
 
     //RIDES FUNCTIONS ----------------------------------------------------
 

@@ -32,6 +32,7 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
 
     interface VehicleListAdapterListener {
         fun onDeleteButtonClick(vehicleId: String, model: String)
+        fun navigateToEditVehicle(vehicleId: String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleViewHolder {
@@ -69,6 +70,7 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
         private val expandableImageMore: ImageView by lazy { itemView.findViewById(R.id.car_row__image__expandable_icon_more) }
         private val expandableImageLess: ImageView by lazy { itemView.findViewById(R.id.car_row__image__expandable_icon_less) }
         val deleteButton: Button by lazy { itemView.findViewById(R.id.car_row__button__delete_car) }
+        private val editButton: Button by lazy { itemView.findViewById(R.id.car_row__button__edit_car) }
 
         init {
            modelItemView.setOnClickListener {
@@ -86,6 +88,11 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
                 val model = getItem(adapterPosition).second.brand + " " + getItem(adapterPosition).second.brand
                 listener.onDeleteButtonClick(getItem(adapterPosition).first, model)
             }
+
+            editButton.setOnClickListener {
+                listener.navigateToEditVehicle(getItem(adapterPosition).first)
+            }
+
         }
     }
 }

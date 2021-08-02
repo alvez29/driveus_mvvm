@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-            android:id="@+id/menu_top_bar__item__log_out"
-            android:title="@string/menu_top_bar__labe__log_out"
-            app:showAsAction="never"/>
+        android:id="@+id/menu_top_bar__item__edit_user"
+        android:title="@string/menu_top_bar__label__edit_user"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_top_bar__item__change_password"
+        android:title="@string/menu_top_bar__label__change_password"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_top_bar__item__log_out"
+        android:title="@string/menu_top_bar__labe__log_out"
+        app:showAsAction="never"/>
+
 </menu>
