@@ -64,25 +64,28 @@ class ProfileFragment : Fragment() {
     }
 
     private val userObserver = Observer<DocumentSnapshot> { document ->
-        val user: User? = document.toObject(User::class.java)
-        val fullName = user?.name + " " + user?.surname
-        viewBinding?.profileFragmentLabelUsername?.text = user?.username
-        viewBinding?.profileFragmentLabelFullName?.text = fullName
-        viewBinding?.profileFragmentLabelEmail?.text = user?.email
+        if (document != null) {
+            val user: User? = document.toObject(User::class.java)
+            val fullName = user?.name + " " + user?.surname
+            viewBinding?.profileFragmentLabelUsername?.text = user?.username
+            viewBinding?.profileFragmentLabelFullName?.text = fullName
+            viewBinding?.profileFragmentLabelEmail?.text = user?.email
 
-        val adapter = VehicleListAdapter(vehicleListListener)
-        viewBinding?.fragmentProfileRecycleView?.adapter = adapter
-        viewBinding?.fragmentProfileRecycleView?.layoutManager = LinearLayoutManager(context)
-        sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-            ?.let { viewModel.getVehiclesByUserId(it).observe(viewLifecycleOwner, vehiclesObserver(adapter)) }
+            val adapter = VehicleListAdapter(vehicleListListener)
+            viewBinding?.fragmentProfileRecycleView?.adapter = adapter
+            viewBinding?.fragmentProfileRecycleView?.layoutManager = LinearLayoutManager(context)
+            sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                ?.let { viewModel.getVehiclesByUserId(it).observe(viewLifecycleOwner, vehiclesObserver(adapter)) }
 
-        if (user?.isDriver == false) {
-            viewBinding?.fragmentProfileLayoutCars?.visibility = View.GONE
-            viewBinding?.fragmentProfileLayoutNoCars?.visibility = View.VISIBLE
-        } else {
-            viewBinding?.fragmentProfileLayoutCars?.visibility = View.VISIBLE
-            viewBinding?.fragmentProfileLayoutNoCars?.visibility = View.GONE
+            if (user?.isDriver == false) {
+                viewBinding?.fragmentProfileLayoutCars?.visibility = View.GONE
+                viewBinding?.fragmentProfileLayoutNoCars?.visibility = View.VISIBLE
+            } else {
+                viewBinding?.fragmentProfileLayoutCars?.visibility = View.VISIBLE
+                viewBinding?.fragmentProfileLayoutNoCars?.visibility = View.GONE
+            }
         }
+
     }
 
     private val imageTriggerObserver = Observer<Boolean> {
