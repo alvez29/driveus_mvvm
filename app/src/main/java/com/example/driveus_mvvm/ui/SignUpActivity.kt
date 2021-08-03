@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +31,14 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    private val isLoadingObserver = Observer<Boolean> {
+        if (it) {
+            showLoadingBar()
+        } else {
+            hideLoadingBar()
+        }
+    }
+
     private val redirectObserver = Observer<Pair<Boolean, String>> {
         if (it.first) {
             try {
@@ -39,6 +48,17 @@ class SignUpActivity : AppCompatActivity() {
                 Log.d(getString(R.string.sign_up_error_save_session_tag), e.message.toString())
             }
         }
+    }
+
+    private fun showLoadingBar() {
+        viewBinding?.activitySignUpImageLoadingBar?.apply {
+            visibility = View.VISIBLE
+            progress = 0F
+        }
+    }
+
+    private fun hideLoadingBar() {
+        viewBinding?.activitySignUpImageLoadingBar?.visibility = View.GONE
     }
 
     private fun saveDocIdInSession(docId: String?) {
@@ -71,6 +91,7 @@ class SignUpActivity : AppCompatActivity() {
 
         viewModel.getFormErrors().observe(this, formErrorsObserver)
         viewModel.getRedirect().observe(this, redirectObserver)
+        viewModel.getIsLoading().observe(this, isLoadingObserver)
 
         viewBinding?.activitySignUpButtonSignUp?.setOnClickListener {
             viewModel.createNewUser(getInputs())

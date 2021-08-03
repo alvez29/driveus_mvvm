@@ -22,6 +22,7 @@ import com.example.driveus_mvvm.databinding.FragmentMyRidesRecordBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.MyRidesRecordListAdapter
 import com.example.driveus_mvvm.ui.utils.DateTimeUtils
+import com.example.driveus_mvvm.ui.utils.ImageUtils
 import com.example.driveus_mvvm.view_model.RideViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
@@ -36,19 +37,7 @@ class MyRidesRecordFragment : Fragment() {
 
     private val myRidesRecordListAdapterListener = object : MyRidesRecordListAdapter.MyRidesRecordListAdapterListener {
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
-            firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
-                Glide.with(this@MyRidesRecordFragment)
-                    .load(it)
-                    .circleCrop()
-                    .into(imageView)
-            }.addOnFailureListener {
-                Glide.with(this@MyRidesRecordFragment)
-                    .load(R.drawable.ic_action_name)
-                    .circleCrop()
-                    .into(imageView)
-
-                Log.d(getString(R.string.profile_picture_not_found_tag), getString(R.string.profile_picture_not_found_message))
-            }
+            context?.let { ImageUtils.loadProfilePicture(userId, imageView, it, firebaseStorage ) }
         }
 
         override fun navigateToRideDetail(rideId: String, channelId: String?) {

@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,6 +19,8 @@ import com.example.driveus_mvvm.model.entities.User
 import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.VehicleListAdapter
+import com.example.driveus_mvvm.ui.utils.ImageUtils
+import com.example.driveus_mvvm.ui.utils.NetworkUtils
 import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -34,20 +37,26 @@ class ProfileFragment : Fragment() {
 
     private val vehicleListListener = object: VehicleListAdapter.VehicleListAdapterListener{
         override fun onDeleteButtonClick(vehicleId: String, model: String) {
-            val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete_car, null)
-            val mBuilder = AlertDialog.Builder(context)
-                .setView(mDialogView)
-                .setTitle(model)
+            if (!NetworkUtils.hasConnection(context)) {
+                Toast.makeText(context, getString(R.string.connection_failed_message), Toast.LENGTH_SHORT).show()
 
-            val mAlertDialog = mBuilder.show()
-            mDialogView.findViewById<View>(R.id.dialog_delete_car__button__cancel).setOnClickListener {
-                mAlertDialog.dismiss()
+            } else {
+                val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete_car, null)
+                val mBuilder = AlertDialog.Builder(context)
+                        .setView(mDialogView)
+                        .setTitle(model)
+
+                val mAlertDialog = mBuilder.show()
+                mDialogView.findViewById<View>(R.id.dialog_delete_car__button__cancel).setOnClickListener {
+                    mAlertDialog.dismiss()
+                }
+                mDialogView.findViewById<View>(R.id.dialog_delete_car__button__accept).setOnClickListener {
+                    sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                            ?.let { it1 -> viewModel.deleteVehicleById(it1, vehicleId) }
+                    mAlertDialog.dismiss()
+                }
             }
-            mDialogView.findViewById<View>(R.id.dialog_delete_car__button__accept).setOnClickListener {
-                sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                    ?.let { it1 -> viewModel.deleteVehicleById(it1, vehicleId) }
-                mAlertDialog.dismiss()
-            }
+
         }
 
         override fun navigateToEditVehicle(vehicleId: String) {
@@ -116,21 +125,13 @@ class ProfileFragment : Fragment() {
 
     private fun showImage() {
         val imageName = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-        firebaseStorage.reference.child("users/$imageName").downloadUrl.addOnSuccessListener {
-            viewBinding?.fragmentProfileImage?.let { it1 ->
-                Glide.with(this)
-                    .load(it.toString())
-                    .circleCrop()
-                    .into(it1)
-            }
-        }.addOnFailureListener {
-            viewBinding?.fragmentProfileImage?.let { it1 ->
-                Glide.with(this)
-                    .load(R.drawable.ic_action_name)
-                    .circleCrop()
-                    .into(it1)
+
+        context?.let {
+            viewBinding?.fragmentProfileImage?.let {
+                view -> ImageUtils.loadProfilePicture(imageName, view, it, firebaseStorage )
             }
         }
+
     }
 
     @SuppressLint("ResourceType")
@@ -170,7 +171,10 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.menu_top_bar__item__log_out -> (activity as MainActivity).logOut()
+            R.id.menu_top_bar__item__log_out -> {
+                (activity as MainActivity).logOut()
+                onDestroy()
+            }
             R.id.menu_top_bar__item__change_password -> setupChangePassword()
             R.id.menu_top_bar__item__edit_user -> navigateToEditUser()
         }

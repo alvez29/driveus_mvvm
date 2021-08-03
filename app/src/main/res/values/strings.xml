@@ -145,4 +145,5 @@
     <string name="fragment_edit_user_name__input__name_edit">Nombre</string>
     <string name="fragment_edit_user_name__button__save">Guardar</string>
     <string name="fragment_edit_vehicle__button__edit_car">Guardar</string>
+    <string name="connection_failed_message">Necesitas tener conexión a internet para realizar esta operación</string>
 </resources>

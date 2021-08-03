@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,6 +28,7 @@ import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.model.toLatLng
 import com.example.driveus_mvvm.ui.utils.ImageUtils
 import com.example.driveus_mvvm.ui.utils.LocationUtils
+import com.example.driveus_mvvm.ui.utils.NetworkUtils
 import com.example.driveus_mvvm.view_model.ChannelViewModel
 import com.example.driveus_mvvm.view_model.RideViewModel
 import com.example.driveus_mvvm.view_model.UserViewModel
@@ -147,25 +149,8 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    //TODO: método duplicado
     private fun loadProfilePicture(userId: String?, imageView: ImageView) {
-        firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
-            context?.let { it1 ->
-                Glide.with(it1)
-                    .load(it)
-                    .circleCrop()
-                    .into(imageView)
-            }
-        }.addOnFailureListener {
-            context?.let { it1 ->
-                Glide.with(it1)
-                    .load(R.drawable.ic_action_name)
-                    .circleCrop()
-                    .into(imageView)
-            }
-
-            Log.d(getString(R.string.profile_picture_not_found_tag), getString(R.string.profile_picture_not_found_message))
-        }
+        context?.let { ImageUtils.loadProfilePicture(userId, imageView, it, firebaseStorage ) }
     }
 
     private fun setupUserName(username: String?) {
@@ -206,7 +191,6 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         viewBinding?.rideDetailImageCapacityIndicator?.let { it1 -> loadCapacityIndicator(ride.capacity, ride.passengers.size, it1) }
     }
 
-    //TODO: metodo duplicado
     private fun loadCapacityIndicator(capacity: Int?, actual: Int, imageView: ImageView) {
         val capacityPercentage = capacity?.toDouble()
             ?.let { actual.toDouble() / it }
@@ -331,32 +315,47 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
 
     private fun setupJoinsButton() {
         viewBinding?.rideDetailButtonJoin?.setOnClickListener {
-            dialogJoin()
+            if (!NetworkUtils.hasConnection(context)) {
+                Toast.makeText(context, getString(R.string.connection_failed_message), Toast.LENGTH_SHORT).show()
+
+            } else {
+                dialogJoin()
+            }
         }
         viewBinding?.rideDetailButtonNotJoin?.setOnClickListener {
-            dialogDisjoin()
+            if (!NetworkUtils.hasConnection(context)) {
+                Toast.makeText(context, getString(R.string.connection_failed_message), Toast.LENGTH_SHORT).show()
+
+            } else {
+                dialogDisjoin()
+            }
         }
     }
 
     private fun setupDeleteButton() {
-        viewBinding?.rideDetailButtonDeleteRide?.setOnClickListener() {
-            val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete_ride, null)
-            val mBuilder = AlertDialog.Builder(context)
-                .setView(mDialogView)
-                .setTitle("Eliminar viaje")
+        viewBinding?.rideDetailButtonDeleteRide?.setOnClickListener {
+            if (!NetworkUtils.hasConnection(context)) {
+                Toast.makeText(context, getString(R.string.connection_failed_message), Toast.LENGTH_SHORT).show()
 
-            val mAlertDialog = mBuilder.show()
+            } else {
+                val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete_ride, null)
+                val mBuilder = AlertDialog.Builder(context)
+                        .setView(mDialogView)
+                        .setTitle("Eliminar viaje")
 
+                val mAlertDialog = mBuilder.show()
 
-            mDialogView.findViewById<View>(R.id.dialog_delete_ride__button__cancel).setOnClickListener {
-                mAlertDialog.dismiss()
+                mDialogView.findViewById<View>(R.id.dialog_delete_ride__button__cancel).setOnClickListener {
+                    mAlertDialog.dismiss()
+                }
+
+                mDialogView.findViewById<View>(R.id.dialog_delete_ride__button__accept).setOnClickListener {
+                    mAlertDialog.dismiss()
+                    rideViewModel.deleteRide(channelId, rideId)
+
+                }
             }
 
-            mDialogView.findViewById<View>(R.id.dialog_delete_ride__button__accept).setOnClickListener {
-                mAlertDialog.dismiss()
-                rideViewModel.deleteRide(channelId, rideId)
-
-            }
         }
     }
 

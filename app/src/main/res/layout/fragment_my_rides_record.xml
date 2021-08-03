@@ -217,7 +217,7 @@
         app:layout_constraintBottom_toBottomOf="@id/my_rides_record__button__list_button_role"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/reverse_arrows_animation" />
+        app:lottie_rawRes="@raw/blue_reverse_arrows_animation" />
 
 
 

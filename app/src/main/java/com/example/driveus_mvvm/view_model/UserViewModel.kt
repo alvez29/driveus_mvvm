@@ -31,6 +31,7 @@ class UserViewModel : ViewModel() {
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
     private val redirect = MutableLiveData(Pair(false, ""))
     private val imageTrigger =  MutableLiveData(false)
+    private val isLoading = MutableLiveData<Boolean>(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
     private val vehicleFormError = MutableLiveData<MutableMap<VehicleFormEnum, Int>>(mutableMapOf())
@@ -41,6 +42,7 @@ class UserViewModel : ViewModel() {
 
     private val firebaseAuth: FirebaseAuth = FirestoreRepository.getFirebaseAuthInstance()
     private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
+
 
     private fun validateForm(textInputs: Map<SignUpFormEnum, String>, usernameInUse: Boolean): Boolean {
         val errorMap = mutableMapOf<SignUpFormEnum, Int>()
@@ -132,7 +134,6 @@ class UserViewModel : ViewModel() {
                 inputs[SignUpFormEnum.EMAIL].toString(),
                 inputs[SignUpFormEnum.PASSWORD].toString()
             ).addOnCompleteListener {
-
                 //Si es exitoso podemos crear el usuario en Firestore con la uid recien creada
                 if (it.isSuccessful) {
                     val uid: String? = it.result?.user?.uid
@@ -140,6 +141,7 @@ class UserViewModel : ViewModel() {
                         uid?.let {
                             val userReference = FirestoreRepository.createUser(getUserFromInputs(inputs, uid)).await()
                             redirect.postValue(Pair(true, userReference.id))
+                            isLoading.postValue(false)
                         }
                     }
 
@@ -148,8 +150,11 @@ class UserViewModel : ViewModel() {
                     it.exception?.let { ex ->
                         treatAuthExceptions(ex)
                     }
+                    isLoading.postValue(false)
                 }
             }
+        } else {
+            isLoading.postValue(false)
         }
     }
 
@@ -187,6 +192,10 @@ class UserViewModel : ViewModel() {
 
     fun getUserByUid(uid: String): Query {
         return FirestoreRepository.getUserByUID(uid)
+    }
+
+    fun getIsLoading(): LiveData<Boolean> {
+        return isLoading
     }
 
     fun isDriver(userId: String): LiveData<Boolean> {
@@ -227,12 +236,16 @@ class UserViewModel : ViewModel() {
     }
 
     fun createNewUser(inputs: Map<SignUpFormEnum, String>) {
+        isLoading.postValue(true)
         FirestoreRepository.usernameInUse(inputs[SignUpFormEnum.USERNAME].toString()).get().addOnSuccessListener {
             if (it.documents.size > 0) {
                 validate(inputs, true)
             } else {
                 validate(inputs, false)
             }
+        }.addOnFailureListener {
+            isLoading.postValue(false)
+            treatAuthExceptions(it)
         }
     }
 

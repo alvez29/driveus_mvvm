@@ -109,4 +109,20 @@
                 android:id="@+id/activity_sign_up__button__sign_up"/>
 
     </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/activity_sign_up__image__loading_bar"
+        android:layout_width="0dp"
+        android:layout_height="6dp"
+        android:visibility="gone"
+        android:fitsSystemWindows="true"
+        android:scaleType="fitXY"
+        android:scaleX="1.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/pink_loading_bar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

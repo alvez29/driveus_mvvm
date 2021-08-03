@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +21,8 @@ import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentRidePayoutsDetailListBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.PayoutsRideDetailsListAdapter
+import com.example.driveus_mvvm.ui.utils.ImageUtils
+import com.example.driveus_mvvm.ui.utils.NetworkUtils
 import com.example.driveus_mvvm.view_model.PayoutViewModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.QueryDocumentSnapshot
@@ -39,33 +42,28 @@ class RidePayoutsListFragment: Fragment() {
     private val adapterListener = object : PayoutsRideDetailsListAdapter.RideListAdapterListener {
 
         override fun loadProfilePicture(userId: String?, imageView: ImageView) {
-            firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
-                Glide.with(this@RidePayoutsListFragment)
-                        .load(it)
-                        .circleCrop()
-                        .into(imageView)
-            }.addOnFailureListener {
-                Glide.with(this@RidePayoutsListFragment)
-                        .load(R.drawable.ic_action_name)
-                        .circleCrop()
-                        .into(imageView)
-
-                Log.d(getString(R.string.profile_picture_not_found_tag), getString(R.string.profile_picture_not_found_message))
-            }
+            context?.let { ImageUtils.loadProfilePicture(userId, imageView, it, firebaseStorage ) }
         }
 
         override fun pressItem(payout: QueryDocumentSnapshot, checkBox: CheckBox) {
-            if (payout.getBoolean("isPaid") == true) {
-                checkBox.isChecked = true
-                dialogCheckAsUnpaid(payout.reference, checkBox)
+            if (!NetworkUtils.hasConnection(context)) {
+                Toast.makeText(context, getString(R.string.connection_failed_message), Toast.LENGTH_SHORT).show()
+                checkBox.isChecked = false
+
             } else {
-                channelId?.let { chnId ->
-                    rideId?.let { rdId ->
-                        payoutViewModel.checkPayoutAsPaid(chnId, rdId, payout.reference, payout.get("passenger") as DocumentReference
-                        )
+                if (payout.getBoolean("isPaid") == true) {
+                    checkBox.isChecked = true
+                    dialogCheckAsUnpaid(payout.reference, checkBox)
+
+                } else {
+                    channelId?.let { chnId ->
+                        rideId?.let { rdId ->
+                            payoutViewModel.checkPayoutAsPaid(chnId, rdId, payout.reference, payout.get("passenger") as DocumentReference)
+                        }
                     }
                 }
             }
+
         }
 
         override fun showItemPaid(payoutViewHolder: PayoutsRideDetailsListAdapter.PayoutViewHolder, date: Date?) {
