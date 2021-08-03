@@ -3,14 +3,12 @@ package com.example.driveus_mvvm.ui
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.icu.lang.UProperty
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.DatePicker
-import android.widget.TimePicker
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +19,7 @@ import com.example.driveus_mvvm.databinding.FragmentRideFormBinding
 import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.ui.enums.RideFormEnum
 import com.example.driveus_mvvm.ui.utils.DateTimeUtils
+import com.example.driveus_mvvm.ui.utils.NetworkUtils
 import com.example.driveus_mvvm.view_model.RideViewModel
 import com.example.driveus_mvvm.view_model.UserViewModel
 import java.util.*
@@ -142,14 +141,19 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
 
     private fun submitNewRide() {
         viewBinding?.fragmentRideFormButtonCreate?.setOnClickListener {
-            sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-                ?.let { userId ->
-                    channelId?.let { channelId ->
-                        context?.let { context ->
-                            vehicleDocRef?.let { it1 -> viewModel.addNewRide(getInputs(), userId, it1, channelId, context) }
+            if (!NetworkUtils.hasConnection(context)) {
+                Toast.makeText(context, getString(R.string.connection_failed_message), Toast.LENGTH_SHORT).show()
+            } else {
+                sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
+                        ?.let { userId ->
+                            channelId?.let { channelId ->
+                                context?.let { context ->
+                                    vehicleDocRef?.let { it1 -> viewModel.addNewRide(getInputs(), userId, it1, channelId, context) }
+                                }
+                            }
                         }
-                    }
-                }
+            }
+
         }
     }
 

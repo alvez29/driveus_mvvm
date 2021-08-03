@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,8 @@ import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentPayoutsDebtsBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.ui.adapter.DebtListAdapter
+import com.example.driveus_mvvm.ui.utils.ImageUtils
+import com.example.driveus_mvvm.ui.utils.NetworkUtils
 import com.example.driveus_mvvm.view_model.PayoutViewModel
 import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.firestore.DocumentReference
@@ -28,7 +31,6 @@ class PayoutDebtsFragment: Fragment() {
 
     private var viewBinding: FragmentPayoutsDebtsBinding? = null
     private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
-    private val userViewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
     private val payoutViewModel : PayoutViewModel by lazy { ViewModelProvider(this)[PayoutViewModel::class.java] }
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
 
@@ -44,27 +46,24 @@ class PayoutDebtsFragment: Fragment() {
                     userId = passengerId
                 }
             }
-            firebaseStorage.reference.child("users/$userId").downloadUrl.addOnSuccessListener {
-                Glide.with(this@PayoutDebtsFragment)
-                    .load(it)
-                    .circleCrop()
-                    .into(imageView)
-            }.addOnFailureListener {
-                Glide.with(this@PayoutDebtsFragment)
-                    .load(R.drawable.ic_action_name)
-                    .circleCrop()
-                    .into(imageView)
 
-                Log.d(getString(R.string.profile_picture_not_found_tag), getString(R.string.profile_picture_not_found_message))
-            }        }
+            context?.let { ImageUtils.loadProfilePicture(userId, imageView, it, firebaseStorage ) }
+        }
 
         override fun pressCheckbox(payoutDocSnap: DocumentSnapshot, checkBox: CheckBox) {
-            val channelId = payoutDocSnap.reference.parent.parent?.parent?.parent?.id
-            val rideId = payoutDocSnap.reference.parent.parent?.id
+            if (!NetworkUtils.hasConnection(context)) {
+                Toast.makeText(context, getString(R.string.connection_failed_message), Toast.LENGTH_SHORT).show()
+                checkBox.isChecked = false
 
-            if (channelId != null && rideId != null) {
-                payoutViewModel.checkDebtAsPaid(channelId, rideId, payoutDocSnap.reference, payoutDocSnap.get("passenger") as DocumentReference)
+            } else {
+                val channelId = payoutDocSnap.reference.parent.parent?.parent?.parent?.id
+                val rideId = payoutDocSnap.reference.parent.parent?.id
+
+                if (channelId != null && rideId != null) {
+                    payoutViewModel.checkDebtAsPaid(channelId, rideId, payoutDocSnap.reference, payoutDocSnap.get("passenger") as DocumentReference)
+                }
             }
+
         }
 
         override fun amIThePassenger(passengerId: String): Boolean {

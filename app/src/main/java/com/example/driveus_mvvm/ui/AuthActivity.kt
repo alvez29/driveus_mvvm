@@ -35,7 +35,8 @@ class AuthActivity : AppCompatActivity() {
     private fun setup() {
         title = "Autenticación"
 
-        viewBinding?.activityAuthButtonLogInButton?.setOnClickListener{
+        viewBinding?.activityAuthButtonLogInButton?.setOnClickListener {
+            showLoadingBar()
             if (viewBinding?.activityAuthInputEmailEditText?.text?.isNotEmpty() == true && viewBinding?.activityAuthInputPasswordEditText?.text?.isNotEmpty() == true) {
                 firebaseAuth.signInWithEmailAndPassword(viewBinding?.activityAuthInputEmailEditText?.text.toString(),
                     viewBinding?.activityAuthInputPasswordEditText?.text.toString())
@@ -48,7 +49,11 @@ class AuthActivity : AppCompatActivity() {
                             }
                         }.addOnFailureListener{
                             showAlert()
+                            hideLoadingBar()
+
                         }
+            } else {
+                hideLoadingBar()
             }
         }
 
@@ -77,6 +82,18 @@ class AuthActivity : AppCompatActivity() {
         startActivity(mainActivityIntent)
         this.finish()
     }
+
+    private fun showLoadingBar() {
+        viewBinding?.activityAuthImageLoadingBar?.apply {
+            visibility = View.VISIBLE
+            progress = 0F
+        }
+    }
+
+    private fun hideLoadingBar() {
+        viewBinding?.activityAuthImageLoadingBar?.visibility = View.GONE
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

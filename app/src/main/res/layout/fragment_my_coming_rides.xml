@@ -175,7 +175,7 @@
         app:layout_constraintBottom_toBottomOf="@id/my_coming_rides_fragment__button__role_button"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/reverse_arrows_animation" />
+        app:lottie_rawRes="@raw/blue_reverse_arrows_animation" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
