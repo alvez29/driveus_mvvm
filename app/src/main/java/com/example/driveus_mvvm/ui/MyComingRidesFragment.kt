@@ -112,7 +112,7 @@ class MyComingRidesFragment : Fragment() {
             val drawableWheel = context?.let { it1 -> ContextCompat.getDrawable(it1, R.drawable.ic_steering_wheel_24) }
             val drawableSeat = context?.let { it1 -> ContextCompat.getDrawable(it1, R.drawable.ic_round_event_seat_24) }
 
-            if (viewBinding?.myComingRidesFragmentContainerDriver?.isShown == true) {
+            if (viewBinding?.myComingRidesFragmentContainerDriver?.visibility == View.VISIBLE) {
                 viewBinding?.myComingRidesFragmentContainerPassenger?.visibility = View.VISIBLE
                 viewBinding?.myComingRidesFragmentContainerDriver?.visibility = View.GONE
                 viewBinding?.myComingRidesFragmentButtonRoleButton
@@ -135,6 +135,7 @@ class MyComingRidesFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewBinding = FragmentMyComingRidesBinding.inflate(inflater, container, false)
+
 
         return viewBinding?.root
     }

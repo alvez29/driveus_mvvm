@@ -85,14 +85,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
 
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text=""
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/my_coming_rides_fragment__list__recycler_as_driver"
@@ -110,19 +102,20 @@
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:visibility="visible">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/my_coming_rides_fragment__container__no_rides_driver"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/my_coming_rides_fragment__container__no_rides_driver"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/my_coming_rides_fragment__image__seat_driver"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
@@ -147,7 +140,8 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
