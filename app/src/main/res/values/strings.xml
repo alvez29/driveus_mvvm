@@ -146,4 +146,6 @@
     <string name="fragment_edit_user_name__button__save">Guardar</string>
     <string name="fragment_edit_vehicle__button__edit_car">Guardar</string>
     <string name="connection_failed_message">Necesitas tener conexión a internet para realizar esta operación</string>
+    <string name="fragment_payout__label__no_payouts_passenger">No tienes deudas como pasajero</string>
+    <string name="fragment_payout__label__no_payouts_driver">No tienes cobros pendeintes como conductor</string>
 </resources>
