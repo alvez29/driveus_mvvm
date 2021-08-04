@@ -203,7 +203,7 @@ class RideViewModel : ViewModel() {
 
     fun getComingRidesAsDriver(userId: String): LiveData<List<DocumentSnapshot>> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { user, error ->
-            if ( error != null) {
+            if (error != null) {
                 Log.w(tag, msgListenFailed, error)
                 ridesAsDriver.value = emptyList()
             }

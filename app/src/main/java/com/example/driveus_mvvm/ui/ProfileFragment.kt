@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentProfileBinding
 import com.example.driveus_mvvm.model.entities.User
@@ -22,7 +21,6 @@ import com.example.driveus_mvvm.ui.adapter.VehicleListAdapter
 import com.example.driveus_mvvm.ui.utils.ImageUtils
 import com.example.driveus_mvvm.ui.utils.NetworkUtils
 import com.example.driveus_mvvm.view_model.UserViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 
@@ -166,7 +164,7 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_top_bar, menu)
+        inflater.inflate(R.menu.menu_top_bar_profile, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -177,6 +175,9 @@ class ProfileFragment : Fragment() {
             }
             R.id.menu_top_bar__item__change_password -> setupChangePassword()
             R.id.menu_top_bar__item__edit_user -> navigateToEditUser()
+            R.id.menu_top_bar__item__help -> {
+                //TODO: Mostrar diálogo
+            }
         }
 
         return true

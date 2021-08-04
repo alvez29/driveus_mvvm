@@ -148,4 +148,5 @@
     <string name="connection_failed_message">Necesitas tener conexión a internet para realizar esta operación</string>
     <string name="fragment_payout__label__no_payouts_passenger">No tienes deudas como pasajero</string>
     <string name="fragment_payout__label__no_payouts_driver">No tienes cobros pendeintes como conductor</string>
+    <string name="menu_top_bar__item__help">Ayuda</string>
 </resources>
