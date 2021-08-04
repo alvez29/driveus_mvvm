@@ -123,16 +123,35 @@ class PayoutsFragment : Fragment() {
 
 
     private fun payoutsAsPassengerObserver(adapter: PayoutListAdapter) = Observer<List<Pair<String, DocumentSnapshot>>> { docSnapList ->
+
+        if (docSnapList.isEmpty()) {
+            viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.GONE
+            viewBinding?.fragmentPayoutContainerNoPayoutsPassenger?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.VISIBLE
+            viewBinding?.fragmentPayoutContainerNoPayoutsPassenger?.visibility = View.GONE
+        }
+
         adapter.submitList(docSnapList)
+    }
+
+
+    private fun payoutsAsDriverObserver(adapter: PayoutListAdapter) = Observer<List<Pair<String, DocumentSnapshot>>> { docSnapList ->
+        adapter.submitList(docSnapList)
+
+        if (docSnapList.isEmpty()) {
+            viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.GONE
+            viewBinding?.fragmentPayoutContainerNoPayoutsDriver?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.VISIBLE
+            viewBinding?.fragmentPayoutContainerNoPayoutsDriver?.visibility = View.GONE
+        }
+
+            configurePayoutsFilter(docSnapList, adapter)
     }
 
     private fun getUsernamesList(docSnapList: List<Pair<String, DocumentSnapshot>>?): Set<String>? {
         return docSnapList?.map { it.first }?.toSet()
-    }
-
-    private fun payoutsAsDriverObserver(adapter: PayoutListAdapter) = Observer<List<Pair<String, DocumentSnapshot>>> { docSnapList ->
-        adapter.submitList(docSnapList)
-        configurePayoutsFilter(docSnapList, adapter)
     }
 
     private fun setupRecyclerAdapterPassenger() : PayoutListAdapter {
@@ -160,21 +179,21 @@ class PayoutsFragment : Fragment() {
         viewBinding?.fragmentPayoutButtonRoleButton?.setOnClickListener {
             viewBinding?.fragmentPayoutButtonFabChangeRole?.playAnimation()
 
-            if (viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility == View.VISIBLE) {
+            if (viewBinding?.fragmentPayoutContainerPayoutsPassenger?.visibility == View.VISIBLE) {
                 viewBinding?.fragmentPayoutContainerFilter?.visibility = View.VISIBLE
 
                 viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.payouts_fragment_button__label__driver)
                 viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableWheel, null, null, null)
-                viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.GONE
-                viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.VISIBLE
+                viewBinding?.fragmentPayoutContainerPayoutsPassenger?.visibility = View.GONE
+                viewBinding?.fragmentPayoutContainerPayoutsDriver?.visibility = View.VISIBLE
             } else {
                 viewBinding?.fragmentPayoutContainerFilter?.visibility = View.GONE
 
                 viewBinding?.fragmentPayoutButtonRoleButton?.text = getString(R.string.payouts_fragment_button__label__passenger)
                 viewBinding?.fragmentPayoutButtonRoleButton?.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableSeat, null, null, null)
 
-                viewBinding?.fragmentPayoutListPayoutsListPassenger?.visibility = View.VISIBLE
-                viewBinding?.fragmentPayoutListPayoutsListDriver?.visibility = View.GONE
+                viewBinding?.fragmentPayoutContainerPayoutsPassenger?.visibility = View.VISIBLE
+                viewBinding?.fragmentPayoutContainerPayoutsDriver?.visibility = View.GONE
             }
         }
     }
