@@ -4,12 +4,11 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <item
-            android:id="@+id/menu_top_bar_payouts__item__help"
-            android:title="@string/menu_top_bar__item__help"
-            android:icon="@drawable/ic_round_help_outline_24"
-            android:iconTint="@color/black"
-            app:showAsAction="ifRoom"
-            tools:targetApi="o" />
+        android:id="@+id/menu_top_bar_payouts__item__help"
+        android:title="@string/menu_top_bar__item__help"
+        android:icon="@drawable/ic_round_help_outline_24"
+        app:iconTint="@color/black"
+        app:showAsAction="ifRoom"
+        tools:targetApi="o" />
 </menu>
