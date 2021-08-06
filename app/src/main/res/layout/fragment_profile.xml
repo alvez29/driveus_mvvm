@@ -116,7 +116,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Button.Icon"
-                app:icon="@drawable/ic_baseline_add_24"
+                app:icon="@drawable/ic_round_add_24"
                 app:layout_constraintStart_toEndOf="@id/profile_fragment__label__car_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

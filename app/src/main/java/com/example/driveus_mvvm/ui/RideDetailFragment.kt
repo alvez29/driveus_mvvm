@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -57,6 +58,12 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     private var actualGoogleMap: GoogleMap? = null
 
     private val firebaseStorage: FirebaseStorage = FirestoreRepository.getFirebaseStorageInstance()
+
+    private val askForPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            activateMyLocation()
+        }
+    }
 
     private val meetingPointObserver = Observer<GeoPoint> {
         setupMapMarker(it)
@@ -395,14 +402,9 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun activateMyLocationButton() {
-        if (context?.let {
-                    ActivityCompat.checkSelfPermission(it, ACCESS_FINE_LOCATION) }
-                != PackageManager.PERMISSION_GRANTED
-                && context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) }
+        if (context?.let { ActivityCompat.checkSelfPermission(it, ACCESS_FINE_LOCATION) }
                 != PackageManager.PERMISSION_GRANTED) {
-            //TODO: Utilizar request for activity result
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION), 1)
-
+            askForPermission.launch(ACCESS_FINE_LOCATION)
         } else {
             activateMyLocation()
         }
@@ -493,26 +495,10 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         setupJoinsButton()
     }
 
-    @SuppressLint("MissingPermission")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1) {
-            val permissionsList = permissions.toList()
-            if (permissionsList.contains(ACCESS_FINE_LOCATION)
-                    && permissionsList.contains(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    activateMyLocation()
-                }
-            }
-        }
-    }
-
     override fun onMapReady(p0: GoogleMap) {
         actualGoogleMap = p0
         activateMyLocationButton()
         rideViewModel.getMeetingPoint().observe(viewLifecycleOwner, meetingPointObserver)
     }
-
 
 }
