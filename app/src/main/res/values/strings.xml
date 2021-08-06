@@ -67,7 +67,9 @@
     <string name="dialog_profile_pic__label__change">Cambiar imagen</string>
     <string name="dialog_profile_pic__label__title">Imagen de perfil</string>
     <string name="profile_picture_not_found_tag">Imagen no encontrada</string>
-    <string name="profile_picture_not_found_message">No se ha encontrado imagen en Firebase Storage. Se ha cargado la imagen por defecto.</string>
+    <string name="profile_picture_not_found_message">No se ha encontrado imagen en Firebase Storage. Se ha cargado la
+        imagen por defecto.
+    </string>
     <string name="my_rides_fragment__label__tab_coming_rides">Próximos</string>
     <string name="my_rides_fragment__label__tab_record">Historial</string>
     <string name="menu_top_bar__labe__log_out">Cerrar sesión</string>
@@ -131,10 +133,16 @@
     <string name="my_coming_rides_fragment_filter_hint">Filtrar por rango de días</string>
     <string name="my_rides_record_filter_dialog_end_title">Selecciona fecha de fin</string>
     <string name="my_rides_record_filter_dialog_start_title">Selecciona fecha de inicio</string>
-    <string name="my_rides_record_filter_dialog_toast_validation_error">No puedes seleccionar fechas de fin antes que de comienzo</string>
+    <string name="my_rides_record_filter_dialog_toast_validation_error">No puedes seleccionar fechas de fin antes que de
+        comienzo
+    </string>
     <string name="menu_top_bar__label__change_password">Cambiar contraseña</string>
-    <string name="fragment_change_password_send_email_message">Al pulsar sobre el botón se te enviará un email donde podrás cambiar la contraseña de tu cuenta</string>
-    <string name="change_password_send_email_failure">Se ha producido un error al enviar el email. Vuelve a intentarlo más tarde</string>
+    <string name="fragment_change_password_send_email_message">Al pulsar sobre el botón se te enviará un email donde
+        podrás cambiar la contraseña de tu cuenta.
+    </string>
+    <string name="change_password_send_email_failure">Se ha producido un error al enviar el email. Vuelve a intentarlo
+        más tarde.
+    </string>
     <string name="fragment_edit_vehicle__label__title">Editar vehiculo</string>
     <string name="fragment_edit_vehicle_seats_input_hint">Nuevo número de asientos</string>
     <string name="fragment_edit_vehicle_color_input_hint">Nuevo color</string>
@@ -147,5 +155,57 @@
     <string name="fragment_edit_vehicle__button__edit_car">Guardar</string>
     <string name="connection_failed_message">Necesitas tener conexión a internet para realizar esta operación</string>
     <string name="fragment_payout__label__no_payouts_passenger">No tienes deudas como pasajero</string>
-    <string name="fragment_payout__label__no_payouts_driver">No tienes cobros pendeintes como conductor</string>
+    <string name="fragment_payout__label__no_payouts_driver">No tienes cobros pendientes como conductor</string>
+    <string name="menu_top_bar__item__help">Ayuda</string>
+    <string name="dialog_help_profile1">Puedes editar tu foto de perfil o eliminarla pulsando sobre ella. También puedes
+        editar tus datos y cerrar sesión pulsando el botón de opciones de arriba a la derecha.
+    </string>
+    <string name="dialog_help_profile2">Accede a las ventajas de un conductor añadiendo un coche en tu historial. Para
+        ello debes pulsar el botón \"+\" y rellenar un sencillo formulario.
+    </string>
+    <string name="dialog_help__image__arrow_left">Previous</string>
+    <string name="dialog_help_profile3">Puedes modificar los datos de tus vehículos si lo deseas, pero solo podrás
+        eliminarlo si no has registrado ningún viaje con él.
+    </string>
+    <string name="dialog_help_my_rides1">En vista puedes ver los viajes en los que estás involucrado/a. En \"Próximos\"
+        aparecen aquellos cuya hora de salida aún no se ha dado. En \"Historial\", aquellos en los que sí se ha sobrepasado.
+    </string>
+    <string name="dialog_help_my_rides2">Si pulsas el botón de abajo puedes ver los viajes en los que cumples el rol de
+        pasajero o conductor, según el viaje que estés buscando.
+    </string>
+    <string name="dialog_help_my_rides3">Pulsando sobre el viaje, podrás acceder a la vista del viaje y poder consultar
+        sus detalles.
+    </string>
+    <string name="dialog_help_channels1">Aquí podrás encontrar los canales en los que se publican viajes. Los canales están
+        definidos por una región de origen y otra de destino. Por tanto, entre dos regiones habrá dos canales, uno que uses
+        como de ida y otro como de vuelta.
+    </string>
+    <string name="dialog_help_channels2">En la sección \"Explorar\" podrás buscar entre todos los canales de la aplicación.
+        Puedes hacer uso del buscador para encontrar una región. Pulsando en el botón de la derecha puedes filtrar esa zona que
+        buscas como punto de origen o de destino según prefieras.
+    </string>
+    <string name="dialog_help_channels3">Puedes añadir un canal a tus marcadores. De esta forma será fácilmente accesible
+        desde la pantalla de \"Mis canales\" sin tener que buscarlo entre todos los canales cada vez que lo necesites.
+    </string>
+    <string name="dialog_help_payouts1">En esta vista tendrás un resumen de todos tus pagos pendientes. Se mostrarán
+        para el rol de pasajero o conductor según se requiera. Para cambiar el rol solo tienes que pulsar el botón de abajo.
+    </string>
+    <string name="dialog_help_payouts2">El encargado de marcar un pago como saldado es el que recibe la cuantía. El otro
+        usario solo podrá consultar sus deudas y pulsar en ella para ver el viaje al que hace referencia ese pago.
+    </string>
+    <string name="dialog_help_payouts3">Si un pasajero paga un viaje y se elimina de él o bien el viaje se cancela, se
+        generará una deuda en favor de éste en esta misma vista que el conductor deberá saldar.
+    </string>
+    <string name="dialog_help_ride_details1">En esta pantalla puedes ver todos los detalles del viaje. Si mantienes pulsado
+        la ventana donde aparece el vehículo podrá ver sus detalles. Puedes ver la localización del punto de encuentro si
+        activas el mapa.
+    </string>
+    <string name="dialog_help_ride_details2">Como pasajero puedes apuntarte al viaje y eliminarte de él mientras aún no
+        se haya dado la hora de recogida. Si has pagado el viaje y no puedes acudir, se generará una deuda que el conductor
+        deberá saldar contigo.
+    </string>
+    <string name="dialog_help_ride_details3">Como conductor puedes eliminar el viaje y acceder a su lista de pagos.
+        Si eliminas el viaje habiendo recibido el dinero de algún pasajero tendrás una alerta de deuda en tu historial de
+        pagos con ese usuario.
+    </string>
 </resources>
