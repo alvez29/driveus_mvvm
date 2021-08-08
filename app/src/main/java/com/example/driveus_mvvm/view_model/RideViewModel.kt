@@ -185,8 +185,6 @@ class RideViewModel : ViewModel() {
                         ridesAsPassenger.value = emptyList()
                     }
 
-                    //TODO: Contemplar que el parametro de filtrar se encuentre en el usuario y no realizar el filtro en cliente
-                    // El filtro controla el estado del mapa actual
                     if ((rideDoc?.get("date") as? Timestamp)?.toDate()?.after(Timestamp.now().toDate()) == true) {
                         resList.add(rideDoc)
                     } else if (rideDoc?.getTimestamp("date")?.toDate()?.after(Timestamp.now().toDate()) == false
@@ -218,8 +216,6 @@ class RideViewModel : ViewModel() {
                         ridesAsDriver.value = mutableListOf()
                     }
 
-                    //TODO: Contemplar que el parametro de filtrar se encuentre en el usuario y no realizar el filtro en cliente
-                    // El filtro controla el estado del mapa actual
                     if ((rideDoc?.get("date") as? Timestamp)?.toDate()?.after(Timestamp.now().toDate()) == true) {
                         resList.add(rideDoc)
                     } else if (rideDoc?.getTimestamp("date")?.toDate()?.after(Timestamp.now().toDate()) == false
