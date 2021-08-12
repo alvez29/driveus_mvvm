@@ -76,6 +76,9 @@ class UserViewModel : ViewModel() {
         } else if (usernameInUse) {
             errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_username_in_use
             res = false
+        } else if (textInputs[SignUpFormEnum.USERNAME].toString().contains(" ")) {
+            errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_no_blanks
+            res = false
         }
 
         //Email

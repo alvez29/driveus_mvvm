@@ -208,4 +208,5 @@
         Si eliminas el viaje habiendo recibido el dinero de algún pasajero tendrás una alerta de deuda en tu historial de
         pagos con ese usuario.
     </string>
+    <string name="sign_up_form_error_no_blanks">El nombre de usuario no puede contener espacios en blanco</string>
 </resources>
