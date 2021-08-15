@@ -36,37 +36,42 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/my_coming_rides_fragment__container__no_rides_passenger"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                android:id="@+id/my_coming_rides_fragment__container__no_rides_passenger"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/my_coming_rides_fragment__image__seat_passenger"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:tint="#1F0000"
-                        app:srcCompat="@drawable/ic_stop_signal"
-                        app:layout_constraintBottom_toTopOf="@id/my_coming_rides_fragment__label__no_rides_passenger"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                    android:id="@+id/my_coming_rides_fragment__image__seat_passenger"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:tint="#1F0000"
+                    app:layout_constraintBottom_toTopOf="@+id/my_coming_rides_fragment__label__no_rides_passenger"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:srcCompat="@drawable/ic_stop_signal" />
 
                 <TextView
-                        android:id="@+id/my_coming_rides_fragment__label__no_rides_passenger"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/my_channels_fragment__label__no_rides"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                        android:gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:id="@+id/my_coming_rides_fragment__label__no_rides_passenger"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:gravity="center"
+                    android:text="@string/my_channels_fragment__label__no_rides"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/my_coming_rides_fragment__image__seat_passenger" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -107,40 +112,42 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/my_coming_rides_fragment__container__no_rides_driver"
-                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/my_coming_rides_fragment__image__seat_driver"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:tint="#1F0000"
-                        app:srcCompat="@drawable/ic_stop_signal"
-                        app:layout_constraintBottom_toTopOf="@id/my_coming_rides_fragment__label__no_rides_driver"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/my_coming_rides_fragment__image__seat_driver"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:tint="#1F0000"
+                    app:layout_constraintBottom_toTopOf="@+id/my_coming_rides_fragment__label__no_rides_driver"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:srcCompat="@drawable/ic_stop_signal" />
 
                 <TextView
-                        android:id="@+id/my_coming_rides_fragment__label__no_rides_driver"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/my_channels_fragment__label__no_rides"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                        android:gravity="center"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:id="@+id/my_coming_rides_fragment__label__no_rides_driver"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:gravity="center"
+                    android:text="@string/my_channels_fragment__label__no_rides"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/my_coming_rides_fragment__image__seat_driver" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

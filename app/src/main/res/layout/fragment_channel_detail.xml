@@ -163,7 +163,10 @@
                 android:tint="#1F0000"
                 app:layout_constraintBottom_toTopOf="@+id/channel_detail__label__no_element"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
                 app:srcCompat="@drawable/ic_stop_signal" />
 
             <TextView
@@ -178,8 +181,9 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/channel_detail__image__no_element" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

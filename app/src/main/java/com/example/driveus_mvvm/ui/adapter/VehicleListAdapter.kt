@@ -85,7 +85,7 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
                }
            }
             deleteButton.setOnClickListener {
-                val model = getItem(adapterPosition).second.brand + " " + getItem(adapterPosition).second.brand
+                val model = getItem(adapterPosition).second.brand + " " + getItem(adapterPosition).second.model
                 listener.onDeleteButtonClick(getItem(adapterPosition).first, model)
             }
 

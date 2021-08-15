@@ -104,40 +104,44 @@
                 tools:visibility="gone"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/fragment_payout__container___no_payouts_passenger"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible">
+            android:id="@+id/fragment_payout__container___no_payouts_passenger"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone">
 
             <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/fragment_payout__image__no_payouts_passenger"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:tint="#1F0000"
-                    app:srcCompat="@drawable/ic_baseline_money_off_24"
-                    app:layout_constraintBottom_toTopOf="@id/fragment_payout__label__no_payouts_passenger"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                android:id="@+id/fragment_payout__image__no_payouts_passenger"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:tint="#1F0000"
+                app:layout_constraintBottom_toTopOf="@+id/fragment_payout__label__no_payouts_passenger"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:srcCompat="@drawable/ic_baseline_money_off_24" />
 
             <TextView
-                    android:id="@+id/fragment_payout__label__no_payouts_passenger"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/fragment_payout__label__no_payouts_passenger"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:gravity="center"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                android:id="@+id/fragment_payout__label__no_payouts_passenger"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
+                android:text="@string/fragment_payout__label__no_payouts_passenger"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_payout__image__no_payouts_passenger" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -153,7 +157,8 @@
             app:layout_constraintTop_toBottomOf="@id/fragment_payout__button__debts_button"
             app:layout_constraintBottom_toTopOf="@id/fragment_payout__button__role_button"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintVertical_bias="0.0"
+            tools:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_payout__list__payouts_list_driver"
@@ -166,40 +171,44 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/fragment_payout__container___no_payouts_driver"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible">
+            android:id="@+id/fragment_payout__container___no_payouts_driver"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/fragment_payout__image__no_payouts_driver"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:tint="#1F0000"
-                    app:srcCompat="@drawable/ic_baseline_money_off_24"
-                    app:layout_constraintBottom_toTopOf="@id/fragment_payout__label__no_payouts_driver"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                android:id="@+id/fragment_payout__image__no_payouts_driver"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:tint="#1F0000"
+                app:layout_constraintBottom_toTopOf="@+id/fragment_payout__label__no_payouts_driver"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:srcCompat="@drawable/ic_baseline_money_off_24" />
 
             <TextView
-                    android:id="@+id/fragment_payout__label__no_payouts_driver"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/fragment_payout__label__no_payouts_driver"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:gravity="center"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                android:id="@+id/fragment_payout__label__no_payouts_driver"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
+                android:text="@string/fragment_payout__label__no_payouts_driver"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_payout__image__no_payouts_driver" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

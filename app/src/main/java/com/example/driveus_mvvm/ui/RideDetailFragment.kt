@@ -1,6 +1,5 @@
 package com.example.driveus_mvvm.ui
 
-import android.Manifest
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -90,6 +89,31 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupScroll() {
+        viewBinding?.rideDetailImgTransparent?.setOnTouchListener { _, event ->
+            return@setOnTouchListener when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Disallow ScrollView to intercept touch events.
+                    viewBinding?.rideDetailContainerScrollContainer?.requestDisallowInterceptTouchEvent(true)
+                    // Disable touch on transparent view
+                    false
+                }
+                MotionEvent.ACTION_UP -> {
+                    // Allow ScrollView to intercept touch events.
+                    viewBinding?.rideDetailContainerScrollContainer?.requestDisallowInterceptTouchEvent(false)
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    viewBinding?.rideDetailContainerScrollContainer?.requestDisallowInterceptTouchEvent(true)
+                    false
+                }
+                else -> true
+            }
+
+        }
+    }
+
     private fun showButtons(driverId: String?, rideDate: Timestamp?, passengers: List<String>, capacity: Int?) {
         val currentUserId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
 
@@ -156,7 +180,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun loadProfilePicture(userId: String?, imageView: ImageView) {
-        context?.let { ImageUtils.loadProfilePicture(userId, imageView, it, firebaseStorage ) }
+        context?.let { ImageUtils.loadProfilePicture(userId, imageView, it, firebaseStorage) }
     }
 
     private fun setupUserName(username: String?) {
@@ -227,11 +251,11 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     private fun setupMapToggleButton() {
         viewBinding?.rideDetailButtonSwitch?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                viewBinding?.rideDetailMapMeetingPoint?.visibility = View.VISIBLE
+                viewBinding?.rideDetailContainerMap?.visibility = View.VISIBLE
                 viewBinding?.rideDetailButtonCenterMeetingPoint?.visibility = View.VISIBLE
                 viewBinding?.rideDetailContainerCarCard?.visibility = View.GONE
             } else {
-                viewBinding?.rideDetailMapMeetingPoint?.visibility = View.GONE
+                viewBinding?.rideDetailContainerMap?.visibility = View.GONE
                 viewBinding?.rideDetailButtonCenterMeetingPoint?.visibility = View.GONE
                 viewBinding?.rideDetailContainerCarCard?.visibility = View.VISIBLE
             }
@@ -429,8 +453,8 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
             R.id.menu_top_bar_ride_details__item__help -> {
                 val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_help_fragment, null)
                 val mBuilder = AlertDialog.Builder(context)
-                    .setView(mDialogView)
-                    .setTitle("Ayuda")
+                        .setView(mDialogView)
+                        .setTitle("Ayuda")
 
                 val text1 = R.string.dialog_help_ride_details1
                 val text2 = R.string.dialog_help_ride_details2
@@ -439,7 +463,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
                 var pointer: Int = 0
 
                 mDialogView.findViewById<TextView>(R.id.dialog_help__text__).setText(text1)
-                mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer+1}/${textList.size}")
+                mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer + 1}/${textList.size}")
 
                 val mAlertDialog = mBuilder.show()
                 mDialogView.findViewById<View>(R.id.dialog_help__button__accept).setOnClickListener {
@@ -452,7 +476,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
                         pointer -= 1
                     }
                     mDialogView.findViewById<TextView>(R.id.dialog_help__text__).setText(textList[pointer])
-                    mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer+1}/${textList.size}")
+                    mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer + 1}/${textList.size}")
                 }
                 mDialogView.findViewById<ImageButton>(R.id.dialog_help__image__arrow_right).setOnClickListener {
                     if (pointer == textList.size - 1) {
@@ -461,7 +485,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
                         pointer += 1
                     }
                     mDialogView.findViewById<TextView>(R.id.dialog_help__text__).setText(textList[pointer])
-                    mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer+1}/${textList.size}")
+                    mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer + 1}/${textList.size}")
                 }
             }
         }
@@ -482,6 +506,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
 
         channelId?.let { channelViewModel.getChannelById(it).observe(viewLifecycleOwner, channelObserver) }
 
+        setupScroll()
         setupMapToggleButton()
         setupCarDescriptionBehaviour()
 

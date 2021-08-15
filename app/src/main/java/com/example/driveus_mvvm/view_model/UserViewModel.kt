@@ -330,12 +330,6 @@ class UserViewModel : ViewModel() {
             res = false
         }
 
-        //Seats
-        if (toEditVehicle.seats.toString().isBlank() || toEditVehicle.seats == 0){
-            errorMap[VehicleFormEnum.SEAT] = R.string.sign_up_form_error_not_empty
-            res = false
-        }
-
         vehicleFormError.postValue(errorMap)
         return res
     }
@@ -350,15 +344,9 @@ class UserViewModel : ViewModel() {
     }
 
     private fun getToEditVehicleFromInputs(inputs: Map<VehicleFormEnum, String>, oldVehicle: Vehicle): Vehicle {
-        val newSeats = if (inputs[VehicleFormEnum.SEAT].isNullOrBlank()) {
-            0
-        } else {
-            inputs[VehicleFormEnum.SEAT]?.toInt()
-        }
-
         return Vehicle(brand = oldVehicle.brand,
                 model = oldVehicle.model,
-                seats = newSeats,
+                seats = oldVehicle.seats,
                 color = inputs[VehicleFormEnum.COLOR],
                 description = inputs[VehicleFormEnum.DESCRIPTION],
                 expanded = oldVehicle.expanded,

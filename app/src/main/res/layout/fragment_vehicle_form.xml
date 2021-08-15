@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="16dp">
-    <TextView
+
+        <TextView
             android:id="@+id/fragment_add_car_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/fragment_add_car__label__car_brand"/>
 
-    <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fragment_add_car__label__car_brand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,15 +33,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/fragment_add_car__label__car_model">
 
-        <EditText
+            <EditText
                 android:id="@+id/fragment_add_car__label__car_brand_editText"
                 android:hint="@string/fragment_add_car__label__car_brand_value"
                 android:inputType="textPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fragment_add_car__label__car_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,15 +51,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
+            <EditText
                 android:id="@+id/fragment_add_car__label__car_model_edit_text"
                 android:hint="@string/fragment_add_car__label__car_model_edit_text"
                 android:inputType="textPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fragment_add_car__label__car_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,15 +69,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
+            <EditText
                 android:id="@+id/fragment_add_car__label__car_color_edit_text"
                 android:hint="@string/fragment_add_car__label__car_color_edit_text"
                 android:inputType="textPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fragment_add_car__label__car_seats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,15 +87,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
+            <EditText
                 android:id="@+id/fragment_add_car__label__car_seats_edit_text"
                 android:hint="@string/fragment_add_car__label__car_seats_edit_text"
                 android:inputType="number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fragment_add_car__label__car_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,15 +105,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
+            <EditText
                 android:id="@+id/fragment_add_car__label__car_description_edit_text"
                 android:hint="@string/fragment_add_car__label__car_description_edit_text"
                 android:inputType="textLongMessage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fragment_add_car__button__add_car"
             android:text="@string/fragment_add_car__button_add_car"
             android:layout_width="wrap_content"
@@ -118,4 +123,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_add_car__label__car_description"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+
