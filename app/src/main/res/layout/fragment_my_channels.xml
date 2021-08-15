@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -11,43 +13,47 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" tools:visibility="gone"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone"/>
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/my_channels_fragment__container__no_channels"
-                android:layout_marginTop="80dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:id="@+id/my_channels_fragment__container__no_channels"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/channel_detail__image__no_element"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:tint="#1F0000"
-                    app:srcCompat="@drawable/ic_stop_signal"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/my_channels_fragment__label__no_channels"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                android:id="@+id/channel_detail__image__no_element"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:tint="#1F0000"
+                app:layout_constraintBottom_toTopOf="@+id/my_channels_fragment__label__no_channels"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:srcCompat="@drawable/ic_stop_signal" />
 
             <TextView
-                    android:id="@+id/my_channels_fragment__label__no_channels"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/my_channels_fragment__label__no_channels"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:gravity="center"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                android:id="@+id/my_channels_fragment__label__no_channels"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
+                android:text="@string/my_channels_fragment__label__no_channels"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_detail__image__no_element" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

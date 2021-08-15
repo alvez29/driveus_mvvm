@@ -25,7 +25,6 @@ class EditVehicleFragment : Fragment() {
 
         private fun vehicleObserver(userId: String) = Observer<Vehicle> { vehicle ->
             if (vehicle != null) {
-                viewBinding?.fragmentEditInputSeatsEdit?.setText(vehicle.seats.toString())
                 viewBinding?.fragmentEditVehicleInputColorEdit?.setText(vehicle.color)
                 viewBinding?.fragmentEditVehicleInputDescripcionEdit?.setText(vehicle.description)
 
@@ -43,7 +42,6 @@ class EditVehicleFragment : Fragment() {
             it.forEach { (k,v) ->
                 when(k) {
                     VehicleFormEnum.COLOR -> viewBinding?.fragmentEditVehicleInputColorEdit?.error = getString(v)
-                    VehicleFormEnum.SEAT -> viewBinding?.fragmentEditVehicleInputSeats?.error = getString(v)
                     VehicleFormEnum.DESCRIPTION -> viewBinding?.fragmentEditVehicleInputDescripcionEdit?.error = getString(v)
                 }
             }
@@ -59,7 +57,6 @@ class EditVehicleFragment : Fragment() {
         private fun getInputs(): MutableMap<VehicleFormEnum, String> {
             return mutableMapOf(
                     VehicleFormEnum.COLOR to viewBinding?.fragmentEditVehicleInputColorEdit?.text.toString(),
-                    VehicleFormEnum.SEAT to viewBinding?.fragmentEditInputSeatsEdit?.text.toString(),
                     VehicleFormEnum.DESCRIPTION to viewBinding?.fragmentEditVehicleInputDescripcionEdit?.text.toString())
         }
 
@@ -77,12 +74,6 @@ class EditVehicleFragment : Fragment() {
                 if (userId != null) {
                     userViewModel.getVehicleById(it, userId).observe(viewLifecycleOwner, vehicleObserver(userId))
                 }
-            }
-
-            viewBinding?.fragmentEditInputSeatsEdit?.addTextChangedListener {
-                viewBinding?.fragmentEditVehicleInputSeats?.error = null
-                viewBinding?.fragmentEditInputSeatsEdit?.error = null
-
             }
 
             userViewModel.getFormVehicleErrors().observe(viewLifecycleOwner, formErrorObserver)
