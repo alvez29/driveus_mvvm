@@ -9,6 +9,9 @@
         android:id="@+id/channels_fragment__container__tab_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabMaxWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
