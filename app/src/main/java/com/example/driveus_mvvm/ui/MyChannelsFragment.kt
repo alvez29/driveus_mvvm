@@ -89,7 +89,7 @@ class MyChannelsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-            ?.let { userViewModel.hasAnySuscription(it)?.observe(viewLifecycleOwner, hasAnySuscriptionObserver) }
+            ?.let { userViewModel.hasAnySubscription(it)?.observe(viewLifecycleOwner, hasAnySuscriptionObserver) }
 
         val adapter = setupRecyclerAdapter()
 

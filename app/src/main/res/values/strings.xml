@@ -209,4 +209,6 @@
         pagos con ese usuario.
     </string>
     <string name="sign_up_form_error_no_blanks">El nombre de usuario no puede contener espacios en blanco</string>
+    <string name="white_message_bar"><![CDATA[<font color=\'#FFFFFF\'>DriveUs </font>]]></string>
+    <string name="black_message_bar"><![CDATA[<font color=\'#000000\'>DriveUs</font>]]></string>
 </resources>

@@ -17,6 +17,8 @@ import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
 
+    private const val LOCAL_HOST = "10.0.2.2"
+
     private const val CHANNELS_COLLECTION = "channel"
     private const val USERS_COLLECTION = "users"
     private const val RIDES_COLLECTION = "rides"
@@ -29,7 +31,7 @@ object FirestoreRepository {
         val firestore = FirebaseFirestore.getInstance()
 
         if (BuildConfig.EMULATORS_MODE.toBoolean()) {
-            firestore.useEmulator("10.0.2.2", BuildConfig.FIRESTORE_PORT?.toInt())
+            firestore.useEmulator(LOCAL_HOST, BuildConfig.FIRESTORE_PORT.toInt())
 
             val settings = FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(false)
@@ -45,7 +47,7 @@ object FirestoreRepository {
         val storage = FirebaseStorage.getInstance()
 
         if (BuildConfig.EMULATORS_MODE.toBoolean()) {
-            storage.useEmulator("10.0.2.2", BuildConfig.STORAGE_PORT?.toInt())
+            storage.useEmulator(LOCAL_HOST, BuildConfig.STORAGE_PORT.toInt())
         }
 
         return storage
@@ -55,7 +57,7 @@ object FirestoreRepository {
         val auth = FirebaseAuth.getInstance()
 
         if (BuildConfig.EMULATORS_MODE.toBoolean()) {
-            auth.useEmulator("10.0.2.2", BuildConfig.AUTH_PORT?.toInt())
+            auth.useEmulator(LOCAL_HOST, BuildConfig.AUTH_PORT.toInt())
         }
 
         return auth

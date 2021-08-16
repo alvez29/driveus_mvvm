@@ -93,7 +93,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     private fun setupScroll() {
         viewBinding?.rideDetailImgTransparent?.setOnTouchListener { _, event ->
             return@setOnTouchListener when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                     // Disallow ScrollView to intercept touch events.
                     viewBinding?.rideDetailContainerScrollContainer?.requestDisallowInterceptTouchEvent(true)
                     // Disable touch on transparent view
@@ -104,13 +104,8 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
                     viewBinding?.rideDetailContainerScrollContainer?.requestDisallowInterceptTouchEvent(false)
                     true
                 }
-                MotionEvent.ACTION_MOVE -> {
-                    viewBinding?.rideDetailContainerScrollContainer?.requestDisallowInterceptTouchEvent(true)
-                    false
-                }
                 else -> true
             }
-
         }
     }
 
