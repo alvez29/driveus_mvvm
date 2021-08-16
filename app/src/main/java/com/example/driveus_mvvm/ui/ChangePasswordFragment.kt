@@ -28,7 +28,7 @@ class ChangePasswordFragment: Fragment() {
         }
 
         override fun onAnimationEnd(animation: Animator?) {
-
+            //no-op
         }
 
         override fun onAnimationCancel(animation: Animator?) {
