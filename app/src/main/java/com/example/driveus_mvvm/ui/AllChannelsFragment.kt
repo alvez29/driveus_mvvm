@@ -21,8 +21,9 @@ import com.google.firebase.firestore.DocumentReference
 class AllChannelsFragment : Fragment() {
 
     private var viewBinding: FragmentAllChannelsBinding? = null
-    private val channelViewModel : ChannelViewModel by lazy { ViewModelProvider(this)[ChannelViewModel::class.java] }
+    private val channelViewModel: ChannelViewModel by lazy { ViewModelProvider(this)[ChannelViewModel::class.java] }
     private val sharedPref by lazy { activity?.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE) }
+    private var filterMode = false
 
     private val allChannelsListAdapterListener = object : AllChannelsListAdapter.AllChannelsListAdapterListener {
 
@@ -51,7 +52,6 @@ class AllChannelsFragment : Fragment() {
             val docId = sharedPref?.getString(getString(R.string.shared_pref_doc_id_key),"")
 
             return usersList.map { it?.id }.contains(docId)
-
         }
 
     }
@@ -78,7 +78,6 @@ class AllChannelsFragment : Fragment() {
                     }
                 }
             }
-
             adapter.submitList(filteredMap.toList())
 
             return true
@@ -87,13 +86,24 @@ class AllChannelsFragment : Fragment() {
         override fun onQueryTextChange(newText: String?): Boolean {
             newText?.let {
                 if (newText.trim().isBlank()) {
+                    filterMode = false
                     adapter.submitList(channels.toList())
+                } else {
+                    filterMode = true
                 }
             }
 
             return true
         }
 
+    }
+
+    private fun checkEditMode() {
+        //Si la lista cambia mientras estamos en el filtro se ejecuta una nueva búsqueda
+        if (filterMode) {
+            val queryString = viewBinding?.allChannelsSearchSearchView?.query.toString()
+            viewBinding?.allChannelsSearchSearchView?.setQuery(queryString, true)
+        }
     }
 
     private fun configureChannelSearch(channels: Map<String, Channel>, adapter: AllChannelsListAdapter) {
@@ -106,7 +116,8 @@ class AllChannelsFragment : Fragment() {
             } else {
                 viewBinding?.allChannelsImageFilterImage?.setImageResource(R.drawable.ic_origin_zone_24)
             }
-            
+
+            checkEditMode()
         }
 
     }
@@ -124,8 +135,8 @@ class AllChannelsFragment : Fragment() {
             viewBinding?.allChannelsImageFilterImage?.visibility = View.GONE
 
         }
-
         adapter.submitList(it.toList())
+        checkEditMode()
     }
 
     private fun setupRecyclerAdapter() : AllChannelsListAdapter {
