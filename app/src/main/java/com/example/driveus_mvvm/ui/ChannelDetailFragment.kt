@@ -62,29 +62,22 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         }
     }
 
-    private fun configureRideFilter(map: Map<String, Ride>?, adapter: RidesListAdapter) {
-        viewBinding?.channelDetailInputFilterText?.setOnClickListener {
-            val cal: Calendar = Calendar.getInstance()
-            val day = cal.get(Calendar.DAY_OF_MONTH)
-            val month = cal.get(Calendar.MONTH)
-            val year = cal.get(Calendar.YEAR)
-
-            context?.let { it1 -> DatePickerDialog(it1, this, year, month,day).show() }
-        }
-
+    private fun configureRideFilter(map: List<Pair<String, Ride>>, adapter: RidesListAdapter) {
         viewBinding?.channelDetailInputFilterText?.addTextChangedListener { editableText ->
             if (editableText.toString().isBlank()) {
                 viewBinding?.channelDetailImageClearFilter?.visibility = View.GONE
-                adapter.submitList(map?.toList())
+                checkListIsEmpty(map)
+                adapter.submitList(map)
+
             } else {
                 viewBinding?.channelDetailImageClearFilter?.visibility = View.VISIBLE
                 val startAndEndTimestamp: Pair<Timestamp, Timestamp> = DateTimeUtils.getStartAndEndDateFromFilterString(editableText.toString())
-                val filteredMap = map?.toList()
-                    ?.filter {
+                val filteredMap = map
+                    .filter {
                         it.second.date?.let { timestamp ->
                             timestamp >= startAndEndTimestamp.first && timestamp <= startAndEndTimestamp.second
                         } == true
-                    }?.sortedBy {
+                    }.sortedBy {
                         it.second.date
                     }
 
@@ -99,11 +92,11 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun ridesObserver(adapter: RidesListAdapter) = Observer<Map<String, Ride>> { map ->
-        val mapList = map.toList()
+        val mapList = map.toList().sortedBy { it.second.date }
 
+        configureRideFilter(mapList, adapter)
         checkListIsEmpty(mapList)
-        adapter.submitList(mapList.sortedBy { it.second.date })
-        configureRideFilter(map, adapter)
+        adapter.submitList(mapList)
 
     }
 
@@ -137,7 +130,20 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         return adapter
     }
 
-    private fun rideForm() {
+    private fun setupDialog() {
+        viewBinding?.channelDetailInputFilterText?.setOnClickListener {
+            val cal: Calendar = Calendar.getInstance()
+            val day = cal.get(Calendar.DAY_OF_MONTH)
+            val month = cal.get(Calendar.MONTH)
+            val year = cal.get(Calendar.YEAR)
+
+            context?.let { it1 ->
+                DatePickerDialog(it1, this, year, month,day).show()
+            }
+        }
+    }
+
+    private fun setupToRideForm() {
         viewBinding?.channelDetailButtonFloatingButton?.setOnClickListener {
             val action = channelId?.let { it1 ->
                 ChannelDetailFragmentDirections
@@ -182,6 +188,8 @@ class ChannelDetailFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")?.let { userId ->
             userViewModel.isDriver(userId).observe(viewLifecycleOwner, isDriverObserver)
         }
-        rideForm()
+        setupDialog()
+        setupToRideForm()
     }
+
 }
