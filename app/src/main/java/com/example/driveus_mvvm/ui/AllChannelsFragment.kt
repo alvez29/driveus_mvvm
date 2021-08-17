@@ -61,17 +61,21 @@ class AllChannelsFragment : Fragment() {
             var filteredMap: Map<String, Channel> = emptyMap()
 
             query?.let {
-                if (viewBinding?.allChannelsSwitchFilter?.isChecked == true) {
-                    filteredMap = channels.filter {
-                        it.value.destinationZone?.contains(query, true) == true
-                    }
+                when (viewBinding?.allChannelsSwitchFilter?.isChecked) {
+                    true -> {
+                        filteredMap = channels.filter {
+                            it.value.destinationZone?.contains(query, true) == true
+                        }
 
-                } else if (viewBinding?.allChannelsSwitchFilter?.isChecked == false) {
-                    filteredMap = channels.filter {
-                        it.value.originZone?.contains(query, true) == true
                     }
-                } else {
-                    filteredMap = channels
+                    false -> {
+                        filteredMap = channels.filter {
+                            it.value.originZone?.contains(query, true) == true
+                        }
+                    }
+                    else -> {
+                        filteredMap = channels
+                    }
                 }
             }
 

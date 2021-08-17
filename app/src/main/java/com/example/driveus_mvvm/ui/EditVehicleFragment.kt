@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -26,7 +25,7 @@ class EditVehicleFragment : Fragment() {
         private fun vehicleObserver(userId: String) = Observer<Vehicle> { vehicle ->
             if (vehicle != null) {
                 viewBinding?.fragmentEditVehicleInputColorEdit?.setText(vehicle.color)
-                viewBinding?.fragmentEditVehicleInputDescripcionEdit?.setText(vehicle.description)
+                viewBinding?.fragmentEditVehicleInputDescriptionEdit?.setText(vehicle.description)
 
                 viewBinding?.fragmentEditVehicleButtonEditCar?.setOnClickListener {
                     val inputs = getInputs()
@@ -42,7 +41,7 @@ class EditVehicleFragment : Fragment() {
             it.forEach { (k,v) ->
                 when(k) {
                     VehicleFormEnum.COLOR -> viewBinding?.fragmentEditVehicleInputColorEdit?.error = getString(v)
-                    VehicleFormEnum.DESCRIPTION -> viewBinding?.fragmentEditVehicleInputDescripcionEdit?.error = getString(v)
+                    VehicleFormEnum.DESCRIPTION -> viewBinding?.fragmentEditVehicleInputDescriptionEdit?.error = getString(v)
                 }
             }
         }
@@ -57,7 +56,7 @@ class EditVehicleFragment : Fragment() {
         private fun getInputs(): MutableMap<VehicleFormEnum, String> {
             return mutableMapOf(
                     VehicleFormEnum.COLOR to viewBinding?.fragmentEditVehicleInputColorEdit?.text.toString(),
-                    VehicleFormEnum.DESCRIPTION to viewBinding?.fragmentEditVehicleInputDescripcionEdit?.text.toString())
+                    VehicleFormEnum.DESCRIPTION to viewBinding?.fragmentEditVehicleInputDescriptionEdit?.text.toString())
         }
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

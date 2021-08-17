@@ -101,16 +101,16 @@ class PayoutViewModel : ViewModel() {
                     Log.d(tag, error.message.toString())
                 }
 
-                val auxlist = mutableListOf<Pair<String, DocumentSnapshot>>()
+                val auxList = mutableListOf<Pair<String, DocumentSnapshot>>()
                 (value?.get("payoutsAsDriver") as? List<DocumentReference>)?.forEach {
                     val payout = it.get().await()
                     val passengerUsername = (payout.get("passenger") as DocumentReference).get().await().get("username").toString()
-                    val pairAux = Pair<String, DocumentSnapshot>(passengerUsername.toString(), payout)
+                    val pairAux = Pair<String, DocumentSnapshot>(passengerUsername, payout)
 
-                    auxlist.add(pairAux)
+                    auxList.add(pairAux)
                 }
 
-                pendingPayoutsAsDriverFromUser.postValue(auxlist)
+                pendingPayoutsAsDriverFromUser.postValue(auxList)
             }
         }
 

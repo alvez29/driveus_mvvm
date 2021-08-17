@@ -16,7 +16,7 @@
 
     <item
         android:id="@+id/menu_top_bar__item__log_out"
-        android:title="@string/menu_top_bar__labe__log_out"
+        android:title="@string/menu_top_bar__label__log_out"
         app:showAsAction="never"/>
 
     <item

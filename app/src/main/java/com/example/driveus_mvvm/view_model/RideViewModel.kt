@@ -139,7 +139,7 @@ class RideViewModel : ViewModel() {
 
     private fun getRideFromInputs(inputs: Map<RideFormEnum, String>, userId: DocumentReference, vehicleDocRef: DocumentReference): Ride? {
 
-        return meetingGeoPoint?.let {
+        return meetingGeoPoint?.let { it ->
             Ride(
                 capacity = inputs[RideFormEnum.CAPACITY]?.toInt(),
                 price = inputs[RideFormEnum.PRICE]?.toDouble(),

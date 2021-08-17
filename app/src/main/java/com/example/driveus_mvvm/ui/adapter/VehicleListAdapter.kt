@@ -42,8 +42,9 @@ class VehicleListAdapter(private val listener: VehicleListAdapterListener) : Lis
 
     override fun onBindViewHolder(holder: VehicleViewHolder, position: Int) {
         val currentVehicle: Pair<String, Vehicle> = getItem(position)
+        val modelAndBrand = currentVehicle.second.brand + " " + currentVehicle.second.model
 
-        holder.modelItemView.text = currentVehicle.second.brand + " " + currentVehicle.second.model
+        holder.modelItemView.text = modelAndBrand
         holder.colorItemView.text = currentVehicle.second.color
         holder.seatsItemView.text = currentVehicle.second.seats.toString()
         holder.descriptionItemView.text = currentVehicle.second.description

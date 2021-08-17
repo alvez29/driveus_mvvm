@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,14 +44,15 @@ class PayoutListAdapter(
         return PayoutViewHolder(payoutListView)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: PayoutListAdapter.PayoutViewHolder, position: Int) {
         val payout = getItem(position).second.toObject(Payout::class.java)
         val priceStr = "${payout?.price} €"
 
         val pattern = "HH:mm dd-MM-yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
-        val crationDate = payout?.creationDate?.toDate()
-        val dateValue = simpleDateFormat.format(crationDate).split(" ")
+        val creationDate = payout?.creationDate?.toDate()
+        val dateValue = simpleDateFormat.format(creationDate).split(" ")
         val dateStr = "Creado a las ${dateValue[0]} el día ${dateValue[1]}"
 
         listener.loadProfilePicture(payout?.passenger?.id, holder.profilePicture)

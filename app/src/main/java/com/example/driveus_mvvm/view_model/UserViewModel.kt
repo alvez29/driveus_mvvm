@@ -26,17 +26,18 @@ import kotlinx.coroutines.tasks.await
 class UserViewModel : ViewModel() {
 
     private val tag = "FIRESTORE_USER_VIEW_MODEL"
+    private val listenFailed = "Listen failed."
 
     private val userDocumentById: MutableLiveData<DocumentSnapshot> = MutableLiveData()
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
     private val redirect = MutableLiveData(Pair(false, ""))
     private val imageTrigger =  MutableLiveData(false)
-    private val isLoading = MutableLiveData<Boolean>(false)
+    private val isLoading = MutableLiveData(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
     private val vehicleFormError = MutableLiveData<MutableMap<VehicleFormEnum, Int>>(mutableMapOf())
     private val redirectVehicle = MutableLiveData(false)
-    private val hasAnySuscription = MutableLiveData(false)
+    private val hasAnySubscription = MutableLiveData(false)
     private val vehicleById: MutableLiveData<Vehicle> = MutableLiveData(null)
     private val isDriver = MutableLiveData(false)
 
@@ -67,18 +68,23 @@ class UserViewModel : ViewModel() {
         }
 
         //Username
-        if (textInputs[SignUpFormEnum.USERNAME].isNullOrBlank()) {
-            errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_not_empty
-            res = false
-        } else if (textInputs[SignUpFormEnum.USERNAME].toString().length > 50) {
-            errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_max_50
-            res = false
-        } else if (usernameInUse) {
-            errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_username_in_use
-            res = false
-        } else if (textInputs[SignUpFormEnum.USERNAME].toString().contains(" ")) {
-            errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_no_blanks
-            res = false
+        when {
+            textInputs[SignUpFormEnum.USERNAME].isNullOrBlank() -> {
+                errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_not_empty
+                res = false
+            }
+            textInputs[SignUpFormEnum.USERNAME].toString().length > 50 -> {
+                errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_max_50
+                res = false
+            }
+            usernameInUse -> {
+                errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_username_in_use
+                res = false
+            }
+            textInputs[SignUpFormEnum.USERNAME].toString().contains(" ") -> {
+                errorMap[SignUpFormEnum.USERNAME] = R.string.sign_up_form_error_no_blanks
+                res = false
+            }
         }
 
         //Email
@@ -204,7 +210,7 @@ class UserViewModel : ViewModel() {
     fun isDriver(userId: String): LiveData<Boolean> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { value, error ->
             if (error != null) {
-                Log.w(tag, "Listen failed.", error)
+                Log.w(tag, listenFailed, error)
                 isDriver.postValue(false)
             }
             val user: User? = value?.toObject(User::class.java)
@@ -214,23 +220,23 @@ class UserViewModel : ViewModel() {
         return isDriver
     }
 
-    fun hasAnySuscription(userId: String): LiveData<Boolean>? {
+    fun hasAnySubscription(userId: String): LiveData<Boolean> {
         FirestoreRepository.getUserById(userId).addSnapshotListener { value, error ->
             if (error != null) {
-                Log.w(tag, "Listen failed.", error)
-                hasAnySuscription.postValue(false)
+                Log.w(tag, listenFailed, error)
+                hasAnySubscription.postValue(false)
             }
             val user = value?.toObject(User::class.java)
-            hasAnySuscription.postValue(user?.channels?.isNotEmpty())
+            hasAnySubscription.postValue(user?.channels?.isNotEmpty())
         }
-        return hasAnySuscription
+        return hasAnySubscription
     }
 
     fun getUserById(id: String): LiveData<DocumentSnapshot> {
         FirestoreRepository.getUserById(id)
             .addSnapshotListener { value, error ->
                 if ( error != null) {
-                    Log.w(tag, "Listen failed.", error)
+                    Log.w(tag, listenFailed, error)
                     userDocumentById.value = null
                 }
                 userDocumentById.postValue(value)
@@ -384,7 +390,7 @@ class UserViewModel : ViewModel() {
         FirestoreRepository.getAllVehiclesByUserId(id)
             .addSnapshotListener { value, error ->
                 if (error != null) {
-                    Log.w(tag, "Listen failed.", error)
+                    Log.w(tag, listenFailed, error)
                     vehiclesByUserId.value = mutableMapOf()
                 }
 
@@ -411,7 +417,7 @@ class UserViewModel : ViewModel() {
         FirestoreRepository.getVehicleById(vehicleId, driverId)
             .addSnapshotListener { value, error ->
                 if (error != null) {
-                    Log.w(tag, "Listen failed.", error)
+                    Log.w(tag, listenFailed, error)
                     vehicleById.value = null
                 }
 

@@ -4,9 +4,6 @@
     <string name="password">Contraseña</string>
     <string name="logIn">Acceder</string>
     <string name="prefs_file">com.example.driveus_mvvm.PREFERENCE_FILE_KEY</string>
-    <string name="activity_main__label__placeholder_provider">Proveedor</string>
-    <string name="activity_main__label__placeholder_email">Email</string>
-    <string name="activity_main__button__logout_button">Cerrar sesión</string>
     <string name="activity_auth__button__sign_up_button">Registrarse</string>
     <string name="activity_sig_up__label__name_edit_text">Nombre</string>
     <string name="activity_sign_up__label__surname_edit_text">Apellidos</string>
@@ -28,8 +25,7 @@
     <string name="menu__item__profile">Mi perfil</string>
     <string name="login_dialog__message__error">Se ha producido un error autenticando al usuario</string>
     <string name="login_dialog__message__title">Error</string>
-    <string name="login_dialog__mesage__positive_message">Aceptar</string>
-    <string name="profile_fragment__label__button_log_out">Cerrar sesión</string>
+    <string name="login_dialog__message__positive_message">Aceptar</string>
     <string name="profile_fragment__label__name">Nombre: </string>
     <string name="profile_fragment__label__email_label">Email:</string>
     <string name="profile_fragment__label__car_title">Tus coches registrados</string>
@@ -51,28 +47,23 @@
     <string name="fragment_add_car__label__car_seats_edit_text">Nº asientos</string>
     <string name="fragment_add_car__label__car_description_edit_text">Descripción</string>
     <string name="fragment_add_car__button_add_car">Añadir</string>
-    <string name="profile_fragment__label__button_add_car">Añadir vehículo</string>
     <string name="channels_fragment__label__tab_explore">Explorar</string>
     <string name="channels_fragment__label__tab_my_channels">Mis canales</string>
     <string name="channel_row__label__origin_zone_icon_content_description">Origin zone icon</string>
     <string name="channel_row__label__destination_zone_icon_content_description">Destination zone icon</string>
-    <string name="all_channels_label_saerch_hint">Buscar zona...</string>
+    <string name="all_channels_label_saerch_hint">Buscar zona…</string>
     <string name="all_channels__label__filter_image_content_description">Filtro de canales</string>
     <string name="shared_pref_doc_id_key">docId</string>
     <string name="dialog_delete_car__label__body">¿Está seguro de que quiere eliminar este vehículo de su lista?</string>
-    <string name="dialog_delete_car__button__acept">Aceptar</string>
+    <string name="dialog_delete_car__button__accept">Aceptar</string>
     <string name="dialog_delete_car__label__cancel">Cancelar</string>
     <string name="dialog_profile_pic___label__cancel">Cancelar</string>
     <string name="dialog_profile_pic__label__delete">Eliminar</string>
     <string name="dialog_profile_pic__label__change">Cambiar imagen</string>
     <string name="dialog_profile_pic__label__title">Imagen de perfil</string>
-    <string name="profile_picture_not_found_tag">Imagen no encontrada</string>
-    <string name="profile_picture_not_found_message">No se ha encontrado imagen en Firebase Storage. Se ha cargado la
-        imagen por defecto.
-    </string>
     <string name="my_rides_fragment__label__tab_coming_rides">Próximos</string>
     <string name="my_rides_fragment__label__tab_record">Historial</string>
-    <string name="menu_top_bar__labe__log_out">Cerrar sesión</string>
+    <string name="menu_top_bar__label__log_out">Cerrar sesión</string>
     <string name="fragment_ride_form__label__title">Nuevo trayecto</string>
     <string name="fragment_ride_form__label__capacity_edit_text">Nº de plazas disponibles</string>
     <string name="fragment_ride_form__label__price_edit_text">Precio</string>
@@ -91,13 +82,12 @@
     <string name="ride_detail__label__date">Fecha de salida</string>
     <string name="dialog_passenger__label__title">Pasajeros</string>
     <string name="ride_detail__label__button">Unirse</string>
-    <string name="ride_form_error_mas_capacity">Este vehículo no dispone de tantas plazas</string>
     <string name="ride_detail__label__button_not_join">Eliminarse</string>
     <string name="fragment_ride_payouts_detail_list__label__total_money">TOTAL RECAUDADO</string>
     <string name="my_rides_record_list__label__role_button_passenger">VIAJES COMO PASAJERO</string>
     <string name="my_rides_record_list__label__role_button_driver">VIAJES COMO CONDUCTOR</string>
     <string name="ride_form_error_max_capacity">Este vehículo no dispone de tantas plazas</string>
-    <string name="fragment_ride_form__lable__check_box">Se repite</string>
+    <string name="fragment_ride_form__label__check_box">Se repite</string>
     <string name="fragment_ride_form__label__time_repeat">Hora</string>
     <string name="fragment_ride_form__label__time_end_repeat_edit_text">Fecha límite (máx 4 meses)</string>
     <string name="ride_form_error_no_days_of_week">Ningún día seleccionado</string>
@@ -125,7 +115,6 @@
     <string name="fragment_payout_debt__label__title_driver">Deudas pendientes de pago como conductor</string>
     <string name="fragment_payout_label_filter_hint">Filtrar entre mis pasajeros</string>
     <string name="dialog_payout_users_list_title">Selecciona un usuario</string>
-    <string name="ride_detail__button__delete_ride">Borrar</string>
     <string name="dialog_delete_ride__text__">Si elimina el viaje se generará una deuda en favor de los pasajeros que ya
         hayan realizado el pago. ¿Está seguro?
     </string>
@@ -144,7 +133,6 @@
         más tarde.
     </string>
     <string name="fragment_edit_vehicle__label__title">Editar vehiculo</string>
-    <string name="fragment_edit_vehicle_seats_input_hint">Nuevo número de asientos</string>
     <string name="fragment_edit_vehicle_color_input_hint">Nuevo color</string>
     <string name="fragment_edit_vehicle_description_input_hint">Nueva descripción</string>
     <string name="menu_top_bar__label__edit_user">Cambiar o editar nombre</string>
@@ -209,4 +197,37 @@
         pagos con ese usuario.
     </string>
     <string name="sign_up_form_error_no_blanks">El nombre de usuario no puede contener espacios en blanco</string>
+    <string name="white_message_bar"><![CDATA[<font color=\'#FFFFFF\'>DriveUs </font>]]></string>
+    <string name="black_message_bar"><![CDATA[<font color=\'#000000\'>DriveUs</font>]]></string>
+    <string name="channel_detail__button__filter_icon_description">Icono de filtro</string>
+    <string name="channel_detail__image__clear_filter_description">X para eliminar</string>
+    <string name="channel_detail__button__floating_button_description">Botón flotante para añadir viaje</string>
+    <string name="my_rides_record__button__filter_icon_description">Icono de filtro</string>
+    <string name="my_rides_record__image__clear_filter_description">X para eliminar el texto</string>
+    <string name="fragment_payout__image__clear_filter_description">X para eliminar el texto</string>
+    <string name="fragment_profile__image_description">Imagen de perfil</string>
+    <string name="ride_detail__image__origin_zone_description">Icono de punto de origen</string>
+    <string name="ride_detail__image__destination_zone_description">Icono punto de destino</string>
+    <string name="ride_detail__button__delete_ride_description">Botón para eliminar viajes</string>
+    <string name="ride_detail__image__profile_picture_description">Imagen del conductor</string>
+    <string name="ride_detail__image__calendar_icon_description">Fecha del viaje</string>
+    <string name="ride_detail__image__clock_icon_description">Hora de salida</string>
+    <string name="ride_detail__image__capacity_indicator_description">Indicador de plazas</string>
+    <string name="ride_detail__image__map_icon_description">Icono de mapa</string>
+    <string name="ride_detail__button__center_meeting_point_description">Icono punto de encuentro en el mapa</string>
+    <string name="ride_detail__image__car_icon_description">Vehículo del vaije</string>
+    <string name="ride_detail__image__color_icon_description">Color del vehículo</string>
+    <string name="channel_row__button__subscribe_description">X para eliminar el texto</string>
+    <string name="payout_row__image__profile_picture_description">Imagen del pasajero</string>
+    <string name="payout_row_ride_details__image__profile_picture_description">Imagen del pasajero</string>
+    <string name="ride_row__image__profile_description">Imagen del conductor</string>
+    <string name="ride_row__image__hour_icon_description">Fecha y hora de salida</string>
+    <string name="ride_row__image__euro_icon_description">Precio del viaje</string>
+    <string name="ride_row__image__capacity_indicator_description">Indicador de aforo</string>
+    <string name="ride_row__image__meeting_point_description">Punto de enceuntro para la salida</string>
+    <string name="profile_fragment__label__email_test">ppgot@gmail.com</string>
+    <string name="car_row__label_Description_test">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+        ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </string>
 </resources>

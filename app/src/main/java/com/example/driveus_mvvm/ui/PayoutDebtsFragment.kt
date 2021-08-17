@@ -2,7 +2,6 @@ package com.example.driveus_mvvm.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentPayoutsDebtsBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
@@ -22,7 +20,6 @@ import com.example.driveus_mvvm.ui.adapter.DebtListAdapter
 import com.example.driveus_mvvm.ui.utils.ImageUtils
 import com.example.driveus_mvvm.ui.utils.NetworkUtils
 import com.example.driveus_mvvm.view_model.PayoutViewModel
-import com.example.driveus_mvvm.view_model.UserViewModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage

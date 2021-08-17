@@ -2,7 +2,6 @@ package com.example.driveus_mvvm.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentMyComingRidesBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
@@ -22,7 +20,6 @@ import com.example.driveus_mvvm.ui.utils.ImageUtils
 import com.example.driveus_mvvm.view_model.RideViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
-import java.util.*
 
 class MyComingRidesFragment : Fragment() {
 
@@ -52,7 +49,7 @@ class MyComingRidesFragment : Fragment() {
 
     }
 
-    private fun myComingRidesAsPassengerObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> {
+    private fun myComingRidesAsPassengerObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> { it ->
         if (it.isEmpty()){
             viewBinding?.myComingRidesFragmentListRecyclerAsPassenger?.visibility = View.GONE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutPassenger?.visibility = View.VISIBLE
@@ -63,7 +60,7 @@ class MyComingRidesFragment : Fragment() {
         adapter.submitList(it.toList().sortedBy { it.getTimestamp("date") })
     }
 
-    private fun myComingRidesAsDriverObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> {
+    private fun myComingRidesAsDriverObserver(adapter: MyComingRidesListAdapter) = Observer<List<DocumentSnapshot>> { it ->
         if (it.isEmpty()){
             viewBinding?.myComingRidesFragmentListRecyclerAsDriver?.visibility = View.GONE
             viewBinding?.myComingRidesFragmentContainerNoRidesLinearLayoutDriver?.visibility = View.VISIBLE

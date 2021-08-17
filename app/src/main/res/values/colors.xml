@@ -2,7 +2,6 @@
 <resources>
     <color name="pink_200">#ff93c1</color>
     <color name="pink_500">#ef6091</color>
-    <color name="pink_700">#b92a64</color>
     <color name="teal_300">#90caf9</color>
     <color name="teal_700">#5d99c6</color>
     <color name="yellow_500">#cabf45</color>
@@ -14,6 +13,5 @@
     <color name="cancel">#e53935</color>
     <color name="unpaid">#B00002</color>
     <color name="paid">#02b000</color>
-    <color name="disbled_payout_grey">#e5e5e5</color>
-    <color name="daySelected">?colorSecondaryVariant</color>
+    <color name="disabled_payout_grey">#e5e5e5</color>
 </resources>

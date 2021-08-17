@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -30,16 +29,16 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-            android:id="@+id/fragment_edit_vehicle__input__color_edit"
-            android:hint="@string/fragment_edit_vehicle_color_input_hint"
-            android:inputType="textPersonName"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                android:id="@+id/fragment_edit_vehicle__input__color_edit"
+                android:hint="@string/fragment_edit_vehicle_color_input_hint"
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:importantForAutofill="no"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/fragment_edit_vehicle__input__descripcion"
+        android:id="@+id/fragment_edit_vehicle__input__description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -48,11 +47,11 @@
         app:layout_constraintTop_toBottomOf="@id/fragment_edit_vehicle__input__color">
 
         <EditText
-            android:id="@+id/fragment_edit_vehicle__input__descripcion_edit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/fragment_edit_vehicle_description_input_hint"
-            android:inputType="textLongMessage" />
+                android:id="@+id/fragment_edit_vehicle__input__description_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/fragment_edit_vehicle_description_input_hint"
+                android:inputType="textLongMessage" android:importantForAutofill="no"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,5 +63,5 @@
         android:text="@string/fragment_edit_vehicle__button__edit_car"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_edit_vehicle__input__descripcion" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_edit_vehicle__input__description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

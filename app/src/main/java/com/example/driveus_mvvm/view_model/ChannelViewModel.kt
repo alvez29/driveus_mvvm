@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 class ChannelViewModel : ViewModel() {
 
     private val tag = "FIRESTORE_CHANNEL_VIEW_MODEL"
+    private val listenFailed = "Listen failed."
 
     private val allChannels: MutableLiveData<Map<String, Channel>> = MutableLiveData(mutableMapOf())
     private val userChannels: MutableLiveData<Map<String, Channel>> = MutableLiveData(mutableMapOf())
@@ -23,7 +24,7 @@ class ChannelViewModel : ViewModel() {
     fun getChannelById(channelDocId: String) : LiveData<Channel> {
         FirestoreRepository.getChannelById(channelDocId).addSnapshotListener { value, error ->
             if (error != null) {
-                Log.w(tag, "Listen failed.", error)
+                Log.w(tag, listenFailed, error)
                 channelById.postValue(Channel())
             }
 
@@ -39,7 +40,7 @@ class ChannelViewModel : ViewModel() {
         FirestoreRepository.getAllChannels()
             .addSnapshotListener { value, error ->
                 if (error != null) {
-                    Log.w(tag, "Listen failed.", error)
+                    Log.w(tag, listenFailed, error)
                     allChannels.postValue(mutableMapOf())
                 }
 
@@ -68,7 +69,7 @@ class ChannelViewModel : ViewModel() {
                     FirestoreRepository.getChannelById(channelReference.id).addSnapshotListener { value, error ->
 
                         if (error != null) {
-                            Log.w(tag, "Listen failed.", error)
+                            Log.w(tag, listenFailed, error)
                             userChannels.postValue(mutableMapOf())
                         }
 
@@ -92,7 +93,7 @@ class ChannelViewModel : ViewModel() {
     fun getRidesFromChannel(channelDocId: String): LiveData<Map<String, Ride>> {
         FirestoreRepository.getRidesFromChannel(channelDocId).addSnapshotListener { value, error ->
             if (error != null) {
-                Log.w(tag, "Listen failed.", error)
+                Log.w(tag, listenFailed, error)
                 channelRides.postValue(emptyMap())
             }
 

@@ -60,7 +60,7 @@ class MyChannelsFragment : Fragment() {
         }
     }
 
-    private val hasAnySuscriptionObserver = Observer<Boolean> {
+    private val hasAnySubscriptionObserver = Observer<Boolean> {
         if (it) {
             viewBinding?.myChannelsFragmentContainerChannelsRecycler?.visibility = View.VISIBLE
             viewBinding?.myChannelsFragmentContainerNoChannels?.visibility = View.GONE
@@ -89,7 +89,7 @@ class MyChannelsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sharedPref?.getString(getString(R.string.shared_pref_doc_id_key), "")
-            ?.let { userViewModel.hasAnySuscription(it)?.observe(viewLifecycleOwner, hasAnySuscriptionObserver) }
+            ?.let { userViewModel.hasAnySubscription(it).observe(viewLifecycleOwner, hasAnySubscriptionObserver) }
 
         val adapter = setupRecyclerAdapter()
 

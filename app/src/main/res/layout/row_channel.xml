@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_round_more_vert_24"
             android:layout_marginStart="16dp"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toTopOf="@id/channel_detail__image__destination_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/channel_detail__image__origin_icon"
@@ -85,6 +86,7 @@
             android:layout_margin="16dp"
             android:background="@null"
             android:src="@drawable/ic_round_bookmark_border_24"
+            android:contentDescription="@string/channel_row__button__subscribe_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
