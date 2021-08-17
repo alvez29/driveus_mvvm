@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.ActivityAuthBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
@@ -18,6 +19,7 @@ class AuthActivity : AppCompatActivity() {
     private var viewBinding : ActivityAuthBinding? = null
     private val viewModel: UserViewModel by lazy { ViewModelProvider(this)[UserViewModel::class.java] }
     private val firebaseAuth: FirebaseAuth = FirestoreRepository.getFirebaseAuthInstance()
+    private val gifURL = "https://i.imgur.com/N16kTqz.gif"
 
     private fun checkSession() {
         if (firebaseAuth.currentUser != null) {
@@ -34,6 +36,14 @@ class AuthActivity : AppCompatActivity() {
 
     private fun setup() {
         title = "Autenticación"
+
+        supportActionBar?.hide()
+
+        viewBinding?.authActivityImgGifBackground?.let {
+            Glide.with(this)
+                .load(gifURL)
+                .into(it)
+        }
 
         viewBinding?.activityAuthButtonLogInButton?.setOnClickListener {
             showLoadingBar()
