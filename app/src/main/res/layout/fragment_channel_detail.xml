@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_round_more_vert_24"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toTopOf="@id/channel_detail__image__destination_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/channel_detail__image__origin_icon"
@@ -85,17 +86,18 @@
             app:layout_constraintTop_toBottomOf="@id/channel_detail__label__channel_destination_zone">
 
             <ImageButton
-                android:id="@+id/channel_detail__button__filter_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@null"
-                android:src="@drawable/ic_round_filter_alt_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    android:id="@+id/channel_detail__button__filter_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_round_filter_alt_24"
+                    android:contentDescription="@string/channel_detail__button__filter_icon_description"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/channel_detail__input__filter_text"
@@ -121,6 +123,7 @@
                 android:background="@null"
                 android:visibility="gone"
                 android:src="@drawable/ic_round_clear_24"
+                android:contentDescription="@string/channel_detail__image__clear_filter_description"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -197,6 +200,7 @@
             android:src="@drawable/ic_round_add_24"
             android:backgroundTint="?colorSecondaryVariant"
             android:layout_marginBottom="16dp"
+            android:contentDescription="@string/channel_detail__button__floating_button_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

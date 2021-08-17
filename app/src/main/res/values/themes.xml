@@ -40,8 +40,4 @@
         <item name="overlapAnchor">true</item>
     </style>
 
-    <style name="DayOfWeekPicker">
-
-    </style>
-
 </resources>

@@ -27,10 +27,11 @@
             android:layout_marginBottom="8dp"
             android:background="@null"
             android:src="@drawable/ic_round_filter_alt_24"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/yellow_500" />
+            app:tint="@color/yellow_500"/>
 
         <TextView
             android:id="@+id/fragment_payout__label__filter"
@@ -56,6 +57,7 @@
             android:background="@null"
             android:visibility="gone"
             android:src="@drawable/ic_round_clear_24"
+            android:contentDescription="@string/fragment_payout__image__clear_filter_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

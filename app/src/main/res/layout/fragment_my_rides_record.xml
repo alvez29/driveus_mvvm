@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -24,6 +23,7 @@
             android:layout_marginBottom="8dp"
             android:background="@null"
             android:src="@drawable/ic_round_filter_alt_24"
+            android:contentDescription="@string/my_rides_record__button__filter_icon_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -53,6 +53,7 @@
             android:background="@null"
             android:visibility="gone"
             android:src="@drawable/ic_round_clear_24"
+            android:contentDescription="@string/my_rides_record__image__clear_filter_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

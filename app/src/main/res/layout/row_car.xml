@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    app:srcCompat="@drawable/ic_expandable_more"
+                    app:srcCompat="@drawable/ic_round_expand_more_24"
                     app:layout_constraintTop_toTopOf="@+id/car_row_label_brand_model"
                     app:layout_constraintBottom_toBottomOf="@+id/car_row_label_brand_model"
                     app:layout_constraintEnd_toEndOf="@+id/car_row_label_brand_model"/>
@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:visibility="gone"
-                    app:srcCompat="@drawable/ic_expandable_less"
+                    app:srcCompat="@drawable/ic_round_expand_less_24"
                     app:layout_constraintTop_toTopOf="@id/car_row_label_brand_model"
                     app:layout_constraintBottom_toBottomOf="@id/car_row_label_brand_model"
                     app:layout_constraintEnd_toEndOf="@id/car_row_label_brand_model"/>
@@ -230,7 +230,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                    android:text="@string/car_row__label_Description_test"
                     android:textColor="@color/browser_actions_bg_grey"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,7 @@ class RidesListAdapter(
         return RideViewHolder(rideView)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: RidesListAdapter.RideViewHolder, position: Int) {
         val currentRidePair = getItem(position)
 

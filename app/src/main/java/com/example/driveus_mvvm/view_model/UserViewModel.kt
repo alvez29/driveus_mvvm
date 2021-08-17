@@ -32,7 +32,7 @@ class UserViewModel : ViewModel() {
     private val formErrors = MutableLiveData<MutableMap<SignUpFormEnum, Int>>(mutableMapOf())
     private val redirect = MutableLiveData(Pair(false, ""))
     private val imageTrigger =  MutableLiveData(false)
-    private val isLoading = MutableLiveData<Boolean>(false)
+    private val isLoading = MutableLiveData(false)
 
     private val vehiclesByUserId: MutableLiveData<Map<String, Vehicle>> = MutableLiveData()
     private val vehicleFormError = MutableLiveData<MutableMap<VehicleFormEnum, Int>>(mutableMapOf())

@@ -66,7 +66,7 @@ class AuthActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.login_dialog__message__title))
         builder.setMessage(getString(R.string.login_dialog__message__error))
-        builder.setPositiveButton(getString(R.string.login_dialog__mesage__positive_message), null)
+        builder.setPositiveButton(getString(R.string.login_dialog__message__positive_message), null)
         val dialog: AlertDialog = builder.create()
         dialog.show()
     }

@@ -2,7 +2,6 @@ package com.example.driveus_mvvm.model.entities
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
-import java.sql.Driver
 
 data class Payout(var creationDate: Timestamp? = null,
                   var paidDate: Timestamp? = null,

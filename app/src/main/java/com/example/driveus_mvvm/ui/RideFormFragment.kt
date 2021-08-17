@@ -3,7 +3,6 @@ package com.example.driveus_mvvm.ui
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.icu.lang.UProperty
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -204,7 +203,8 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
             TimePickerDialog(context, this, hour, minute, true).show()
         } else {
             getDateLimitCalendar()
-            viewBinding?.fragmentRideFormLabelDateEndRepeatEditText?.setText("$savedDay/$savedMonth/$savedYear")
+            val dateStr = "$savedDay/$savedMonth/$savedYear"
+            viewBinding?.fragmentRideFormLabelDateEndRepeatEditText?.setText(dateStr)
         }
     }
 
@@ -213,9 +213,11 @@ class RideFormFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
         savedMinute = minute
         val finalMinute = DateTimeUtils.fixMinuteString(savedMinute)
         if (viewBinding?.fragmentRideFormCheckBoxRepeat?.isChecked == false) {
-            viewBinding?.fragmentRideFormLabelDateTimeEditText?.setText("$savedDay/$savedMonth/$savedYear $savedHour:$finalMinute")
+            val datetimeStr = "$savedDay/$savedMonth/$savedYear $savedHour:$finalMinute"
+            viewBinding?.fragmentRideFormLabelDateTimeEditText?.setText(datetimeStr)
         } else {
-            viewBinding?.fragmentRideFormLabelTimeRepeatEditText?.setText("$savedHour:$finalMinute")
+            val minuteStr = "$savedHour:$finalMinute"
+            viewBinding?.fragmentRideFormLabelTimeRepeatEditText?.setText(minuteStr)
         }
     }
 

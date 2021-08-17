@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -30,11 +29,11 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-            android:id="@+id/fragment_edit_user_name__input__name_edit"
-            android:hint="@string/fragment_edit_user_name__input__name_edit"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                android:id="@+id/fragment_edit_user_name__input__name_edit"
+                android:hint="@string/fragment_edit_user_name__input__name_edit"
+                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:importantForAutofill="no"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -48,11 +47,11 @@
         app:layout_constraintTop_toBottomOf="@+id/fragment_edit_user_name__input__name">
 
         <EditText
-            android:id="@+id/fragment_edit_user_name__input__surname_edit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/fragment_edit_user_name__input__surname_edit"
-            android:inputType="text" />
+                android:id="@+id/fragment_edit_user_name__input__surname_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/fragment_edit_user_name__input__surname_edit"
+                android:inputType="text" android:importantForAutofill="no"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

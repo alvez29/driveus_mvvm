@@ -1,10 +1,10 @@
 package com.example.driveus_mvvm.ui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.example.driveus_mvvm.R
 import com.example.driveus_mvvm.databinding.FragmentRidePayoutsDetailListBinding
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
@@ -66,6 +65,7 @@ class RidePayoutsListFragment: Fragment() {
 
         }
 
+        @SuppressLint("SimpleDateFormat")
         override fun showItemPaid(payoutViewHolder: PayoutsRideDetailsListAdapter.PayoutViewHolder, date: Date?) {
             val pattern = "HH:mm dd-MM-yyyy"
             val simpleDateFormat = SimpleDateFormat(pattern)
@@ -93,7 +93,7 @@ class RidePayoutsListFragment: Fragment() {
 
         override fun showItemUnpaid(payoutViewHolder: PayoutsRideDetailsListAdapter.PayoutViewHolder) {
             val priceColor = context?.let { ContextCompat.getColor(it, R.color.unpaid) }
-            val backgroundColor = context?.let { ContextCompat.getColor(it, R.color.disbled_payout_grey) }
+            val backgroundColor = context?.let { ContextCompat.getColor(it, R.color.disabled_payout_grey) }
 
             payoutViewHolder.checkbox.isChecked = false
 

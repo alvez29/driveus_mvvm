@@ -11,9 +11,8 @@ object DateTimeUtils {
         //El string tendra el formato dd/MM/yyyy HH:mm
 
         val dateArrayStr = dateTimeStr.split(" ")
-        val dateStr: String = dateArrayStr[0].toString()
-        val timeStr: String = dateArrayStr[1].toString()
-
+        val dateStr: String = dateArrayStr[0]
+        val timeStr: String = dateArrayStr[1]
         val dateSplit = dateStr.split("/")
         val day: Int = dateSplit[0].toInt()
         val month: Int = dateSplit[1].toInt() - 1
@@ -62,8 +61,8 @@ object DateTimeUtils {
     fun getStartAndEndDateFromFilterString(filterString: String): Pair<Timestamp, Timestamp> {
         //El string tendrá la forma dd/MM/yyyy de HH:mm a HH:mm
 
-        var startDateStr: String
-        var endDateStr: String
+        val startDateStr: String
+        val endDateStr: String
 
         val filterStringSplit = filterString.split("de")
         val startHour = filterStringSplit[1].split("a").map { it.trim() }

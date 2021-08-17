@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:text="@string/dialog_delete_car__button__acept"
+            android:text="@string/dialog_delete_car__button__accept"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,5 +1,6 @@
 package com.example.driveus_mvvm.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +45,7 @@ class DebtListAdapter (
         return DebtViewHolder(debtListView)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: DebtListAdapter.DebtViewHolder, position: Int) {
         val payout = getItem(position).second.toObject(Payout::class.java)
         val priceStr = "${payout?.price} €"

@@ -28,6 +28,7 @@
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_origin_zone_24"
+                android:contentDescription="@string/ride_detail__image__origin_zone_description"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,6 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_round_arrow_forward_24"
+                android:importantForAccessibility="no"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +65,7 @@
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_pink_round_location_on_24"
+                android:contentDescription="@string/ride_detail__image__destination_zone_description"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ride_detail__image__arrow_icon"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -170,6 +173,7 @@
                 android:visibility="gone"
                 android:background="@null"
                 android:src="@drawable/ic_delete_24"
+                android:contentDescription="@string/ride_detail__button__delete_ride_description"
                 app:tint="@color/cancel"
                 app:layout_constraintTop_toTopOf="@+id/ride_detail__label__username"
                 app:layout_constraintBottom_toBottomOf="@+id/ride_detail__label__username"
@@ -191,6 +195,7 @@
                     android:layout_width="100dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="16dp"
+                    android:contentDescription="@string/ride_detail__image__profile_picture_description"
                     tools:src="@drawable/circular_crop_profile_picture_example"
                     app:layout_constraintBottom_toTopOf="@+id/ride_detail__container__switch_container"
                     app:layout_constraintStart_toStartOf="parent"
@@ -239,6 +244,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:src="@drawable/ic_round_calendar_today_24"
+                            android:contentDescription="@string/ride_detail__image__calendar_icon_description"
                             app:layout_constraintBottom_toBottomOf="@+id/ride_detail__label__date"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/ride_detail__label__date" />
@@ -261,6 +267,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:src="@drawable/ic_round_access_time_24"
+                            android:contentDescription="@string/ride_detail__image__clock_icon_description"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/ride_detail__image__calendar_icon" />
@@ -382,6 +389,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_marginTop="8dp"
+                            android:contentDescription="@string/ride_detail__image__capacity_indicator_description"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/dialog_passenger__divider"
@@ -429,6 +437,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/ic_baseline_map_24"
+                        android:contentDescription="@string/ride_detail__image__map_icon_description"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -470,7 +479,8 @@
                         android:id="@+id/ride_detail__img__transparent"
                         android:layout_width="match_parent"
                         android:layout_height="350dp"
-                        android:src="@android:color/transparent" />
+                        android:src="@android:color/transparent"
+                        android:importantForAccessibility="no"/>
 
                 </RelativeLayout>
 
@@ -482,6 +492,7 @@
                     android:visibility="gone"
                     android:layout_marginStart="24dp"
                     android:layout_marginBottom="32dp"
+                    android:contentDescription="@string/ride_detail__button__center_meeting_point_description"
                     app:layout_constraintStart_toStartOf="@id/ride_detail__container__map"
                     app:layout_constraintBottom_toBottomOf="@id/ride_detail__container__map" />
 
@@ -507,6 +518,7 @@
                             android:layout_height="0dp"
                             android:layout_marginStart="16dp"
                             android:src="@drawable/ic_baseline_directions_car_24"
+                            android:contentDescription="@string/ride_detail__image__car_icon_description"
                             app:layout_constraintBottom_toBottomOf="@+id/ride_detail__label__color"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -533,6 +545,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/ic_round_grey_color_lens_24"
+                            android:contentDescription="@string/ride_detail__image__color_icon_description"
                             app:layout_constraintBottom_toBottomOf="@+id/ride_detail__label__color"
                             app:layout_constraintStart_toEndOf="@+id/ride_detail__image__car_icon"
                             app:layout_constraintTop_toTopOf="@+id/ride_detail__label__color" />

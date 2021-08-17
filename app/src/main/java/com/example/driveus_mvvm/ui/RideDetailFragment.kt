@@ -7,9 +7,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -25,6 +23,7 @@ import com.example.driveus_mvvm.model.entities.Ride
 import com.example.driveus_mvvm.model.entities.Vehicle
 import com.example.driveus_mvvm.model.repository.FirestoreRepository
 import com.example.driveus_mvvm.model.toLatLng
+import com.example.driveus_mvvm.ui.utils.HelpMenu
 import com.example.driveus_mvvm.ui.utils.ImageUtils
 import com.example.driveus_mvvm.ui.utils.LocationUtils
 import com.example.driveus_mvvm.ui.utils.NetworkUtils
@@ -198,6 +197,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
         viewBinding?.rideDetailLabelDestinationZone?.text = channel.destinationZone.toString()
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun setupBasicInformation(ride: Ride) {
         val pattern = "HH:mm dd-MM-yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern)
@@ -219,7 +219,7 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     private fun loadCapacityIndicator(capacity: Int?, actual: Int, imageView: ImageView) {
         val capacityPercentage = capacity?.toDouble()
             ?.let { actual.toDouble() / it }
-        var capacityDrawable: Int = 0
+        var capacityDrawable = 0
 
         capacityPercentage?.let {
             capacityDrawable = if (capacityPercentage == 1.0) {
@@ -446,42 +446,11 @@ class RideDetailFragment : Fragment(), OnMapReadyCallback {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.menu_top_bar_ride_details__item__help -> {
-                val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_help_fragment, null)
-                val mBuilder = AlertDialog.Builder(context)
-                        .setView(mDialogView)
-                        .setTitle("Ayuda")
-
                 val text1 = R.string.dialog_help_ride_details1
                 val text2 = R.string.dialog_help_ride_details2
                 val text3 = R.string.dialog_help_ride_details3
                 val textList: List<Int> = listOf(text1, text2, text3)
-                var pointer: Int = 0
-
-                mDialogView.findViewById<TextView>(R.id.dialog_help__text__).setText(text1)
-                mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer + 1}/${textList.size}")
-
-                val mAlertDialog = mBuilder.show()
-                mDialogView.findViewById<View>(R.id.dialog_help__button__accept).setOnClickListener {
-                    mAlertDialog.dismiss()
-                }
-                mDialogView.findViewById<ImageButton>(R.id.dialog_help__image__arrow_left).setOnClickListener {
-                    if (pointer == 0) {
-                        pointer = textList.size - 1
-                    } else {
-                        pointer -= 1
-                    }
-                    mDialogView.findViewById<TextView>(R.id.dialog_help__text__).setText(textList[pointer])
-                    mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer + 1}/${textList.size}")
-                }
-                mDialogView.findViewById<ImageButton>(R.id.dialog_help__image__arrow_right).setOnClickListener {
-                    if (pointer == textList.size - 1) {
-                        pointer = 0
-                    } else {
-                        pointer += 1
-                    }
-                    mDialogView.findViewById<TextView>(R.id.dialog_help__text__).setText(textList[pointer])
-                    mDialogView.findViewById<TextView>(R.id.dialog_help__text__n_views).setText("${pointer + 1}/${textList.size}")
-                }
+                context?.let { HelpMenu.displayHelpMenu(it, textList) }
             }
         }
         return true
