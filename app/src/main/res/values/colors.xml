@@ -14,4 +14,5 @@
     <color name="unpaid">#B00002</color>
     <color name="paid">#02b000</color>
     <color name="disabled_payout_grey">#e5e5e5</color>
+    <color name="daySelected">?colorSecondaryVariant</color>
 </resources>
