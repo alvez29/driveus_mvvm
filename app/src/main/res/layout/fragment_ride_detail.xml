@@ -600,9 +600,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ride_detail__container__no_content"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:visibility="gone"
             android:background="?colorSecondary"
+            android:layout_marginTop="50dp"
             app:layout_constraintTop_toBottomOf="@id/ride_detail__container__title_container"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
