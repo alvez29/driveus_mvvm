@@ -404,12 +404,22 @@ class RideViewModel : ViewModel() {
                 payoutsOfRide.forEach {
                     //Si hay una deuda queda saldada al apuntarse de nuevo
                     if (it.getDocumentReference("passenger")?.id == passengerId
-                        && it.getBoolean("isDebt") == true) {
+                        && it.getBoolean("isDebt") == true
+                        && it.getBoolean("isPaid") == false) {
                         FirestoreRepository.deleteDebtFromPassenger(passengerId, it.reference)
                         ride?.driver?.id?.let { it1 -> FirestoreRepository.deleteDebtFromDriver(it1, it.reference) }
                         FirestoreRepository.checkPayoutAsPaidUpdateBoolean(channelId, rideId, it.id)
                         FirestoreRepository.debtToPayout(channelId, rideId, it.id)
 
+                        return@launch
+                    } else if (it.getDocumentReference("passenger")?.id == passengerId
+                        && it.getBoolean("isDebt") == true
+                        && it.getBoolean("isPaid") == true) {
+                        FirestoreRepository.debtToPayout(channelId, rideId, it.id)
+                        FirestoreRepository.checkPayoutAsUnpaidUpdateBoolean(channelId, rideId, it.id)
+                        FirestoreRepository.checkPayoutAsUnpaidUpdatePaidDate(channelId, rideId, it.id)
+                        FirestoreRepository.addPayoutInAPassenger(passengerId, it.reference)
+                        ride?.driver?.id?.let { it1 -> FirestoreRepository.addPayoutInADriver(it1, it.reference) }
                         return@launch
                     }
                 }
