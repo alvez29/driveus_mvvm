@@ -1,9 +1,10 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs'
-    id 'com.google.gms.google-services'
+    id "com.android.application"
+    id "kotlin-android"
+    id "kotlin-kapt"
+    id "androidx.navigation.safeargs"
+    id "com.google.gms.google-services"
+    id "com.google.secrets_gradle_plugin" version "0.5"
 }
 
 android {
@@ -12,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.driveus_mvvm"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -27,7 +28,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
@@ -35,38 +36,64 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.10"
-    implementation 'androidx.core:core-ktx:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha02"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
+    implementation "androidx.core:core-ktx:1.6.0"
+    implementation "androidx.appcompat:appcompat:1.3.1"
+    implementation "com.google.android.material:material:1.4.0"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha06"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.0"
+    implementation "com.google.firebase:firebase-firestore:23.0.3"
+
+    //Firebase Auth
+    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation platform("com.google.firebase:firebase-bom:28.0.1")
+
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.3"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+
+    //Google Maps
+    implementation "com.google.android.gms:play-services-maps:17.0.1"
+
+    //Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.5"
-    implementation 'com.google.firebase:firebase-firestore:23.0.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //Firebase Storage
+    implementation platform("com.google.firebase:firebase-bom:28.1.0")
+    implementation "com.google.firebase:firebase-storage-ktx"
 
     // Kotlin components
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
+
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+
+    //Time range picker
+    implementation "com.github.zion830:RangeTimePickerDialog:1.2"
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation "com.github.bumptech.glide:glide:4.12.0"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.12.0"
+
+    //Day of week picker
+    implementation "ca.antonious:materialdaypicker:0.7.4"
+
+    //Lottie
+    implementation "com.airbnb.android:lottie:4.0.0"
 
 }

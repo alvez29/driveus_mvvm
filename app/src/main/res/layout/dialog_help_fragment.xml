@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/dialog_help__text__"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:padding="16dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Texto de prueba donde se detallarán los detalles del manual de usario."
+            app:layout_constraintEnd_toStartOf="@+id/dialog_help__image__arrow_right"
+            app:layout_constraintStart_toEndOf="@+id/dialog_help__image__arrow_left"/>
+
+    <TextView
+            android:id="@+id/dialog_help__text__n_views"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_help__text__"
+            tools:text="1/3"/>
+
+    <ImageButton
+            android:id="@+id/dialog_help__image__arrow_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/dialog_help__image__arrow_left"
+            android:background="@null"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_round_arrow_back_ios_24"
+            app:tint="@color/common_google_signin_btn_text_light"
+            app:layout_constraintTop_toTopOf="@id/dialog_help__text__"
+            app:layout_constraintBottom_toBottomOf="@id/dialog_help__text__"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageButton
+            android:id="@+id/dialog_help__image__arrow_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/dialog_help__image__arrow_left"
+            android:background="@null"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_round_arrow_forward_ios_24"
+            app:tint="@color/common_google_signin_btn_text_light"
+            app:layout_constraintTop_toTopOf="@id/dialog_help__text__"
+            app:layout_constraintBottom_toBottomOf="@id/dialog_help__text__"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+            android:id="@+id/dialog_help__button__accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_join_ride__label__accept"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_help__text__n_views"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

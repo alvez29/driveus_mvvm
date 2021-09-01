@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/fragment_ride_form_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment_ride_form__label__title"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_ride_form__label__capacity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toBottomOf="@id/fragment_ride_form_title"
+                app:layout_constraintStart_toEndOf="@id/fragment_ride_form__image__seat"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            <EditText
+                    android:id="@+id/fragment_ride_form__label__capacity_edit_text"
+                    android:hint="@string/fragment_ride_form__label__capacity_edit_text"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:importantForAutofill="no"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/fragment_ride_form__image__seat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="?colorSecondary"
+                app:srcCompat="@drawable/ic_seat_car_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fragment_ride_form__label__capacity"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_ride_form__label__capacity"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_ride_form__label__price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toEndOf="@id/fragment_ride_form__image__price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_ride_form__label__capacity">
+
+            <EditText
+                    android:id="@+id/fragment_ride_form__label__price_edit_text"
+                    android:hint="@string/fragment_ride_form__label__price_edit_text"
+                    android:inputType="numberDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:importantForAutofill="no"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/fragment_ride_form__image__price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="?colorSecondary"
+                app:srcCompat="@drawable/ic_round_euro_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fragment_ride_form__label__price"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_ride_form__label__price"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_ride_form__label__meeting_point"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@id/fragment_ride_form__image__meeting_point"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_ride_form__label__price">
+
+            <EditText
+                    android:id="@+id/fragment_ride_form__label__meeting_point_edit_text"
+                    android:hint="@string/fragment_ride_form__label__meeting_point_edit_text"
+                    android:inputType="text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:importantForAutofill="no"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/fragment_ride_form__image__meeting_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="?colorSecondary"
+                app:srcCompat="@drawable/ic_blue_round_location_on_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fragment_ride_form__label__meeting_point"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_ride_form__label__meeting_point"/>
+
+
+        <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/fragment_ride_form__label__vehicle_spinner"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="8dp"
+                android:paddingStart="8dp"
+                style="@style/SpinnerStyle"
+                app:layout_constraintStart_toEndOf="@id/fragment_ride_form__image__vehicle_spinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_ride_form__label__meeting_point"
+                tools:ignore="RtlSymmetry" app:layout_constraintHorizontal_bias="0.0"/>
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ride_form__image__expandable_icon_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@color/black"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/ic_round_expand_more_24"
+                app:layout_constraintEnd_toEndOf="@+id/fragment_ride_form__label__vehicle_spinner"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_ride_form__label__vehicle_spinner"
+                app:layout_constraintTop_toTopOf="@+id/fragment_ride_form__label__vehicle_spinner"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/fragment_ride_form__image__vehicle_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="?colorSecondary"
+                app:srcCompat="@drawable/ic_baseline_directions_car_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fragment_ride_form__label__vehicle_spinner"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_ride_form__label__vehicle_spinner"/>
+
+        <View
+                android:id="@+id/fragment_ride_form_divider"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="?colorSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_ride_form__label__vehicle_spinner"/>
+
+        <CheckBox
+                android:id="@+id/fragment_ride_form__check_box__repeat"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@string/fragment_ride_form__label__check_box"
+                app:layout_constraintStart_toStartOf="@id/fragment_ride_form__label__vehicle_spinner"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_ride_form_divider"/>
+
+        <EditText
+                android:id="@+id/fragment_ride_form__label__error_days_of_week"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:textAlignment="textEnd"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:background="@null"
+                android:focusable="false"
+                android:importantForAutofill="no"
+                app:layout_constraintStart_toEndOf="@+id/fragment_ride_form__check_box__repeat"
+                app:layout_constraintEnd_toStartOf="@+id/fragment_ride_form__icon__error_days_of_week"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_ride_form__check_box__repeat"
+                app:layout_constraintTop_toTopOf="@id/fragment_ride_form__check_box__repeat"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="LabelFor,TextFields"/>
+
+        <EditText
+                android:id="@+id/fragment_ride_form__icon__error_days_of_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:background="@null"
+                android:focusable="false"
+                android:importantForAutofill="no"
+                app:layout_constraintStart_toEndOf="@+id/fragment_ride_form__label__error_days_of_week"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_ride_form__check_box__repeat"
+                app:layout_constraintTop_toTopOf="@id/fragment_ride_form__check_box__repeat"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="LabelFor,TextFields"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fragment_ride_form__container__date_time_no_repeat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintTop_toBottomOf="@id/fragment_ride_form__check_box__repeat"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/fragment_ride_form__button__create"
+                tools:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/fragment_ride_form__image__date_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="?colorSecondary"
+                    app:srcCompat="@drawable/ic_round_access_time_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/fragment_ride_form__label__date_time"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragment_ride_form__label__date_time"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_ride_form__label__date_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/fragment_ride_form__image__date_time"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                        android:id="@+id/fragment_ride_form__label__date_time_edit_text"
+                        android:hint="@string/fragment_ride_form__label__date_time_edit_text"
+                        android:focusable="false"
+                        android:inputType="datetime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:importantForAutofill="no"/>
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fragment_ride_form__container__date_time_repeat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/fragment_ride_form__check_box__repeat"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/fragment_ride_form__button__create"
+                tools:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/fragment_ride_form__image__day_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="?colorSecondary"
+                    app:srcCompat="@drawable/ic_round_calendar_today_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/fragment_ride_form__input__day_week"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragment_ride_form__input__day_week"/>
+
+            <ca.antonious.materialdaypicker.MaterialDayPicker
+                    android:id="@+id/fragment_ride_form__input__day_week"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/fragment_ride_form__label__time_repeat"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/fragment_ride_form__image__time_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="?colorSecondary"
+                    app:srcCompat="@drawable/ic_round_access_time_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/fragment_ride_form__label__time_repeat"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragment_ride_form__label__time_repeat"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_ride_form__label__time_repeat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@id/fragment_ride_form__image__time_repeat"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/fragment_ride_form__input__day_week">
+                <EditText
+                        android:id="@+id/fragment_ride_form__label__time_repeat_edit_text"
+                        android:hint="@string/fragment_ride_form__label__time_repeat"
+                        android:focusable="false"
+                        android:inputType="datetime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:importantForAutofill="no"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/fragment_ride_form__image__day_end_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="?colorSecondary"
+                    app:srcCompat="@drawable/ic_round_timer_off_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/fragment_ride_form__label__day_end_repeat"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragment_ride_form__label__day_end_repeat"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_ride_form__label__day_end_repeat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@id/fragment_ride_form__image__day_end_repeat"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragment_ride_form__label__time_repeat">
+
+                <EditText
+                        android:id="@+id/fragment_ride_form__label__date_end_repeat_edit_text"
+                        android:hint="@string/fragment_ride_form__label__time_end_repeat_edit_text"
+                        android:focusable="false"
+                        android:inputType="datetime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" android:importantForAutofill="no"/>
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+                android:id="@+id/fragment_ride_form__button__create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fragment_ride_form__label__button_submit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

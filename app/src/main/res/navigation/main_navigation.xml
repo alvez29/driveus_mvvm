@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/main_navigation"
+            app:startDestination="@id/myRidesFragment">
+
+    <fragment android:id="@+id/myRidesFragment"
+              android:name="com.example.driveus_mvvm.ui.MyRidesFragment"
+              android:label="MyRidesFragment">
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="blue" />
+        <action
+            android:id="@+id/action_myRidesFragment_to_rideDetailFragment"
+            app:destination="@id/rideDetailFragment" />
+
+    </fragment>
+
+    <fragment android:id="@+id/channelsFragment"
+              android:name="com.example.driveus_mvvm.ui.ChannelsFragment"
+              android:label="ChannelsFragment">
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="pink" />
+
+        <action
+            android:id="@+id/action_channelsFragment_to_channelDetailFragment"
+            app:destination="@id/channelDetailFragment" />
+
+    </fragment>
+
+    <fragment android:id="@+id/payoutsFragment"
+              android:name="com.example.driveus_mvvm.ui.PayoutsFragment"
+              android:label="PayoutsFragment">
+
+        <action android:id="@+id/action_payoutsFragment_to_payoutDebtsFragment"
+                app:destination="@id/payoutDebtsFragment"/>
+
+        <action
+            android:id="@+id/action_payoutsFragment_to_rideDetailFragment"
+            app:destination="@id/rideDetailFragment" />
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="yellow" />
+
+        <argument
+            android:name="usernameFilter"
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment android:id="@+id/payoutDebtsFragment"
+              android:name="com.example.driveus_mvvm.ui.PayoutDebtsFragment"
+              android:label="PayoutDebtsFragment">
+
+        <argument
+                android:name="backgroundColor"
+                app:argType="string"
+                android:defaultValue="yellow" />
+        <action
+            android:id="@+id/action_payoutDebtsFragment_to_rideDetailFragment"
+            app:destination="@id/rideDetailFragment" />
+
+    </fragment>
+
+    <fragment android:id="@+id/profileFragment"
+              android:name="com.example.driveus_mvvm.ui.ProfileFragment"
+              android:label="ProfileFragment">
+
+        <action android:id="@+id/action_profileFragment_to_addCarFragment2"
+                app:destination="@id/addCarFragment"/>
+        <action
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editVehicleFragment"
+            app:destination="@id/editVehicleFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editUserNameFragment"
+            app:destination="@id/editUserNameFragment" />
+
+    </fragment>
+
+    <fragment android:id="@+id/addCarFragment"
+              android:name="com.example.driveus_mvvm.ui.VehicleFormFragment"
+              android:label="AddCarFragment"/>
+
+    <fragment
+        android:id="@+id/channelDetailFragment"
+        android:name="com.example.driveus_mvvm.ui.ChannelDetailFragment"
+        android:label="ChannelDetailFragment" >
+
+        <argument
+            android:name="channelId"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="pink" />
+
+        <action android:id="@+id/action_channelDetailFragment_to_rideFormFragment"
+                app:destination="@id/rideFormFragment"/>
+
+        <action
+            android:id="@+id/action_channelDetailFragment_to_rideDetailFragment"
+            app:destination="@id/rideDetailFragment" />
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/rideFormFragment"
+            android:name="com.example.driveus_mvvm.ui.RideFormFragment"
+            android:label="rideFormFragment">
+
+        <argument
+                android:name="backgroundColor"
+                app:argType="string"
+                android:defaultValue="blue" />
+        <argument
+                android:name="channelId"
+                app:argType="string"
+                android:defaultValue="" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/myChannelsFragment"
+        android:name="com.example.driveus_mvvm.ui.MyChannelsFragment"
+        android:label="MyChannelsFragment" />
+
+    <fragment
+        android:id="@+id/allChannelsFragment"
+        android:name="com.example.driveus_mvvm.ui.AllChannelsFragment"
+        android:label="AllChannelsFragment" />
+
+    <fragment
+        android:id="@+id/myComingRidesFragment"
+        android:name="com.example.driveus_mvvm.ui.MyComingRidesFragment"
+        android:label="MyComingRidesFragment" />
+
+    <fragment
+        android:id="@+id/myRidesRecordFragment"
+        android:name="com.example.driveus_mvvm.ui.MyRidesRecordFragment"
+        android:label="MyRidesRecordFragment" />
+
+    <fragment
+            android:id="@+id/rideDetailFragment"
+            android:name="com.example.driveus_mvvm.ui.RideDetailFragment"
+            android:label="RideDetailFragment" >
+
+        <argument
+                android:name="backgroundColor"
+                app:argType="string"
+                android:defaultValue="blue" />
+
+        <argument
+                android:name="rideId"
+                app:argType="string"
+                android:defaultValue="" />
+
+        <argument
+                android:name="channelId"
+                app:argType="string"
+                android:defaultValue="" />
+        <action
+            android:id="@+id/action_rideDetailFragment_to_ridePayoutsListFragment"
+            app:destination="@id/ridePayoutsListFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/ridePayoutsListFragment"
+        android:name="com.example.driveus_mvvm.ui.RidePayoutsListFragment"
+        android:label="RidePayoutsListFragment" >
+
+        <argument
+            android:name="backgroundColor"
+            app:argType="string"
+            android:defaultValue="yellow" />
+
+        <argument
+            android:name="rideId"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="channelId"
+            app:argType="string"
+            android:defaultValue="" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/payoutUsernameFilterDialog"
+        android:name="com.example.driveus_mvvm.ui.PayoutUsernameFilterDialogFragment"
+        android:label="PayoutUsernameFilterDialog" >
+
+        <action
+            android:id="@+id/action_payoutUsernameFilterDialog_to_payoutsFragment"
+            app:destination="@id/payoutsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.driveus_mvvm.ui.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" />
+
+    <fragment
+        android:id="@+id/editVehicleFragment"
+        android:name="com.example.driveus_mvvm.ui.EditVehicleFragment"
+        android:label="EditVehicleFragment" >
+
+        <argument
+            android:name="vehicleId"
+            app:argType="string"/>
+
+        <action
+            android:id="@+id/action_editVehicleFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editUserNameFragment"
+        android:name="com.example.driveus_mvvm.ui.EditUserNameFragment"
+        android:label="EditUserNameFragment" />
+
+</navigation>

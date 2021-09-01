@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/channel_detail__container__title_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/channel_detail__image__origin_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/channel_row__label__origin_zone_icon_content_description"
+            android:src="@drawable/ic_origin_zone_24"
+            app:layout_constraintBottom_toTopOf="@id/channel_detail__label__channel_destination_zone"
+            app:layout_constraintEnd_toStartOf="@id/channel_detail__label__channel_origin_zone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/channel_detail__label__channel_origin_zone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintBottom_toTopOf="@+id/channel_detail__label__channel_destination_zone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/channel_detail__image__origin_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Mairena del Alcor" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_round_more_vert_24"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toTopOf="@id/channel_detail__image__destination_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/channel_detail__image__origin_icon"
+            app:layout_constraintVertical_bias="0.454" />
+
+        <ImageView
+            android:id="@+id/channel_detail__image__destination_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/channel_row__label__destination_zone_icon_content_description"
+            android:src="@drawable/ic_pink_round_location_on_24"
+            app:layout_constraintBottom_toTopOf="@id/channel_detail__container__date_filter"
+            app:layout_constraintEnd_toStartOf="@id/channel_detail__label__channel_destination_zone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/channel_detail__label__channel_origin_zone" />
+
+
+        <TextView
+            android:id="@+id/channel_detail__label__channel_destination_zone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintBottom_toTopOf="@id/channel_detail__container__date_filter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/channel_detail__image__destination_icon"
+            app:layout_constraintTop_toBottomOf="@id/channel_detail__label__channel_origin_zone"
+            tools:text="Reina Mercedes" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/channel_detail__container__date_filter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/browser_actions_bg_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/channel_detail__label__channel_destination_zone">
+
+            <ImageButton
+                    android:id="@+id/channel_detail__button__filter_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_round_filter_alt_24"
+                    android:contentDescription="@string/channel_detail__button__filter_icon_description"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/channel_detail__input__filter_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:focusable="false"
+                android:fontFamily="@font/montserrat_italic"
+                android:hint="@string/channel_detail__label__filter_text"
+                android:maxLines="1"
+                android:paddingHorizontal="16dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/channel_detail__image__clear_filter"
+                app:layout_constraintStart_toEndOf="@id/channel_detail__button__filter_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/channel_detail__image__clear_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@null"
+                android:visibility="gone"
+                android:src="@drawable/ic_round_clear_24"
+                android:contentDescription="@string/channel_detail__image__clear_filter_description"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/channel_detail__list__rides_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/channel_detail__container__title_container" />
+
+    <LinearLayout
+        android:id="@+id/channel_detail_fragment__container__no_rides_linear_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/channel_detail__container__title_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/channel_detail_fragment__container__no_rides"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?colorPrimary">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/channel_detail__image__no_element"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:tint="#1F0000"
+                app:layout_constraintBottom_toTopOf="@+id/channel_detail__label__no_element"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:srcCompat="@drawable/ic_stop_signal" />
+
+            <TextView
+                android:id="@+id/channel_detail__label__no_element"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
+                android:text="@string/channel_detail_fragment__label__no_rides"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_detail__image__no_element" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/channel_detail__button__floating_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:tint="?colorSecondaryVariant"
+            android:src="@drawable/ic_round_add_24"
+            android:backgroundTint="?colorSecondaryVariant"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/channel_detail__button__floating_button_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

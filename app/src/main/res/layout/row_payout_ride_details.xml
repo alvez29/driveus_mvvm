@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="2"
+    android:orientation="vertical"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardElevation="5dp"
+    style="@style/Widget.MaterialComponents.CardView"
+    app:cardCornerRadius="8dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <CheckBox
+            android:id="@+id/payout_row_ride_details__button__checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/payout_row_ride_details__image__profile_picture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/payout_row_ride_details__image__profile_picture_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/payout_row_ride_details__button__checkbox"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/circular_crop_profile_picture_example" />
+
+        <TextView
+            android:id="@+id/payout_row_ride_details__label__username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintBottom_toTopOf="@id/payout_row_ride_details__label__paid_date"
+            app:layout_constraintStart_toEndOf="@id/payout_row_ride_details__image__profile_picture"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Maria Gonzalez" />
+
+        <TextView
+            android:id="@+id/payout_row_ride_details__label__paid_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/montserrat_italic"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/payout_row_ride_details__label__price"
+            app:layout_constraintStart_toEndOf="@id/payout_row_ride_details__image__profile_picture"
+            tools:text="pagado el 15/04/2021 14:00" />
+
+        <TextView
+            android:id="@+id/payout_row_ride_details__label__price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:fontFamily="@font/montserrat_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1.5 €" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

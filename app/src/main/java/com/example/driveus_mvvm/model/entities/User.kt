@@ -5,10 +5,16 @@ import com.google.firebase.firestore.DocumentReference
 data class User( val uid: String? = "",
                  val username: String? = "",
                  val surname: String? = "",
-                 val name:String? = "",
+                 val name: String? = "",
                  val channels: List<DocumentReference?>? = emptyList(),
-                 val rides: List<DocumentReference?>? = emptyList(),
+                 val ridesAsPassenger: List<DocumentReference?>? = emptyList(),
+                 val ridesAsDriver: List<DocumentReference?>? = emptyList(),
+                 val payoutsAsPassenger: List<DocumentReference?>? = emptyList(),
+                 val payoutsAsDriver: List<DocumentReference?>? = emptyList(),
+                 val debtsAsDriver: List<DocumentReference?>? = emptyList(),
+                 val debtsAsPassenger: List<DocumentReference?>? = emptyList(),
+                 val imageTrigger: Int = 0,
                  @field:JvmField
                  val isDriver: Boolean? = false,
                  @field:JvmField
-                 val email:String? = "" )
+                 val email: String? = "" )

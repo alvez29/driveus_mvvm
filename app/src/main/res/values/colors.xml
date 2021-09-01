@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <color name="pink_200">#ff93c1</color>
+    <color name="pink_500">#ef6091</color>
+    <color name="teal_300">#90caf9</color>
+    <color name="teal_700">#5d99c6</color>
+    <color name="yellow_500">#cabf45</color>
+    <color name="yellow_300">#fff176</color>
+    <color name="yellow_100">#ffffa8</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="filled_input">#1F000000</color>
+    <color name="cancel">#e53935</color>
+    <color name="unpaid">#B00002</color>
+    <color name="paid">#02b000</color>
+    <color name="disabled_payout_grey">#e5e5e5</color>
+    <color name="daySelected">?colorSecondaryVariant</color>
 </resources>

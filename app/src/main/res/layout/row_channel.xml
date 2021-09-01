@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="2"
+    android:orientation="vertical"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardElevation="5dp"
+    style="@style/Widget.MaterialComponents.CardView"
+    app:cardCornerRadius="8dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/channel_detail__image__origin_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_origin_zone_24"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/channel_detail__label__channel_destination_zone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/channel_detail__label__channel_origin_zone"
+            android:contentDescription="@string/channel_row__label__origin_zone_icon_content_description" />
+
+        <TextView
+            android:id="@+id/channel_detail__label__channel_origin_zone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintBottom_toTopOf="@+id/channel_detail__label__channel_destination_zone"
+            app:layout_constraintEnd_toStartOf="@id/channel_row__button__subscribe"
+            app:layout_constraintStart_toEndOf="@id/channel_detail__image__origin_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Mairena del Alcor" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_round_more_vert_24"
+            android:layout_marginStart="16dp"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toTopOf="@id/channel_detail__image__destination_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/channel_detail__image__origin_icon"
+            app:layout_constraintVertical_bias="0.454" />
+
+        <ImageView
+            android:id="@+id/channel_detail__image__destination_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pink_round_location_on_24"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/channel_detail__label__channel_origin_zone"
+            app:layout_constraintEnd_toStartOf="@id/channel_detail__label__channel_destination_zone"
+            android:contentDescription="@string/channel_row__label__destination_zone_icon_content_description" />
+
+
+        <TextView
+            android:id="@+id/channel_detail__label__channel_destination_zone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/channel_row__button__subscribe"
+            app:layout_constraintStart_toEndOf="@id/channel_detail__image__destination_icon"
+            app:layout_constraintTop_toBottomOf="@id/channel_detail__label__channel_origin_zone"
+            tools:text="Reina Mercedes" />
+
+        <ImageButton
+            android:id="@+id/channel_row__button__subscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@null"
+            android:src="@drawable/ic_round_bookmark_border_24"
+            android:contentDescription="@string/channel_row__button__subscribe_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</com.google.android.material.card.MaterialCardView>
